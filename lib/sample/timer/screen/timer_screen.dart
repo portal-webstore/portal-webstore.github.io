@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TimerScreen extends StatefulWidget {
-  const TimerScreen(
+  const TimerScreen({
     Key? key,
-  ) : super(key: key);
+  }) : super(key: key);
 
   @override
   _TimerScreenState createState() => _TimerScreenState();

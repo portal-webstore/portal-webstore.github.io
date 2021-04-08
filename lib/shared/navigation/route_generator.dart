@@ -44,7 +44,7 @@ class RouteGenerator {
         // final args = settings.arguments;
 
         return MaterialPageRoute<void>(
-          builder: (BuildContext context) => const TimerScreen(null),
+          builder: (BuildContext context) => const TimerScreen(),
           settings: settings,
         );
 
