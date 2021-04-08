@@ -42,7 +42,12 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   Stream<TimerState> _mapTimerStartedToState(
     TimerStarted start,
   ) async* {
+    // Start streaming lazily. Not sure why this is strictly needed when
+    // is only for the start condition and the subscription seems to be
+    // separately listening
+    // Or maybe thinking like Observable when different implementation
     yield TimerRunInProgress(start.duration);
+
     // Wow so not sure if this is intended race condition.
     // Await blocking may kill the timer
     //
@@ -56,6 +61,8 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 }
 
+/// Notify callback trigger eventToState on each listened tick
+///
 StreamSubscription<int>? getTickerSubscribed(
   Ticker ticker,
 
