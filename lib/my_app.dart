@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart'
 import 'package:testable_web_app/boilerplate/my_home_page.dart' show MyHomePage;
 import 'package:testable_web_app/i18n/localisation/australian/australian_localisation_delegate.dart'
     show AustralianLocalisationDelegate;
+import 'package:testable_web_app/shared/navigation/route_generator.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
       home: const MyHomePage(
         title: 'Flutter webstore portal demo home page',
       ),
+      onGenerateRoute: RouteGenerator.getRouteOnGenerate,
     );
   }
 }
