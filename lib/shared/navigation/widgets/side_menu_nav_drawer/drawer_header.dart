@@ -1,7 +1,7 @@
 part of 'side_menu_nav_drawer_widget.dart';
 
-class SideMenuNavDrawerHeader extends StatelessWidget {
-  const SideMenuNavDrawerHeader({
+class _SideMenuNavDrawerHeader extends StatelessWidget {
+  const _SideMenuNavDrawerHeader({
     Key? key,
     required this.title,
   }) : super(key: key);

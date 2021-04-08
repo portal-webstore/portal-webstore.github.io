@@ -1,7 +1,7 @@
 part of 'side_menu_nav_drawer_widget.dart';
 
-class SideMenuNavDrawerItem extends StatelessWidget {
-  const SideMenuNavDrawerItem({
+class _SideMenuNavDrawerItem extends StatelessWidget {
+  const _SideMenuNavDrawerItem({
     Key? key,
     required this.icon,
     required this.name,

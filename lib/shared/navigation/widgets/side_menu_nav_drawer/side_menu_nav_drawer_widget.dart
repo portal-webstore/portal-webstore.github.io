@@ -1,5 +1,8 @@
+library side_menu_nav_drawer;
+
 import 'package:flutter/material.dart';
-import 'package:testable_web_app/shared/navigation/routes_constant.dart';
+import 'package:testable_web_app/shared/navigation/routes_constant.dart'
+    show Routes;
 
 part 'drawer_header.dart';
 part 'drawer_item.dart';
@@ -15,10 +18,10 @@ class SideMenuNavigationDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          const SideMenuNavDrawerHeader(
+          const _SideMenuNavDrawerHeader(
             title: 'Webstore',
           ),
-          SideMenuNavDrawerItem(
+          _SideMenuNavDrawerItem(
             icon: Icons.home_rounded,
             name: 'Home',
             onTap: () => Navigator.pushReplacementNamed(
@@ -27,8 +30,8 @@ class SideMenuNavigationDrawer extends StatelessWidget {
             ),
           ),
           const Divider(),
-          SideMenuNavDrawerItem(
-            icon: Icons.home_rounded,
+          _SideMenuNavDrawerItem(
+            icon: Icons.timer,
             name: 'Timer bloc',
             onTap: () => Navigator.pushReplacementNamed(
               context,
