@@ -46,6 +46,12 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
       return;
     }
+
+    if (event is TimerReset) {
+      yield* _mapTimerResetToState(event);
+
+      return;
+    }
   }
 
   @override
@@ -104,6 +110,16 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       _tickerSubscription?.resume();
 
       yield TimerRunInProgress(state.duration);
+    }
+  }
+
+  Stream<TimerState> _mapTimerResetToState(TimerReset resetEvent) async* {
+    if (state is TimerRunInProgress) {
+      // Current bloc state access! whaaa
+      await _tickerSubscription?.cancel();
+
+      // Wow bad using static duration... That makes the start time unchangeable?
+      yield const TimerInitial(_duration);
     }
   }
 }
