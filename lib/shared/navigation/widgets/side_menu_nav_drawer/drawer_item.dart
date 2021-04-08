@@ -1,14 +1,14 @@
 part of 'side_menu_nav_drawer_widget.dart';
 
 class SideMenuNavDrawerItem extends StatelessWidget {
-  const SideMenuNavDrawerItem(
+  const SideMenuNavDrawerItem({
     Key? key,
-    this.icon,
-    this.name,
-    this.onTap,
+    required this.icon,
+    required this.name,
+    required this.onTap,
     this.nameStyle,
     this.iconColour,
-  ) : super(key: key);
+  }) : super(key: key);
 
   final IconData icon;
   final String name;

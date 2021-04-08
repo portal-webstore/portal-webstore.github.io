@@ -1,12 +1,12 @@
 part of 'side_menu_nav_drawer_widget.dart';
 
 class SideMenuNavDrawerHeader extends StatelessWidget {
-  const SideMenuNavDrawerHeader(
+  const SideMenuNavDrawerHeader({
     Key? key,
-    this._headerTitle,
-  ) : super(key: key);
+    required this.title,
+  }) : super(key: key);
 
-  final String _headerTitle;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class SideMenuNavDrawerHeader extends StatelessWidget {
             bottom: 16.0,
             left: 16.0,
             child: Text(
-              _headerTitle,
+              title,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 20.0,
