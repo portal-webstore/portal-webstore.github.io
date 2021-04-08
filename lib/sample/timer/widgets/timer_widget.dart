@@ -61,7 +61,10 @@ class TimerWidget extends StatelessWidget {
         BlocBuilder<TimerBloc, TimerState>(
           buildWhen: (previousState, state) =>
               state.runtimeType != previousState.runtimeType,
-          builder: (context, state) => const _TimerActions(),
+          // `const` results in this never being re-evaluated
+          // Remove const to see the button displays change based on state.
+          // Provided in the nested BlocProvider
+          builder: (context, state) => /* const */_TimerActions(),
         ),
       ],
     );
