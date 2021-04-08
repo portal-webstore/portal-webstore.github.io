@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testable_web_app/boilerplate/my_home_page.dart';
-import 'package:testable_web_app/sample/timer/screen/timer_page.dart';
+import 'package:testable_web_app/sample/timer/screen/timer_screen.dart';
 import 'package:testable_web_app/shared/navigation/routes_constant.dart';
 
 /// Extract routes generation here to remove noise from MaterialApp
