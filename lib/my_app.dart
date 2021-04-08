@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart'
+    show GlobalMaterialLocalizations, GlobalWidgetsLocalizations;
 import 'package:testable_web_app/boilerplate/my_home_page.dart' show MyHomePage;
+import 'package:testable_web_app/i18n/localisation/australian/australian_localisation_delegate.dart'
+    show AustralianLocalisationDelegate;
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -11,6 +15,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter webstore portal demo app',
+      localizationsDelegates: const [
+        AustralianLocalisationDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'AU'), // English (Australia)
+        Locale('en', 'US'), // English (United States) for safe defaults
+      ],
       theme: ThemeData(
         // This is the theme of your application.
         //
