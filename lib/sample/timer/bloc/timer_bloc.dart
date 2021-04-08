@@ -105,22 +105,29 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   Stream<TimerState> _mapTimerResumedToState(TimerResumed resumeEvent) async* {
-    if (state is TimerRunInProgress) {
-      // Current bloc state access! whaaa
-      _tickerSubscription?.resume();
+    // Why would we check this again when we already predefine the conditions
+    // for each available state and event
+    // (available buttons)
+    // end up changing three files every time map state, button view is changed?
+    // ... poor documentation samples of bloc usage
 
-      yield TimerRunInProgress(state.duration);
+    if (state is! TimerRunPause) {
+      // This should not happen
+      // Should not be able to resume unless we are currently paused
+      //
+      return;
     }
+
+    _tickerSubscription?.resume();
+
+    yield TimerRunInProgress(state.duration);
   }
 
   Stream<TimerState> _mapTimerResetToState(TimerReset resetEvent) async* {
-    if (state is TimerRunInProgress) {
-      // Current bloc state access! whaaa
-      await _tickerSubscription?.cancel();
+    await _tickerSubscription?.cancel();
 
-      // Wow bad using static duration... That makes the start time unchangeable?
-      yield const TimerInitial(_duration);
-    }
+    // Wow bad using static duration... That makes the start time unchangeable?
+    yield const TimerInitial(_duration);
   }
 }
 
