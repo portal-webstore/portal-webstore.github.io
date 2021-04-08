@@ -27,6 +27,14 @@ class SideMenuNavigationDrawer extends StatelessWidget {
             ),
           ),
           const Divider(),
+          SideMenuNavDrawerItem(
+            icon: Icons.home_rounded,
+            name: 'Timer bloc',
+            onTap: () => Navigator.pushReplacementNamed(
+              context,
+              Routes.timer,
+            ),
+          ),
         ],
       ),
     );
