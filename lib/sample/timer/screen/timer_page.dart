@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:testable_web_app/shared/navigation/widgets/side_menu_nav_drawer/side_menu_nav_drawer_widget.dart';
+import 'package:testable_web_app/sample/timer/widgets/timer_widget.dart' as t
+    show TimerWidget;
+import 'package:testable_web_app/shared/navigation/widgets/side_menu_nav_drawer/side_menu_nav_drawer_widget.dart'
+    show SideMenuNavigationDrawer;
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({
@@ -49,6 +52,7 @@ class _TimerScreenState extends State<TimerScreen> {
               '',
               style: Theme.of(context).textTheme.headline4,
             ),
+            const t.TimerWidget(),
           ],
         ),
       ),
