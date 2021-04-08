@@ -29,6 +29,12 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       yield* _mapTimerStartedToState(
         event,
       );
+
+      return;
+    }
+
+    if (event is TimerTicked) {
+      yield* _mapTimerTickedToState(event);
     }
   }
 
@@ -58,6 +64,19 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     await _tickerSubscription?.cancel();
 
     _tickerSubscription = getTickerSubscribed(_ticker, add, start);
+  }
+
+  Stream<TimerState> _mapTimerTickedToState(TimerTicked tickEvent) async* {
+    final remainingDuration = tickEvent.duration;
+    if (remainingDuration <= 0) {
+      // Finished ticking down!
+
+      yield const TimerRunCompleteResettable();
+      return;
+    }
+
+    // Still ticking
+    yield TimerRunInProgress(remainingDuration);
   }
 }
 
