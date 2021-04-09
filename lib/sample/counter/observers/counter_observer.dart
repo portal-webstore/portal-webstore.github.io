@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart' show Bloc, BlocObserver, Transition;
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart' show debugPrint;
 
 /// {@template counter_observer}
@@ -10,8 +10,16 @@ class CounterObserver extends BlocObserver {
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
 
+    debugPrint('CounterObserver onTransition ${bloc.runtimeType} $transition');
+  }
+
+  /// Bloc documentation sample also failed again here!
+  /// They talked about onChange when they created code for onTransition...
+  ///
+  @override
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc as BlocBase<int>, change as Change<int>);
     // ignore: avoid_print
-    print('CounterObserver onTransition ${bloc.runtimeType} $transition');
-    debugPrint('${bloc.runtimeType} $transition');
+    debugPrint('CounterObserver.onChange ${bloc.runtimeType} $change');
   }
 }
