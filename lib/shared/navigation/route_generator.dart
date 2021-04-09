@@ -25,9 +25,9 @@ import 'package:testable_web_app/shared/navigation/routes_constant.dart';
 /// ```
 ///
 ///
-class RouteGenerator {
+class Router {
   /// "Static class" for namespacing
-  const RouteGenerator._();
+  const Router._();
 
   /// Use this instead of MaterialApp.routes
   ///
@@ -57,11 +57,30 @@ class RouteGenerator {
           builder: (BuildContext context) => const BoilerplateCounterScreen(),
           settings: settings,
         );
+
       case Routes.counter:
         return MaterialPageRoute<void>(
           builder: (BuildContext context) => const CounterScreen(),
           settings: settings,
         );
+
+      case Routes.counter:
+        return MaterialPageRoute<void>(
+          builder: (BuildContext context) => const LandingScreen(),
+          settings: settings,
+        );
+      case Routes.counter:
+        return MaterialPageRoute<void>(
+          builder: (BuildContext context) => const LoginScreen(),
+          settings: settings,
+        );
+      case Routes.counter:
+        return MaterialPageRoute<void>(
+          builder: (BuildContext context) => const SplashScreen(),
+          settings: settings,
+        );
+
+
       default:
         return MaterialPageRoute<void>(
           builder: (BuildContext context) => const HomeScreen(),

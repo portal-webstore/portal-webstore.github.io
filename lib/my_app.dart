@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       home: const HomeScreen(
         title: 'Flutter webstore portal demo home page',
       ),
-      onGenerateRoute: RouteGenerator.getRouteOnGenerate,
+      onGenerateRoute: Router.getRouteOnGenerate,
     );
   }
 }
