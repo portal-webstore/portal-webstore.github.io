@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider, ReadContext;
 import 'package:testable_web_app/sample/counter/counter.dart' show CounterCubit;
-import 'package:testable_web_app/sample/counter/widgets/counter_text_view_widget.dart'
-    show CounterTextView;
+import 'package:testable_web_app/sample/counter/widgets/counter_view_widget.dart'
+    show CounterView;
 
 /// This example is better. Updated lints, Null safety, updated mocktail dep.
 /// {@template counter_widget}
@@ -22,7 +22,7 @@ class CounterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => CounterCubit(),
-      child: const CounterTextView(
+      child: const CounterView(
         key: Key('CounterViewKey'),
         textStyle: null,
       ),

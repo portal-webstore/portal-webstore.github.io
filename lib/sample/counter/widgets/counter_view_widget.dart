@@ -10,8 +10,8 @@ const decrementButtonKey = '-decrement_counterScreen_floatingActionButton';
 /// A [StatelessWidget] which reacts to the provided
 /// [CounterCubit] state and notifies it in response to user input.
 /// {@endtemplate}
-class CounterTextView extends StatelessWidget {
-  const CounterTextView({
+class CounterView extends StatelessWidget {
+  const CounterView({
     Key? key,
     required this.textStyle,
   }) : super(key: key);

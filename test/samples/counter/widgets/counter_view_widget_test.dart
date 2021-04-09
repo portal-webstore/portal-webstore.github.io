@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:testable_web_app/sample/counter/counter.dart';
-import 'package:testable_web_app/sample/counter/widgets/counter_text_view_widget.dart';
+import 'package:testable_web_app/sample/counter/widgets/counter_view_widget.dart';
 
 class MockCounterCubit extends MockCubit<int> implements CounterCubit {}
 
@@ -29,7 +29,7 @@ void main() {
         MaterialApp(
           home: BlocProvider.value(
             value: counterCubit,
-            child: const CounterTextView(
+            child: const CounterView(
               textStyle: null,
             ),
           ),
@@ -45,7 +45,7 @@ void main() {
         MaterialApp(
           home: BlocProvider.value(
             value: counterCubit,
-            child: const CounterTextView(
+            child: const CounterView(
               textStyle: null,
             ),
           ),
@@ -62,7 +62,7 @@ void main() {
         MaterialApp(
           home: BlocProvider.value(
             value: counterCubit,
-            child: const CounterTextView(
+            child: const CounterView(
               textStyle: null,
             ),
           ),
