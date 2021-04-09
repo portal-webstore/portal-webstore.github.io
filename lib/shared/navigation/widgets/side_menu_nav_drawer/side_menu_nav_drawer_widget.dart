@@ -1,8 +1,12 @@
 library side_menu_nav_drawer;
 
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:testable_web_app/shared/navigation/routes_constant.dart'
     show Routes;
+
+import 'app_info/app_info.dart'
+    show getAppInfoTextOrProgressBuilder, getAppNameVersion, mockPackageInfo;
 
 part 'drawer_header.dart';
 part 'drawer_item.dart';
@@ -46,6 +50,14 @@ class SideMenuNavigationDrawer extends StatelessWidget {
               Routes.boilerplateCounter,
             ),
           ),
+          const Divider(),
+          ListTile(
+            title: FutureBuilder<PackageInfo>(
+              future: getAppNameVersion(),
+              builder: getAppInfoTextOrProgressBuilder,
+              initialData: mockPackageInfo,
+            ),
+          )
         ],
       ),
     );
