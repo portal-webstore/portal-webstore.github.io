@@ -10,6 +10,8 @@ class CounterObserver extends BlocObserver {
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
 
+    // ignore: avoid_print
+    print('CounterObserver onTransition ${bloc.runtimeType} $transition');
     debugPrint('${bloc.runtimeType} $transition');
   }
 }
