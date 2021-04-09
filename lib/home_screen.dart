@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:testable_web_app/shared/navigation/widgets/side_menu_nav_drawer/side_menu_nav_drawer_widget.dart'
     show SideMenuNavigationDrawer;
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({
     Key? key,
     this.title,
   }) : super(key: key);
@@ -11,10 +11,10 @@ class MyHomePage extends StatefulWidget {
   final String? title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

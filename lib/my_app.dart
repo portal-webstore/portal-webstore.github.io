@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart'
     show GlobalMaterialLocalizations, GlobalWidgetsLocalizations;
-import 'package:testable_web_app/boilerplate/my_home_page.dart' show MyHomePage;
+import 'package:testable_web_app/home_screen.dart' show HomeScreen;
 import 'package:testable_web_app/i18n/localisation/australian/australian_localisation_delegate.dart'
     show AustralianLocalisationDelegate;
 import 'package:testable_web_app/shared/navigation/route_generator.dart';
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(
+      home: const HomeScreen(
         title: 'Flutter webstore portal demo home page',
       ),
       onGenerateRoute: RouteGenerator.getRouteOnGenerate,

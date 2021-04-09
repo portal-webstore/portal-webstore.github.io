@@ -3,18 +3,19 @@ import 'package:testable_web_app/shared/navigation/widgets/side_menu_nav_drawer/
     show SideMenuNavigationDrawer;
 
 /// For more direct comparison to a Bloc-implementation of counter
-class BoilerplateCounterPage extends StatefulWidget {
-  const BoilerplateCounterPage({
+class BoilerplateCounterScreen extends StatefulWidget {
+  const BoilerplateCounterScreen({
     Key? key,
   }) : super(key: key);
 
   static const String title = 'Sample counter boilerplate';
 
   @override
-  _BoilerplateCounterPageState createState() => _BoilerplateCounterPageState();
+  _BoilerplateCounterScreenState createState() =>
+      _BoilerplateCounterScreenState();
 }
 
-class _BoilerplateCounterPageState extends State<BoilerplateCounterPage> {
+class _BoilerplateCounterScreenState extends State<BoilerplateCounterScreen> {
   int _counter = 0;
 
   void _incrementCounter() {
@@ -40,7 +41,7 @@ class _BoilerplateCounterPageState extends State<BoilerplateCounterPage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text(BoilerplateCounterPage.title),
+        title: const Text(BoilerplateCounterScreen.title),
       ),
       drawer: const SideMenuNavigationDrawer(),
       body: Center(
