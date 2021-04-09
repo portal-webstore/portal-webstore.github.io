@@ -38,6 +38,14 @@ class SideMenuNavigationDrawer extends StatelessWidget {
               Routes.timer,
             ),
           ),
+          _SideMenuNavDrawerItem(
+            icon: Icons.add_alarm,
+            name: 'Demo boilerplate counter',
+            onTap: () => Navigator.pushReplacementNamed(
+              context,
+              Routes.boilerplateCounter,
+            ),
+          ),
         ],
       ),
     );
