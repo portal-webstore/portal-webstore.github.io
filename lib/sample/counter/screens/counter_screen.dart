@@ -16,6 +16,36 @@ class CounterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Counter screen'),
+      ),
+      body: Center(
+        child: Text(
+          'Placeholder count',
+          style: textTheme.headline2,
+        ),
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          FloatingActionButton(
+            key: const Key('+increment_counterScreen_floatingActionButton'),
+            heroTag: '+increment_counterScreen_floatingActionButton',
+            onPressed: () {},
+            child: const Icon(Icons.add),
+          ),
+          FloatingActionButton(
+            key: const Key('-decrement_counterScreen_floatingActionButton'),
+            heroTag: '-decrement_counterScreen_floatingActionButton',
+            onPressed: () {},
+            child: const Icon(Icons.remove),
+          ),
+        ],
+      ),
+    );
   }
 }
