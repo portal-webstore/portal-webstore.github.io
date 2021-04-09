@@ -29,6 +29,28 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       yield* _mapTimerStartedToState(
         event,
       );
+
+      return;
+    }
+
+    if (event is TimerPaused) {
+      yield* _mapTimerPausedToState(event);
+    }
+
+    if (event is TimerResumed) {
+      yield* _mapTimerResumedToState(event);
+    }
+
+    if (event is TimerTicked) {
+      yield* _mapTimerTickedToState(event);
+
+      return;
+    }
+
+    if (event is TimerReset) {
+      yield* _mapTimerResetToState(event);
+
+      return;
     }
   }
 
@@ -42,7 +64,12 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   Stream<TimerState> _mapTimerStartedToState(
     TimerStarted start,
   ) async* {
+    // Start streaming lazily. Not sure why this is strictly needed when
+    // is only for the start condition and the subscription seems to be
+    // separately listening
+    // Or maybe thinking like Observable when different implementation
     yield TimerRunInProgress(start.duration);
+
     // Wow so not sure if this is intended race condition.
     // Await blocking may kill the timer
     //
@@ -54,8 +81,58 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
     _tickerSubscription = getTickerSubscribed(_ticker, add, start);
   }
+
+  Stream<TimerState> _mapTimerTickedToState(TimerTicked tickEvent) async* {
+    final remainingDuration = tickEvent.duration;
+    if (remainingDuration <= 0) {
+      // Finished ticking down!
+
+      yield const TimerRunCompleteResettable();
+      return;
+    }
+
+    // Still ticking
+    yield TimerRunInProgress(remainingDuration);
+  }
+
+  Stream<TimerState> _mapTimerPausedToState(TimerPaused pauseEvent) async* {
+    if (state is TimerRunInProgress) {
+      // Current bloc state access! whaaa
+      _tickerSubscription?.pause();
+
+      yield TimerRunPause(state.duration);
+    }
+  }
+
+  Stream<TimerState> _mapTimerResumedToState(TimerResumed resumeEvent) async* {
+    // Why would we check this again when we already predefine the conditions
+    // for each available state and event
+    // (available buttons)
+    // end up changing three files every time map state, button view is changed?
+    // ... poor documentation samples of bloc usage
+
+    if (state is! TimerRunPause) {
+      // This should not happen
+      // Should not be able to resume unless we are currently paused
+      //
+      return;
+    }
+
+    _tickerSubscription?.resume();
+
+    yield TimerRunInProgress(state.duration);
+  }
+
+  Stream<TimerState> _mapTimerResetToState(TimerReset resetEvent) async* {
+    await _tickerSubscription?.cancel();
+
+    // Wow bad using static duration... That makes the start time unchangeable?
+    yield const TimerInitial(_duration);
+  }
 }
 
+/// Notify callback trigger eventToState on each listened tick
+///
 StreamSubscription<int>? getTickerSubscribed(
   Ticker ticker,
 
