@@ -25,6 +25,8 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  authentication_repository:
+    path: packages/authentication_repository
   bloc: ^7.0.0
   cupertino_icons: ^1.0.2
   equatable: ^2.0.0
@@ -32,7 +34,8 @@ dependencies:
   intl: ^0.17.0
   json_annotation: ^4.0.1
   package_info_plus: ^1.0.0
-
+  user_repository:
+    path: packages/user_repository
 dev_dependencies:
   flutter_test:
     sdk: flutter
