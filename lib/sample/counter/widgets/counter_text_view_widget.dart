@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../counter.dart';
 
+const incrementButtonKey = '+increment_counterScreen_floatingActionButton';
+const decrementButtonKey = '-decrement_counterScreen_floatingActionButton';
+
 /// {@template counter_view}
 /// A [StatelessWidget] which reacts to the provided
 /// [CounterCubit] state and notifies it in response to user input.
@@ -37,8 +40,8 @@ class CounterTextView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           FloatingActionButton(
-            key: const Key('+increment_counterScreen_floatingActionButton'),
-            heroTag: '+increment_counterScreen_floatingActionButton',
+            key: const Key(incrementButtonKey),
+            heroTag: incrementButtonKey,
             onPressed: () {
               /// Provider provider.dart read(). Exposed through flutter_bloc extension
               /// [ReadContext]
@@ -66,8 +69,8 @@ class CounterTextView extends StatelessWidget {
             child: const Icon(Icons.add),
           ),
           FloatingActionButton(
-            key: const Key('-decrement_counterScreen_floatingActionButton'),
-            heroTag: '-decrement_counterScreen_floatingActionButton',
+            key: const Key(decrementButtonKey),
+            heroTag: decrementButtonKey,
             onPressed: () {
               context.read<CounterCubit>().decrement();
             },
