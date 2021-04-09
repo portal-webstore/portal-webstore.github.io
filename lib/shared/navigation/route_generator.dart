@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testable_web_app/boilerplate/boilerplate_counter_screen.dart';
 import 'package:testable_web_app/home_screen.dart';
+import 'package:testable_web_app/sample/counter/counter.dart';
 import 'package:testable_web_app/sample/timer/screen/timer_screen.dart';
 import 'package:testable_web_app/shared/navigation/routes_constant.dart';
 
@@ -56,7 +57,11 @@ class RouteGenerator {
           builder: (BuildContext context) => const BoilerplateCounterScreen(),
           settings: settings,
         );
-
+      case Routes.counter:
+        return MaterialPageRoute<void>(
+          builder: (BuildContext context) => const CounterScreen(),
+          settings: settings,
+        );
       default:
         return MaterialPageRoute<void>(
           builder: (BuildContext context) => const HomeScreen(),

@@ -50,6 +50,14 @@ class SideMenuNavigationDrawer extends StatelessWidget {
               Routes.boilerplateCounter,
             ),
           ),
+          _SideMenuNavDrawerItem(
+            icon: Icons.add_alarm_outlined,
+            name: 'Sample counter bloc',
+            onTap: () => Navigator.pushReplacementNamed(
+              context,
+              Routes.counter,
+            ),
+          ),
           const Divider(),
           ListTile(
             title: FutureBuilder<PackageInfo>(
