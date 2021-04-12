@@ -12,6 +12,7 @@ const List<ProductModel> seedProducts = [
         'mg',
       ),
     ],
+    'IVINF',
   ),
   ProductModel(
     2,
@@ -23,6 +24,7 @@ const List<ProductModel> seedProducts = [
         'mg',
       ),
     ],
+    'IVENOS',
   ),
   ProductModel(
     3,
@@ -34,6 +36,7 @@ const List<ProductModel> seedProducts = [
         'mg',
       ),
     ],
+    'IVENOS',
   ),
   ProductModel(
     4,
@@ -54,5 +57,6 @@ const List<ProductModel> seedProducts = [
         'mg',
       ),
     ],
+    'IVINF',
   ),
 ];

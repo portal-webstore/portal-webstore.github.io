@@ -11,6 +11,7 @@ class ProductModel extends Equatable {
     this.productName,
     this.containerName,
     this.drugs,
+    this.productAdministrationRoute,
   );
 
   final int productID;
@@ -25,9 +26,13 @@ class ProductModel extends Equatable {
   /// No unit conversion on customer input.
   final List<DrugModel> drugs;
 
+  /// Administration route
+  /// common route variations with syringes for the same drug ITHEC IVINF IVENOS
+  ///
+  final String productAdministrationRoute;
+
   /// Note that this display may not be required for a single customer
   // final double maximumVolume;
-  // final String drugAdministrationRoute;
   // final String dongle;
 
   // final double price;
