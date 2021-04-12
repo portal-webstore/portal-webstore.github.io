@@ -22,7 +22,6 @@ class ProductListTile extends StatelessWidget {
             ),
             child: Text(
               name,
-              style: Theme.of(context).textTheme.headline4,
             ),
           )
         ],
