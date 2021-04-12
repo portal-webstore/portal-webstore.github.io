@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testable_web_app/webstore/catalogue/widgets/product_list_widget.dart';
 
 class ProductCatalogueScreen extends StatelessWidget {
   const ProductCatalogueScreen({
@@ -11,6 +12,7 @@ class ProductCatalogueScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Product catalogue'),
       ),
+      body: const ProductList(),
     );
   }
 }

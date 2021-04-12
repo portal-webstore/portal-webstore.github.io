@@ -12,5 +12,5 @@ class Routes {
   static const String loginLogin = '/loginLogin';
   static const String loginHome = '/loginHome';
 
-  static const String productCatalogue = '/product/catalogue';
+  static const String productCatalogue = '/productCatalogue';
 }

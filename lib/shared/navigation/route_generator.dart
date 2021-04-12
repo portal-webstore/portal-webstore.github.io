@@ -3,6 +3,8 @@ import 'package:testable_web_app/boilerplate/boilerplate_counter_screen.dart';
 import 'package:testable_web_app/home_screen.dart';
 import 'package:testable_web_app/login/login/screens/login_screen.dart';
 import 'package:testable_web_app/login/screens/base_login_landing_app_screen.dart';
+import 'package:testable_web_app/login/screens/home_screen.dart'
+    show LoginHomeScreen;
 import 'package:testable_web_app/login/splash/screens/splash_screen.dart';
 import 'package:testable_web_app/sample/counter/counter.dart';
 import 'package:testable_web_app/sample/timer/screen/timer_screen.dart';
@@ -82,6 +84,11 @@ class Router {
       case Routes.loginSplash:
         return MaterialPageRoute<void>(
           builder: (BuildContext context) => const SplashScreen(),
+          settings: settings,
+        );
+      case Routes.loginHome:
+        return MaterialPageRoute<void>(
+          builder: (BuildContext context) => const LoginHomeScreen(),
           settings: settings,
         );
 
