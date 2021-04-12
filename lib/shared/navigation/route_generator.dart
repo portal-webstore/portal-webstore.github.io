@@ -7,6 +7,8 @@ import 'package:testable_web_app/login/splash/screens/splash_screen.dart';
 import 'package:testable_web_app/sample/counter/counter.dart';
 import 'package:testable_web_app/sample/timer/screen/timer_screen.dart';
 import 'package:testable_web_app/shared/navigation/routes_constant.dart';
+import 'package:testable_web_app/webstore/catalogue/screens/product_catalogue_screen.dart'
+    show ProductCatalogueScreen;
 
 /// Extract routes generation here to remove noise from MaterialApp
 ///
@@ -80,6 +82,12 @@ class Router {
       case Routes.loginSplash:
         return MaterialPageRoute<void>(
           builder: (BuildContext context) => const SplashScreen(),
+          settings: settings,
+        );
+
+      case Routes.productCatalogue:
+        return MaterialPageRoute<void>(
+          builder: (BuildContext context) => const ProductCatalogueScreen(),
           settings: settings,
         );
 
