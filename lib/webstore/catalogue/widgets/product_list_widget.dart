@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart';
+import 'package:testable_web_app/webstore/catalogue/product/screens/product_detail_screen.dart'
+    show ProductDetailScreen;
 import 'package:testable_web_app/webstore/catalogue/product/seeds/products_seed.dart';
 import 'package:testable_web_app/webstore/catalogue/product/widgets/product_list_tile_widget.dart'
     show ProductListTile;
@@ -28,6 +30,14 @@ class ProductList extends StatelessWidget {
       name: products[index].productName,
       onTap: () {
         // Navigate to screen with a given settings args for the product data
+        Navigator.push<void>(
+          context,
+          MaterialPageRoute<void>(
+            builder: (context) => ProductDetailScreen(
+              productData: products[index],
+            ),
+          ),
+        );
       },
     );
   }
