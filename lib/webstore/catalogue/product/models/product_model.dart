@@ -16,7 +16,13 @@ class ProductModel extends Equatable {
   final int productID;
 
   final String productName;
+
+  /// May be redundant if we simplify to only use the flat product name.
   final String containerName;
+
+  /// Required for per-drug dose input fields with given units
+  /// Expect input in the predefined OCS units.
+  /// No unit conversion on customer input.
   final List<DrugModel> drugs;
 
   /// Note that this display may not be required for a single customer
