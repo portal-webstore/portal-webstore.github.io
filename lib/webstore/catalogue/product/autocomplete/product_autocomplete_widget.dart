@@ -13,21 +13,13 @@ class ProductAutocomplete extends StatelessWidget {
     required this.textEditingController,
   }) : super(key: key);
 
-  final Iterable<ProductModel> Function(TextEditingValue text) optionsBuilder;
+  final AutocompleteOptionsBuilder<ProductModel> optionsBuilder;
 
-  final Widget Function(
-    BuildContext context,
-    void Function(ProductModel product) p2,
-    Iterable<ProductModel> product,
-  ) optionsViewBuilder;
+  final AutocompleteOptionsViewBuilder<ProductModel> optionsViewBuilder;
 
-  final void Function(
-    ProductModel product,
-  )? onSelected;
+  final AutocompleteOnSelected<ProductModel>? onSelected;
 
-  final String Function(
-    ProductModel product,
-  )? displayStringForOption;
+  final AutocompleteOptionToString<ProductModel>? displayStringForOption;
 
   final AutocompleteFieldViewBuilder? fieldViewBuilder;
 
