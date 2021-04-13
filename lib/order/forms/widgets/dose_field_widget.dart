@@ -23,6 +23,7 @@ class DoseField extends StatelessWidget {
         allowDecimalInput,
       ],
       validator: doseInputValidator,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 }
