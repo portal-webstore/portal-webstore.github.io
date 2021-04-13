@@ -3,17 +3,29 @@ import 'package:flutter/material.dart'
 import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart'
     show ProductModel;
 
+/// Circumspect typedef.
+/// Dart does not support simple type aliases typedef on typedef
+/// https://github.com/dart-lang/language/issues/65
+///
+/// final AutocompleteOptionsBuilder<ProductModel> optionsBuilder;
+///
 typedef ProductAutocompleteOptionsBuilder = Iterable<ProductModel> Function(
   TextEditingValue textEditingValue,
 );
+
+/// final AutocompleteOptionsViewBuilder<ProductModel> optionsViewBuilder;
 typedef ProductAutocompleteOptionsViewBuilder = Widget Function(
   BuildContext context,
   AutocompleteOnSelected<ProductModel> onSelected,
   Iterable<ProductModel> options,
 );
+
+/// final AutocompleteOnSelected<ProductModel>? onSelected;
 typedef ProductAutocompleteOnSelected = void Function(
   ProductModel option,
 );
+
+/// final AutocompleteOptionToString<ProductModel>? displayStringForOption;
 typedef ProductAutocompleteOptionToString = String Function(
   ProductModel option,
 );
