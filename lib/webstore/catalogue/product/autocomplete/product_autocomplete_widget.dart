@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:testable_web_app/shared/autocomplete/helpers/is_search_text_found_in_option.dart';
-import 'package:testable_web_app/webstore/catalogue/product/autocomplete/types/product_autocomplete_types.dart';
-import 'package:testable_web_app/webstore/catalogue/product/models/get_product_viewmodel.dart';
-import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart';
+import 'package:testable_web_app/shared/autocomplete/helpers/is_search_text_found_in_option.dart'
+    show isSearchTextFoundInOption;
+import 'package:testable_web_app/webstore/catalogue/product/autocomplete/types/product_autocomplete_types.dart'
+    show
+        ProductAutocompleteOnSelected,
+        ProductAutocompleteOptionToString,
+        ProductAutocompleteOptionsBuilder,
+        ProductAutocompleteOptionsViewBuilder;
+import 'package:testable_web_app/webstore/catalogue/product/models/get_product_viewmodel.dart'
+    show getProductViewModel;
+import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart'
+    show ProductModel;
 
 class ProductAutocomplete extends StatelessWidget {
   const ProductAutocomplete({
