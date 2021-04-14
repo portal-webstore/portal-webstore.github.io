@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testable_web_app/webstore/catalogue/product/autocomplete/types/product_autocomplete_types.dart';
 import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart';
 
 class ProductAutocomplete extends StatelessWidget {
@@ -13,18 +14,27 @@ class ProductAutocomplete extends StatelessWidget {
     required this.textEditingController,
   }) : super(key: key);
 
-  final AutocompleteOptionsBuilder<ProductModel> optionsBuilder;
+  final ProductAutocompleteOptionsBuilder optionsBuilder;
 
-  final AutocompleteOptionsViewBuilder<ProductModel> optionsViewBuilder;
+  final ProductAutocompleteOptionsViewBuilder optionsViewBuilder;
 
-  final AutocompleteOnSelected<ProductModel>? onSelected;
+  final ProductAutocompleteOnSelected? onSelected;
 
-  final AutocompleteOptionToString<ProductModel>? displayStringForOption;
+  final ProductAutocompleteOptionToString? displayStringForOption;
 
   final AutocompleteFieldViewBuilder? fieldViewBuilder;
 
+  /// Potentially less useful for parent smart page component to know about
+  /// Must be disposed of in parent form
   final FocusNode? focusNode;
 
+  /// Exposes the text controller for parent smart page / form component
+  /// to be able to clear, evaluate, set text more directly
+  ///
+  /// Controller should be stateful
+  ///
+  /// Must be disposed of in parent form
+  ///
   final TextEditingController? textEditingController;
 
   @override

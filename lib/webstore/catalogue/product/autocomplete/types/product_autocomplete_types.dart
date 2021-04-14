@@ -9,11 +9,16 @@ import 'package:testable_web_app/webstore/catalogue/product/models/product_model
 ///
 /// final AutocompleteOptionsBuilder<ProductModel> optionsBuilder;
 ///
+/// * [AutocompleteOptionsBuilder]
 typedef ProductAutocompleteOptionsBuilder = Iterable<ProductModel> Function(
   TextEditingValue textEditingValue,
 );
 
-/// final AutocompleteOptionsViewBuilder<ProductModel> optionsViewBuilder;
+/// See
+///
+/// `final AutocompleteOptionsViewBuilder<ProductModel> optionsViewBuilder;`
+///
+/// * [AutocompleteOptionsViewBuilder]
 typedef ProductAutocompleteOptionsViewBuilder = Widget Function(
   BuildContext context,
   AutocompleteOnSelected<ProductModel> onSelected,
@@ -21,11 +26,15 @@ typedef ProductAutocompleteOptionsViewBuilder = Widget Function(
 );
 
 /// final AutocompleteOnSelected<ProductModel>? onSelected;
+///
+/// * [AutocompleteOnSelected]
 typedef ProductAutocompleteOnSelected = void Function(
   ProductModel option,
 );
 
 /// final AutocompleteOptionToString<ProductModel>? displayStringForOption;
+///
+/// * [AutocompleteOptionToString]
 typedef ProductAutocompleteOptionToString = String Function(
   ProductModel option,
 );
