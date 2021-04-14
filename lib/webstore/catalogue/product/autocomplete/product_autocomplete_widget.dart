@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:testable_web_app/shared/autocomplete/helpers/is_search_text_found_in_option.dart';
 import 'package:testable_web_app/webstore/catalogue/product/autocomplete/types/product_autocomplete_types.dart';
+import 'package:testable_web_app/webstore/catalogue/product/models/get_product_viewmodel.dart';
 import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart';
 
 class ProductAutocomplete extends StatelessWidget {
@@ -48,6 +50,17 @@ class ProductAutocomplete extends StatelessWidget {
       fieldViewBuilder: fieldViewBuilder,
       focusNode: focusNode,
       textEditingController: textEditingController,
+    );
+  }
+
+  static bool isSearchTextFoundInProductOption(
+    ProductModel option,
+    String searchText,
+  ) {
+    return isSearchTextFoundInOption(
+      option,
+      searchText,
+      getProductViewModel,
     );
   }
 }
