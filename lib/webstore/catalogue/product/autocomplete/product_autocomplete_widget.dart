@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:testable_web_app/shared/autocomplete/helpers/is_search_text_found_in_option.dart'
-    show isSearchTextFoundInOption;
+import 'package:testable_web_app/shared/autocomplete/helpers/autocomplete_text_option.dart';
 import 'package:testable_web_app/webstore/catalogue/product/autocomplete/types/product_autocomplete_types.dart'
     show
         ProductAutocompleteOnSelected,
@@ -65,10 +64,57 @@ class ProductAutocomplete extends StatelessWidget {
     ProductModel option,
     String searchText,
   ) {
-    return isSearchTextFoundInOption(
+    return AutocompleteTextOption.isSearchTextFoundInOption(
       option,
       searchText,
       getProductViewModel,
+    );
+  }
+
+  /// Get searched options based on whether the exact text is found
+  /// within each option's text
+  ///
+  /// Note potentially unsorted lazy-load iterable rather than sorted eager list
+  ///
+  /// ```dart
+  /// return getOptionsFilteredBy(
+  ///   options,
+  ///   searchText,
+  ///   isSearchTextFoundInProductOption,
+  /// );
+  ///
+  /// // vs
+  ///
+  /// return getOptionsFilteredBy(
+  ///   options,
+  ///   searchText,
+  ///   isSearchTextFoundInProductOption,
+  /// );
+  /// ```
+  ///
+  Iterable<ProductModel> optionsSearchedByText(
+    String searchText,
+    Iterable<ProductModel> options,
+  ) {
+    /* 
+    return options.where(
+      (ProductModel option) => isSearchTextFoundInProductOption(
+        option,
+        searchText,
+      ),
+    );
+    */
+
+    /// Reusing genericised autocomplete utility helper for minimal code
+    /// maintainability benefit until we start to have dozens of these
+    /// Enforce same pattern
+    ///
+    /// Trade-off reusability vs extensive customisation
+    ///
+    return AutocompleteTextOption.getOptionsFilteredBy(
+      options,
+      searchText,
+      isSearchTextFoundInProductOption,
     );
   }
 }
