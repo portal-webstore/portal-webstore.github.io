@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testable_web_app/shared/autocomplete/helpers/autocomplete_text_option.dart';
 
 class LabelledAutocompleteOptions<T extends Object> extends StatelessWidget {
   const LabelledAutocompleteOptions({
@@ -84,4 +85,35 @@ class LabelledAutocompleteOptions<T extends Object> extends StatelessWidget {
   //         options: options,
   //       );
   //     }}
+  //
+
+  AutocompleteOptionsBuilder<T> getOptionsBuilder(Iterable<T> options,
+      IsOptionMatchedFromSearchTextFn<T> isOptionMatchedFromSearchTextFn) {
+    // Try Catch scope?
+
+    return (
+      TextEditingValue text,
+    ) {
+      try {
+        final String searchText = text.text;
+        if (searchText.trim().isEmpty) {
+          return [];
+        }
+
+        final Iterable<T> searchedOptions = options.where(
+          (T option) => isOptionMatchedFromSearchTextFn(
+            option,
+            searchText,
+          ),
+        );
+
+        return searchedOptions;
+      } on Exception catch (exc) {
+        // In case runtime craziness occurs.
+        debugPrint(exc.toString());
+      }
+
+      return [];
+    };
+  }
 }
