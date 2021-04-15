@@ -121,6 +121,15 @@ class _OrderFormState extends State<OrderForm> {
                   labelText: 'Required date',
                   helperText: '',
                 ),
+                onTap: () {
+                  showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2021, 4, 24),
+                    initialEntryMode: DatePickerEntryMode.input,
+                  );
+                },
               ),
             ),
 
