@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testable_web_app/shared/autocomplete/helpers/autocomplete_text_option.dart';
+import 'package:testable_web_app/shared/autocomplete/widgets/labelled_autocomplete_field_widget.dart';
 import 'package:testable_web_app/webstore/catalogue/product/autocomplete/types/product_autocomplete_types.dart'
     show
         ProductAutocompleteOnSelected,
@@ -18,7 +19,6 @@ class ProductAutocomplete extends StatelessWidget {
     required this.optionsViewBuilder,
     required this.onSelected,
     required this.displayStringForOption,
-    required this.fieldViewBuilder,
     required this.focusNode,
     required this.textEditingController,
   }) : super(key: key);
@@ -30,8 +30,6 @@ class ProductAutocomplete extends StatelessWidget {
   final ProductAutocompleteOnSelected? onSelected;
 
   final ProductAutocompleteOptionToString? displayStringForOption;
-
-  final AutocompleteFieldViewBuilder? fieldViewBuilder;
 
   /// Potentially less useful for parent smart page component to know about
   /// Must be disposed of in parent form
@@ -48,13 +46,15 @@ class ProductAutocomplete extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// Use RawAutocomplete to retain access to
+    /// focusNode and textEditingController for customisability
     return RawAutocomplete<ProductModel>(
       optionsBuilder: optionsBuilder,
       optionsViewBuilder: optionsViewBuilder,
       onSelected: onSelected,
       displayStringForOption:
           displayStringForOption ?? RawAutocomplete.defaultStringForOption,
-      fieldViewBuilder: fieldViewBuilder,
+      fieldViewBuilder: getFieldViewBuilder(),
       focusNode: focusNode,
       textEditingController: textEditingController,
     );
@@ -115,6 +115,24 @@ class ProductAutocomplete extends StatelessWidget {
       options,
       searchText,
       isSearchTextFoundInProductOption,
+    );
+  }
+
+  static AutocompleteFieldViewBuilder getFieldViewBuilder() {
+    return fieldViewBuilder;
+  }
+
+  static Widget fieldViewBuilder(
+    BuildContext context,
+    TextEditingController textEditingController,
+    FocusNode focusNode,
+    VoidCallback onFieldSubmitted,
+  ) {
+    return LabelledAutocompleteField(
+      focusNode: focusNode,
+      textEditingController: textEditingController,
+      onFieldSubmitted: onFieldSubmitted,
+      labelText: 'Search patient',
     );
   }
 }
