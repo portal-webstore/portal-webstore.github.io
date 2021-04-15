@@ -12,8 +12,8 @@ import 'package:testable_web_app/webstore/catalogue/product/models/get_product_v
 import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart'
     show ProductModel;
 
-class ProductAutocomplete extends StatelessWidget {
-  const ProductAutocomplete({
+class ProductAutocompleteField extends StatelessWidget {
+  const ProductAutocompleteField({
     Key? key,
     required this.optionsBuilder,
     required this.optionsViewBuilder,
