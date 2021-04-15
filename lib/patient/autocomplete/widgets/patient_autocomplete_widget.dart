@@ -65,14 +65,14 @@ class PatientAutocomplete<T extends PatientModel> extends StatelessWidget {
   }
 
   static AutocompleteOptionsViewBuilder<T>
-      getOptionsViewBuilder<T extends Object>() {
+      getOptionsViewBuilder<T extends PatientModel>() {
     return LabelledAutocompleteOptions.getOptionsViewBuilder(
       getViewModel(),
     );
   }
 
-  static AutocompleteOptionToString<T> getViewModel<T extends Object>() {
-    return (option) => option.toString();
+  static AutocompleteOptionToString<T> getViewModel<T extends PatientModel>() {
+    return getPatientViewModel;
   }
 
   static AutocompleteFieldViewBuilder getFieldViewBuilder() {
