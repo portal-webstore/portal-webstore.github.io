@@ -114,7 +114,6 @@ class _OrderFormState extends State<OrderForm> {
             Container(
               padding: edgeInsetsFormFieldPadding,
               width: 120,
-              // - TODO: Replace with date picker or alternative
               child: TextFormField(
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
@@ -131,6 +130,32 @@ class _OrderFormState extends State<OrderForm> {
                   );
                 },
               ),
+            ),
+
+            InputDatePickerFormField(
+              firstDate: DateTime.now(),
+              lastDate: DateTime.now().add(
+                const Duration(
+                  days: 400,
+                ),
+              ),
+              errorFormatText: 'Invalid date format',
+              errorInvalidText: 'Outside date range', // Or selectable predicate
+              fieldHintText: 'Hint',
+              fieldLabelText: 'Required date',
+              onDateSubmitted: (date) {
+                // Only called when datetime is in valid format + range predicate
+                debugPrint('Valid date submitted');
+
+                // Validate input again?
+                // Or save into form model?
+                // Ideally save only in one place to prevent possible bugs
+              },
+              onDateSaved: (date) {
+                // Potentially called with invalid text? on formState.save()
+                debugPrint('Valid date saved');
+                // Save to form model
+              },
             ),
 
             // Free text notes
