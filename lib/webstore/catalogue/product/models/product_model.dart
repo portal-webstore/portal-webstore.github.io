@@ -12,10 +12,12 @@ class ProductModel extends Equatable {
     required this.containerName,
     required this.drugs,
     required this.productAdministrationRoute,
+    required this.ocsProductID,
   });
 
   /// For potential ease of INSERT
-  final int productID;
+  /// UUID
+  final String productID;
 
   /// Simplified model has drugs and container name (diluent/type)
   final String productName;
@@ -39,6 +41,15 @@ class ProductModel extends Equatable {
   ///
   final String productAdministrationRoute;
 
+  /// To link back.
+  /// Not required for display.
+  /// Could be kept entirely out of this interface.
+  /// For future reintegration
+  ///
+  /// May not even be required in the internal history view
+  /// as manually reprocessed.
+  final int ocsProductID;
+
   /// Note that this display may not be required for a single customer
   // final double maximumVolume;
   // final String dongle;
@@ -53,6 +64,7 @@ class ProductModel extends Equatable {
         containerName,
         drugs,
         productAdministrationRoute,
+        ocsProductID
       ];
 
   String getDrugsListCommaSeparatedText() {
