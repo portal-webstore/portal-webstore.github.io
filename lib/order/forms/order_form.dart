@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show MaxLengthEnforcement;
 import 'package:testable_web_app/order/forms/widgets/dose_field_widget.dart';
 import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart';
 import 'package:testable_web_app/webstore/catalogue/product/seeds/products_seed.dart';
 import 'package:testable_web_app/webstore/catalogue/product/widgets/product_detail_widget.dart';
 
 const edgeInsetsPadding = EdgeInsets.fromLTRB(24, 16, 24, 16);
+const maxNumTextCharacters = 1000;
 
 class OrderForm extends StatefulWidget {
   const OrderForm({
@@ -87,8 +89,24 @@ class _OrderFormState extends State<OrderForm> {
             alignLabelWithHint: true,
           ),
           textAlignVertical: TextAlignVertical.top,
+          // Note that shift arrow selection on Flutter web does not autoscroll
+          //
+          // Also note that multi line selection has unintuitive behaviour
+          // Selecting from a line that does not have the text caret cursor on
+          // it causes the field to scroll instead of selecting from that line
+          // * Vertical dragging gesture override seems to be the root issue
+          // You can use mouse cursor to select within one line though
+          // *and multi-lines* if you initate the cursor drag selection
+          // **horizontally**
+          //
+          // ...
           minLines: 4,
           maxLines: 6,
+          maxLength: maxNumTextCharacters,
+          // https://flutter.dev/docs/release/breaking-changes/use-maxLengthEnforcement-instead-of-maxLengthEnforced#default-values-of-maxlengthenforcement
+          // Composition end may not be working correctly. Appears to hard-limit
+          maxLengthEnforcement:
+              MaxLengthEnforcement.truncateAfterCompositionEnds,
         ),
 
         ElevatedButton(
