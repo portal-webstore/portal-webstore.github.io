@@ -170,7 +170,7 @@ class ProductAutocompleteField extends StatelessWidget {
   }
 
   static AutocompleteFieldViewBuilder getFieldViewBuilder() {
-    return LabelledAutocomplete.getBuilder(
+    return LabelledAutocomplete.getFieldBuilder(
       labelText: 'Search product',
     );
   }
