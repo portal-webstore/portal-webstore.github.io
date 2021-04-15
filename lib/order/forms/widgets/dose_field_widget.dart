@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:testable_web_app/order/forms/helpers/allow_decimal_input_formatter.dart';
-import 'package:testable_web_app/order/forms/helpers/dose_input_validator.dart';
-import 'package:testable_web_app/webstore/catalogue/product/models/drug_model.dart';
+import 'package:testable_web_app/order/forms/helpers/allow_decimal_input_formatter.dart'
+    show allowDecimalTwoPlacesInput;
+import 'package:testable_web_app/order/forms/helpers/dose_input_validator.dart'
+    show doseInputValidator;
+import 'package:testable_web_app/webstore/catalogue/product/models/drug_model.dart'
+    show DrugModel;
 
 class DoseField extends StatelessWidget {
   const DoseField({
@@ -20,7 +23,7 @@ class DoseField extends StatelessWidget {
         helperText: '',
       ),
       inputFormatters: [
-        allowDecimalInput,
+        allowDecimalTwoPlacesInput,
       ],
       validator: doseInputValidator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
