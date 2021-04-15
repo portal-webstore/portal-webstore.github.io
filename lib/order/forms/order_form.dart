@@ -87,7 +87,8 @@ class _OrderFormState extends State<OrderForm> {
             alignLabelWithHint: true,
           ),
           textAlignVertical: TextAlignVertical.top,
-          maxLines: 4,
+          minLines: 4,
+          maxLines: 6,
         ),
 
         ElevatedButton(
