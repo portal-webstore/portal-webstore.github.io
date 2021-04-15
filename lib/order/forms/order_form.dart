@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show MaxLengthEnforcement;
 import 'package:testable_web_app/order/forms/widgets/dose_field_widget.dart';
+import 'package:testable_web_app/webstore/catalogue/product/autocomplete/product_autocomplete_field_widget.dart'
+    show ProductAutocompleteField;
 import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart';
 import 'package:testable_web_app/webstore/catalogue/product/widgets/product_detail_widget.dart';
 
@@ -72,19 +74,21 @@ class _OrderFormState extends State<OrderForm> {
             ),
 
             // Could add the patient creation fields directly here for better UX
+
             Container(
               padding: edgeInsetsFormFieldPadding,
               constraints: boxFieldWidthConstraintsLong,
-
-              // - TODO: Replace with product autocomplete
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Search product',
-                  helperText: '',
-                ),
+              child: ProductAutocompleteField(
+                options: widget.products,
+                focusNode: FocusNode(),
+                textEditingController: TextEditingController(),
+                onSelected: (option) {
+                  // Do something
+                  // Save
+                },
               ),
             ),
+
             // Blank it vs possible visibility tween
             Visibility(
               visible: productDetail != null,
