@@ -6,19 +6,27 @@ import 'package:testable_web_app/webstore/catalogue/product/models/drug_model.da
 ///
 ///
 class ProductModel extends Equatable {
-  const ProductModel(
-    this.productID,
-    this.productName,
-    this.containerName,
-    this.drugs,
-    this.productAdministrationRoute,
-  );
+  const ProductModel({
+    required this.productID,
+    required this.productName,
+    required this.containerName,
+    required this.drugs,
+    required this.productAdministrationRoute,
+  });
 
+  /// For potential ease of INSERT
   final int productID;
 
+  /// Simplified model has drugs and container name (diluent/type)
   final String productName;
 
   /// May be redundant if we simplify to only use the flat product name.
+  ///
+  /// Helps if we definitely want the container part pre-separated on order
+  /// Otherwise superfluous as product name already has container name in it..
+  ///
+  /// May also be the conjoined containerVariantName + containerBaseName
+  /// for surefusers
   final String containerName;
 
   /// Required for per-drug dose input fields with given units
@@ -44,6 +52,7 @@ class ProductModel extends Equatable {
         productName,
         containerName,
         drugs,
+        productAdministrationRoute,
       ];
 
   String getDrugsListCommaSeparatedText() {

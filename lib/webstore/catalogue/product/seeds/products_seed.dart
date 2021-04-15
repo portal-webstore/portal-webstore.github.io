@@ -3,47 +3,47 @@ import 'package:testable_web_app/webstore/catalogue/product/models/product_model
 
 const List<ProductModel> seedProducts = [
   ProductModel(
-    1,
-    'Pralatrexate - Syringe',
-    'Syringe', // 20mL
-    [
+    productID: 1,
+    productName: 'Pralatrexate - Syringe',
+    containerName: 'Syringe', // 20mL
+    drugs: [
       DrugModel(
         'Pralatrexate',
         'mg',
       ),
     ],
-    'IVINF',
+    productAdministrationRoute: 'IVINF',
   ),
   ProductModel(
-    2,
-    'Pembrolizumab N/S 50mL Freeflex',
-    'N/S 50mL Freeflex', // 127mL
-    [
+    productID: 2,
+    productName: 'Pembrolizumab N/S 50mL Freeflex',
+    containerName: 'N/S 50mL Freeflex', // 127mL
+    drugs: [
       DrugModel(
         'Pembrolizumab',
         'mg',
       ),
     ],
-    'IVENOS',
+    productAdministrationRoute: 'IVENOS',
   ),
   ProductModel(
-    3,
-    'Pembrolizumab N/S 100mL Freeflex',
-    'N/S 100mL Freeflex', // 198mL
-    [
+    productID: 3,
+    productName: 'Pembrolizumab N/S 100mL Freeflex',
+    containerName: 'N/S 100mL Freeflex', // 198mL
+    drugs: [
       DrugModel(
         'Pembrolizumab',
         'mg',
       ),
     ],
-    'IVENOS',
+    productAdministrationRoute: 'IVENOS',
   ),
   ProductModel(
-    4,
-    'Doxorubicin / Vincristine / Etoposide (E/phos br) - '
+    productID: 4,
+    productName: 'Doxorubicin / Vincristine / Etoposide (E/phos br) - '
         '24-hour Surefuser, Surefuser 250mL 1 day',
-    '24-hour Surefuser, Surefuser 250mL 1 day', // 241mL
-    [
+    containerName: '24-hour Surefuser, Surefuser 250mL 1 day', // 241mL
+    drugs: [
       DrugModel(
         'Doxorubicin',
         'mg',
@@ -57,6 +57,6 @@ const List<ProductModel> seedProducts = [
         'mg',
       ),
     ],
-    'IVINF',
+    productAdministrationRoute: 'IVINF',
   ),
 ];
