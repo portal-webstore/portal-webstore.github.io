@@ -89,7 +89,7 @@ class LabelledAutocompleteOptions<T extends Object> extends StatelessWidget {
 
   ///
   /// Returns empty iterable if an error is encountered.
-  AutocompleteOptionsBuilder<T> getTryOptionsBuilder(
+  static AutocompleteOptionsBuilder<T> getTryOptionsBuilder<T extends Object>(
     Iterable<T> options,
     IsOptionMatchedFromSearchTextFn<T> isOptionMatchedFromSearchTextFn,
   ) {

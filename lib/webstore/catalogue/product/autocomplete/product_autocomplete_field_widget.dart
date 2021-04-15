@@ -46,13 +46,20 @@ class ProductAutocompleteField extends StatelessWidget {
     /// Use RawAutocomplete to retain access to
     /// focusNode and textEditingController for customisability
     return RawAutocomplete<ProductModel>(
-      optionsBuilder: productOptionsBuilder,
+      optionsBuilder: getProductOptionsBuilder(),
       optionsViewBuilder: getProductOptionsViewBuilder(),
       onSelected: onSelected,
       displayStringForOption: getProductViewModel,
       fieldViewBuilder: getFieldViewBuilder(),
       focusNode: focusNode,
       textEditingController: textEditingController,
+    );
+  }
+
+  ProductAutocompleteOptionsBuilder getProductOptionsBuilder() {
+    return LabelledAutocompleteOptions.getTryOptionsBuilder(
+      options,
+      isSearchTextFoundInProductOption,
     );
   }
 
