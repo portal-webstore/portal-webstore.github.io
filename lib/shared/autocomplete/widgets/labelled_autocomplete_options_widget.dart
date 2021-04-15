@@ -109,6 +109,14 @@ class LabelledAutocompleteOptions<T extends Object> extends StatelessWidget {
           isOptionMatchedFromSearchTextFn,
         );
 
+/*
+        final Iterable<T> searchedOptions = options.where(
+          (T option) => isOptionMatchedFromSearchTextFn(
+            option,
+            searchText,
+          ),
+        );
+*/
         return searchedOptions;
       } on Exception catch (exc) {
         // In case runtime craziness occurs.
