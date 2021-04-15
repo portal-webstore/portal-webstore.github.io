@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+/// Otherwise we spam the user that they did something wrong in the first key
+/// entering a single number!
+/// UX anxiety
+const AutovalidateMode disabledAutovalidatePreventEarlyPartialTextErrors =
+    AutovalidateMode.disabled;
+
 /// Fork of [InputDatePickerFormField]
 ///
 ///
@@ -15,6 +21,17 @@ import 'package:flutter/material.dart';
 ///
 /// TextFormField should response to text inputs (/) it does pass `String?`
 /// _handleSaved
+///
+/// no - triple checking again now
+/// The callbacks are only run through _updateDate which only run the
+/// `onDateSubmitted` and `onDateSaved` callbacks with valid date times
+/// Which means we are unable to customise by default.
+/// Which means we are also unable to trigger .validate() when datetime is null
+/// which is when we actually want to see the validate error message in the
+/// first place in response to potential text !!
+///
+///
+/// Callback is only run when _isValidAcceptableDate . ParseDate is run first
 ///
 ///
 /// Inspired original 2014 The Flutter Authors. All rights reserved.
@@ -253,6 +270,7 @@ class _CustomInputDateTextFormFieldState
         MaterialLocalizations.of(context);
     final InputDecorationTheme inputTheme =
         Theme.of(context).inputDecorationTheme;
+
     return TextFormField(
       decoration: InputDecoration(
         border: inputTheme.border ?? const UnderlineInputBorder(),
@@ -266,6 +284,10 @@ class _CustomInputDateTextFormFieldState
       onFieldSubmitted: _handleSubmitted,
       autofocus: widget.autofocus,
       controller: _controller,
+      // Explicitly disable as we want to customise the partial interactions first
+      // Do not show annoying red alert messages on first keystroke!
+      //
+      autovalidateMode: disabledAutovalidatePreventEarlyPartialTextErrors,
     );
   }
 }
