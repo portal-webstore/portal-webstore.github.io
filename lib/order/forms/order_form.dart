@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show MaxLengthEnforcement;
 import 'package:testable_web_app/order/forms/widgets/dose_field_widget.dart';
+import 'package:testable_web_app/patient/autocomplete/widgets/patient_autocomplete_widget.dart';
+import 'package:testable_web_app/patient/models/patient_model.dart';
 import 'package:testable_web_app/webstore/catalogue/product/autocomplete/product_autocomplete_field_widget.dart'
     show ProductAutocompleteField;
 import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart';
@@ -32,7 +34,7 @@ class OrderForm extends StatefulWidget {
   }) : super(key: key);
 
   final List<ProductModel> products;
-  final List patients;
+  final List<PatientModel> patients;
   @override
   _OrderFormState createState() => _OrderFormState();
 }
@@ -55,12 +57,14 @@ class _OrderFormState extends State<OrderForm> {
               constraints: boxFieldWidthConstraintsStandard,
 
               // - TODO: Replace with autocomplete
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Search patient',
-                  helperText: '',
-                ),
+              child: PatientAutocomplete<PatientModel>(
+                options: widget.patients,
+                focusNode: FocusNode(),
+                textEditingController: TextEditingController(),
+                onSelected: (option) {
+                  // Do something
+                  // Save
+                },
               ),
             ),
 

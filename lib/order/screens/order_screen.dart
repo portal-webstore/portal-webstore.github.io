@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testable_web_app/order/forms/order_form.dart';
+import 'package:testable_web_app/patient/models/patient_model.dart';
 import 'package:testable_web_app/shared/navigation/widgets/side_menu_nav_drawer/side_menu_nav_drawer_widget.dart';
 import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart';
 
@@ -15,7 +16,7 @@ class OrderScreen extends StatelessWidget {
   }) : super(key: key);
 
   final List<ProductModel> products;
-  final List patients;
+  final List<PatientModel> patients;
 
   @override
   Widget build(BuildContext context) {

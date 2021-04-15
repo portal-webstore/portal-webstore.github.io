@@ -46,7 +46,7 @@ class LabelledAutocomplete {
 
   /// Alternate syntax to above function [getLabelledFieldViewBuilder]
   /// Works around the lint.
-  static LabelledAutocompleteFieldViewBuilder getBuilder({
+  static LabelledAutocompleteFieldViewBuilder getFieldBuilder({
     required String labelText,
     String helperText = '',
   }) {

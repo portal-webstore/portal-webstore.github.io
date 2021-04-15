@@ -8,6 +8,8 @@ import 'package:testable_web_app/login/screens/home_screen.dart'
 import 'package:testable_web_app/login/splash/screens/splash_screen.dart';
 import 'package:testable_web_app/order/screens/order_screen.dart'
     show OrderScreen;
+import 'package:testable_web_app/patient/seeds/patients_seed.dart'
+    show seedPatients;
 import 'package:testable_web_app/sample/counter/counter.dart';
 import 'package:testable_web_app/sample/timer/screen/timer_screen.dart';
 import 'package:testable_web_app/shared/navigation/routes_constant.dart';
@@ -127,7 +129,7 @@ class Router {
         return MaterialPageRoute<void>(
           builder: (BuildContext context) => const OrderScreen(
             products: seedProducts,
-            patients: <dynamic>[],
+            patients: seedPatients,
           ),
           settings: settings,
         );
