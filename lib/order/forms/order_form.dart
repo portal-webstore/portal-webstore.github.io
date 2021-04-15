@@ -3,6 +3,7 @@ import 'package:flutter/services.dart' show MaxLengthEnforcement;
 import 'package:testable_web_app/order/forms/widgets/dose_field_widget.dart';
 import 'package:testable_web_app/patient/autocomplete/widgets/patient_autocomplete_widget.dart';
 import 'package:testable_web_app/patient/models/patient_model.dart';
+import 'package:testable_web_app/shared/forms/date/widgets/input_custom_date_text_field.dart';
 import 'package:testable_web_app/webstore/catalogue/product/autocomplete/product_autocomplete_field_widget.dart'
     show ProductAutocompleteField;
 import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart';
@@ -132,7 +133,7 @@ class _OrderFormState extends State<OrderForm> {
               ),
             ),
 
-            InputDatePickerFormField(
+            CustomInputDateTextFormField(
               firstDate: DateTime.now(),
               lastDate: DateTime.now().add(
                 const Duration(

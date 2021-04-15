@@ -67,8 +67,11 @@ class CustomInputDateTextFormField extends StatefulWidget {
     this.fieldHintText,
     this.fieldLabelText,
     this.autofocus = false,
+    // ignore: unnecessary_null_comparison
   })  : assert(firstDate != null),
+        // ignore: unnecessary_null_comparison
         assert(lastDate != null),
+        // ignore: unnecessary_null_comparison
         assert(autofocus != null),
         initialDate =
             initialDate != null ? DateUtils.dateOnly(initialDate) : null,
