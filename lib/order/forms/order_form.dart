@@ -52,7 +52,7 @@ class _OrderFormState extends State<OrderForm> {
         TextFormField(
           decoration: const InputDecoration(
             border: UnderlineInputBorder(),
-            labelText: 'Search products',
+            labelText: 'Search product',
             helperText: '',
           ),
         ),
