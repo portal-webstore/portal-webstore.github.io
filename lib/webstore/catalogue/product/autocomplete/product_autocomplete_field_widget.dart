@@ -17,14 +17,15 @@ import 'package:testable_web_app/webstore/catalogue/product/models/product_model
 class ProductAutocompleteField extends StatelessWidget {
   const ProductAutocompleteField({
     Key? key,
-    required this.optionsBuilder,
+    required this.options,
     required this.onSelected,
     required this.displayStringForOption,
     required this.focusNode,
     required this.textEditingController,
   }) : super(key: key);
 
-  final ProductAutocompleteOptionsBuilder optionsBuilder;
+  /// Base options
+  final Iterable<ProductModel> options;
 
   final ProductAutocompleteOnSelected? onSelected;
 
@@ -48,7 +49,7 @@ class ProductAutocompleteField extends StatelessWidget {
     /// Use RawAutocomplete to retain access to
     /// focusNode and textEditingController for customisability
     return RawAutocomplete<ProductModel>(
-      optionsBuilder: optionsBuilder,
+      optionsBuilder: productOptionsBuilder,
       optionsViewBuilder: getProductOptionsViewBuilder(),
       onSelected: onSelected,
       displayStringForOption:
@@ -57,6 +58,32 @@ class ProductAutocompleteField extends StatelessWidget {
       focusNode: focusNode,
       textEditingController: textEditingController,
     );
+  }
+
+  /// Builder from text editing value search text.
+  Iterable<ProductModel> productOptionsBuilder(
+    TextEditingValue text,
+  ) {
+    try {
+      final String searchText = text.text;
+      if (searchText.trim().isEmpty) {
+        return [];
+      }
+
+      final Iterable<ProductModel> searchedOptions = options.where(
+        (ProductModel option) => isSearchTextFoundInProductOption(
+          option,
+          searchText,
+        ),
+      );
+
+      return searchedOptions;
+    } on Exception catch (exc) {
+      // In case runtime craziness occurs.
+      debugPrint(exc.toString());
+    }
+
+    return [];
   }
 
   ProductAutocompleteOptionsViewBuilder getProductOptionsViewBuilder() {
