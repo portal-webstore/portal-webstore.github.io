@@ -89,8 +89,10 @@ class LabelledAutocompleteOptions<T extends Object> extends StatelessWidget {
 
   ///
   /// Returns empty iterable if an error is encountered.
-  AutocompleteOptionsBuilder<T> getTryOptionsBuilder(Iterable<T> options,
-      IsOptionMatchedFromSearchTextFn<T> isOptionMatchedFromSearchTextFn) {
+  AutocompleteOptionsBuilder<T> getTryOptionsBuilder(
+    Iterable<T> options,
+    IsOptionMatchedFromSearchTextFn<T> isOptionMatchedFromSearchTextFn,
+  ) {
     // Try Catch scope?
 
     return (
@@ -102,6 +104,9 @@ class LabelledAutocompleteOptions<T extends Object> extends StatelessWidget {
           return [];
         }
 
+// The only difference between these two chunks of code
+// is options.where vs wrapped (options)
+// and the extra step to read type info IsOptionMatched<T>
         final Iterable<T> searchedOptions =
             AutocompleteTextOption.getOptionsFilteredBy(
           options,
