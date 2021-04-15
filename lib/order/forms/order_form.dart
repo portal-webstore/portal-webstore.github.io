@@ -5,6 +5,9 @@ import 'package:testable_web_app/webstore/catalogue/product/models/product_model
 import 'package:testable_web_app/webstore/catalogue/product/widgets/product_detail_widget.dart';
 
 const edgeInsetsPadding = EdgeInsets.fromLTRB(16, 16, 16, 16);
+const edgeInsetsFormFieldPadding = EdgeInsets.symmetric(
+  vertical: 16,
+);
 const maxNumTextCharacters = 1000;
 const boxFieldWidthConstraintsStandard = BoxConstraints(
   minWidth: 480,
@@ -46,6 +49,7 @@ class _OrderFormState extends State<OrderForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
+              padding: edgeInsetsFormFieldPadding,
               constraints: boxFieldWidthConstraintsStandard,
 
               // - TODO: Replace with autocomplete
@@ -69,6 +73,7 @@ class _OrderFormState extends State<OrderForm> {
 
             // Could add the patient creation fields directly here for better UX
             Container(
+              padding: edgeInsetsFormFieldPadding,
               constraints: boxFieldWidthConstraintsLong,
 
               // - TODO: Replace with product autocomplete
@@ -89,6 +94,7 @@ class _OrderFormState extends State<OrderForm> {
             ),
 
             Container(
+              padding: edgeInsetsFormFieldPadding,
               constraints: boxFieldWidthConstraintsShort,
 
               // - TODO: Replace with generated number of dose fields
@@ -97,7 +103,8 @@ class _OrderFormState extends State<OrderForm> {
               ),
             ),
 
-            SizedBox(
+            Container(
+              padding: edgeInsetsFormFieldPadding,
               width: 120,
               // - TODO: Replace with date picker or alternative
               child: TextFormField(
