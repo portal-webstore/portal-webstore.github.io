@@ -19,7 +19,6 @@ class ProductAutocompleteField extends StatelessWidget {
     Key? key,
     required this.options,
     required this.onSelected,
-    required this.displayStringForOption,
     required this.focusNode,
     required this.textEditingController,
   }) : super(key: key);
@@ -28,8 +27,6 @@ class ProductAutocompleteField extends StatelessWidget {
   final Iterable<ProductModel> options;
 
   final ProductAutocompleteOnSelected? onSelected;
-
-  final ProductAutocompleteOptionToString? displayStringForOption;
 
   /// Potentially less useful for parent smart page component to know about
   /// Must be disposed of in parent form
@@ -52,8 +49,7 @@ class ProductAutocompleteField extends StatelessWidget {
       optionsBuilder: productOptionsBuilder,
       optionsViewBuilder: getProductOptionsViewBuilder(),
       onSelected: onSelected,
-      displayStringForOption:
-          displayStringForOption ?? RawAutocomplete.defaultStringForOption,
+      displayStringForOption: getProductViewModel,
       fieldViewBuilder: getFieldViewBuilder(),
       focusNode: focusNode,
       textEditingController: textEditingController,
