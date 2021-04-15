@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:testable_web_app/shared/autocomplete/helpers/autocomplete_builders.dart';
 import 'package:testable_web_app/shared/autocomplete/helpers/autocomplete_text_option.dart';
+import 'package:testable_web_app/shared/autocomplete/widgets/labelled_autocomplete_options_widget.dart'
+    show LabelledAutocompleteOptions;
 import 'package:testable_web_app/webstore/catalogue/product/autocomplete/types/product_autocomplete_types.dart'
     show
         ProductAutocompleteOnSelected,
@@ -16,7 +18,6 @@ class ProductAutocompleteField extends StatelessWidget {
   const ProductAutocompleteField({
     Key? key,
     required this.optionsBuilder,
-    required this.optionsViewBuilder,
     required this.onSelected,
     required this.displayStringForOption,
     required this.focusNode,
@@ -24,8 +25,6 @@ class ProductAutocompleteField extends StatelessWidget {
   }) : super(key: key);
 
   final ProductAutocompleteOptionsBuilder optionsBuilder;
-
-  final ProductAutocompleteOptionsViewBuilder optionsViewBuilder;
 
   final ProductAutocompleteOnSelected? onSelected;
 
@@ -50,13 +49,35 @@ class ProductAutocompleteField extends StatelessWidget {
     /// focusNode and textEditingController for customisability
     return RawAutocomplete<ProductModel>(
       optionsBuilder: optionsBuilder,
-      optionsViewBuilder: optionsViewBuilder,
+      optionsViewBuilder: getProductOptionsViewBuilder(),
       onSelected: onSelected,
       displayStringForOption:
           displayStringForOption ?? RawAutocomplete.defaultStringForOption,
       fieldViewBuilder: getFieldViewBuilder(),
       focusNode: focusNode,
       textEditingController: textEditingController,
+    );
+  }
+
+  ProductAutocompleteOptionsViewBuilder getProductOptionsViewBuilder() {
+    return LabelledAutocompleteOptions.getOptionsViewBuilder(
+      getProductViewModel,
+    );
+  }
+
+  /// Alternative to above
+  /// [getProductOptionsViewBuilder]
+  /// code maintainability reusability trade-off vs readability at point.
+  ///
+  Widget productOptionsViewBuilder(
+    BuildContext context,
+    AutocompleteOnSelected<ProductModel> onSelected,
+    Iterable<ProductModel> options,
+  ) {
+    return LabelledAutocompleteOptions(
+      displayStringForOption: getProductViewModel,
+      onSelected: onSelected,
+      options: options,
     );
   }
 
