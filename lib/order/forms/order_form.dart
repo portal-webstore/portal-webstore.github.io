@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show MaxLengthEnforcement;
 import 'package:testable_web_app/order/forms/widgets/dose_field_widget.dart';
 import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart';
-import 'package:testable_web_app/webstore/catalogue/product/seeds/products_seed.dart';
 import 'package:testable_web_app/webstore/catalogue/product/widgets/product_detail_widget.dart';
 
 const edgeInsetsPadding = EdgeInsets.fromLTRB(24, 16, 24, 16);
@@ -11,8 +10,12 @@ const maxNumTextCharacters = 1000;
 class OrderForm extends StatefulWidget {
   const OrderForm({
     Key? key,
+    required this.products,
+    required this.patients,
   }) : super(key: key);
 
+  final List<ProductModel> products;
+  final List patients;
   @override
   _OrderFormState createState() => _OrderFormState();
 }
@@ -68,7 +71,7 @@ class _OrderFormState extends State<OrderForm> {
         ),
         // - TODO: Replace with generated number of dose fields
         DoseField(
-          drug: seedProducts[0].drugs[0],
+          drug: widget.products[0].drugs[0],
         ),
 
         // - TODO: Replace

@@ -34,7 +34,10 @@ class OrderScreen extends StatelessWidget {
          */
       ),
       drawer: const SideMenuNavigationDrawer(),
-      body: const OrderForm(),
+      body: OrderForm(
+        products: products,
+        patients: patients,
+      ),
     );
   }
 }
