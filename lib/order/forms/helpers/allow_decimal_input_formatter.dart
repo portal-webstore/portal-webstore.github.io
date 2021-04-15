@@ -36,3 +36,18 @@ final FilteringTextInputFormatter allowDecimalTwoPlacesInput =
 
   // Alternatively ^\d+\.?\d*$ would reset to blank on invalid extra '..'
 );
+
+// For another user experience alternative
+// Allows the input validator to go through with a message and error-shake
+// Resets field when exceeding or entering invalid input rather than blocking
+// early keystrokes.
+final FilteringTextInputFormatter
+    resetOnExceedingTwoDecimalPlacesInputFormatter =
+    FilteringTextInputFormatter.allow(
+  // Add end string $
+  // for text reset that prompts the error message (with validator)
+  // i.e. "Invalid value detected. Please enter dose"
+  // shakes the field
+  //
+  RegExp(r'^\d+\.?\d{0,2}$'),
+);
