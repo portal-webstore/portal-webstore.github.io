@@ -6,6 +6,18 @@ import 'package:testable_web_app/webstore/catalogue/product/widgets/product_deta
 
 const edgeInsetsPadding = EdgeInsets.fromLTRB(16, 16, 16, 16);
 const maxNumTextCharacters = 1000;
+const boxFieldWidthConstraintsStandard = BoxConstraints(
+  minWidth: 480,
+  maxWidth: 600,
+);
+const boxFieldWidthConstraintsShort = BoxConstraints(
+  minWidth: 120,
+  maxWidth: 240,
+);
+const boxFieldWidthConstraintsLong = BoxConstraints(
+  minWidth: 600,
+  maxWidth: 960,
+);
 
 class OrderForm extends StatefulWidget {
   const OrderForm({
@@ -30,15 +42,19 @@ class _OrderFormState extends State<OrderForm> {
     return SingleChildScrollView(
       child: Container(
         padding: edgeInsetsPadding,
-        child: Wrap(
-          spacing: 16,
-          runSpacing: 16,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // - TODO: Replace with autocomplete
-            TextFormField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Search patient',
+            Container(
+              constraints: boxFieldWidthConstraintsStandard,
+
+              // - TODO: Replace with autocomplete
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Search patient',
+                  helperText: '',
+                ),
               ),
             ),
 
@@ -52,15 +68,18 @@ class _OrderFormState extends State<OrderForm> {
             ),
 
             // Could add the patient creation fields directly here for better UX
+            Container(
+              constraints: boxFieldWidthConstraintsLong,
 
-            // - TODO: Replace with product autocomplete
-            TextFormField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Search product',
+              // - TODO: Replace with product autocomplete
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Search product',
+                  helperText: '',
+                ),
               ),
             ),
-
             // Blank it vs possible visibility tween
             Visibility(
               visible: productDetail != null,
@@ -68,16 +87,25 @@ class _OrderFormState extends State<OrderForm> {
                 _productDetailsToShow,
               ),
             ),
-            // - TODO: Replace with generated number of dose fields
-            DoseField(
-              drug: widget.products[0].drugs[0],
+
+            Container(
+              constraints: boxFieldWidthConstraintsShort,
+
+              // - TODO: Replace with generated number of dose fields
+              child: DoseField(
+                drug: widget.products[0].drugs[0],
+              ),
             ),
 
-            // - TODO: Replace
-            TextFormField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Required date',
+            SizedBox(
+              width: 120,
+              // - TODO: Replace with date picker or alternative
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Required date',
+                  helperText: '',
+                ),
               ),
             ),
 
