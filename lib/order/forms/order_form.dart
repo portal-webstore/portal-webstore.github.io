@@ -78,6 +78,18 @@ class _OrderFormState extends State<OrderForm> {
           ),
         ),
 
+        // Free text notes
+        TextFormField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: 'Notes',
+            helperText: '',
+            alignLabelWithHint: true,
+          ),
+          textAlignVertical: TextAlignVertical.top,
+          maxLines: 4,
+        ),
+
         ElevatedButton(
           onPressed: () {},
           child: const Text(
