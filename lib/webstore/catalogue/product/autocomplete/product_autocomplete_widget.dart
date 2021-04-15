@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:testable_web_app/shared/autocomplete/helpers/autocomplete_builders.dart';
 import 'package:testable_web_app/shared/autocomplete/helpers/autocomplete_text_option.dart';
-import 'package:testable_web_app/shared/autocomplete/widgets/labelled_autocomplete_field_widget.dart';
 import 'package:testable_web_app/webstore/catalogue/product/autocomplete/types/product_autocomplete_types.dart'
     show
         ProductAutocompleteOnSelected,
@@ -119,20 +119,8 @@ class ProductAutocomplete extends StatelessWidget {
   }
 
   static AutocompleteFieldViewBuilder getFieldViewBuilder() {
-    return fieldViewBuilder;
-  }
-
-  static Widget fieldViewBuilder(
-    BuildContext context,
-    TextEditingController textEditingController,
-    FocusNode focusNode,
-    VoidCallback onFieldSubmitted,
-  ) {
-    return LabelledAutocompleteField(
-      focusNode: focusNode,
-      textEditingController: textEditingController,
-      onFieldSubmitted: onFieldSubmitted,
-      labelText: 'Search patient',
+    return LabelledAutocomplete.getBuilder(
+      labelText: 'Search product',
     );
   }
 }
