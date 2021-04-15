@@ -16,7 +16,7 @@ class DoseField extends StatelessWidget {
     return TextFormField(
       decoration: InputDecoration(
         border: const UnderlineInputBorder(),
-        labelText: '${drug.drugName} dose ${drug.drugUnits}',
+        labelText: '${drug.drugName} dose (${drug.drugUnits})',
         helperText: '',
       ),
       inputFormatters: [
