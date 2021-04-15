@@ -87,7 +87,9 @@ class LabelledAutocompleteOptions<T extends Object> extends StatelessWidget {
   //     }}
   //
 
-  AutocompleteOptionsBuilder<T> getOptionsBuilder(Iterable<T> options,
+  ///
+  /// Returns empty iterable if an error is encountered.
+  AutocompleteOptionsBuilder<T> getTryOptionsBuilder(Iterable<T> options,
       IsOptionMatchedFromSearchTextFn<T> isOptionMatchedFromSearchTextFn) {
     // Try Catch scope?
 
@@ -100,11 +102,11 @@ class LabelledAutocompleteOptions<T extends Object> extends StatelessWidget {
           return [];
         }
 
-        final Iterable<T> searchedOptions = options.where(
-          (T option) => isOptionMatchedFromSearchTextFn(
-            option,
-            searchText,
-          ),
+        final Iterable<T> searchedOptions =
+            AutocompleteTextOption.getOptionsFilteredBy(
+          options,
+          searchText,
+          isOptionMatchedFromSearchTextFn,
         );
 
         return searchedOptions;
