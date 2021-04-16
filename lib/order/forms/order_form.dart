@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show MaxLengthEnforcement;
-import 'package:intl/intl.dart';
+import 'package:testable_web_app/i18n/date/australia_date_locale_format.dart';
 import 'package:testable_web_app/order/forms/widgets/dose_field_widget.dart';
 import 'package:testable_web_app/patient/autocomplete/widgets/patient_autocomplete_widget.dart';
 import 'package:testable_web_app/patient/models/patient_model.dart';
@@ -28,6 +28,10 @@ const boxFieldWidthConstraintsLong = BoxConstraints(
   maxWidth: 960,
 );
 
+const addFutureDateIncrement = Duration(
+  days: 400,
+);
+
 class OrderForm extends StatefulWidget {
   const OrderForm({
     Key? key,
@@ -42,169 +46,179 @@ class OrderForm extends StatefulWidget {
 }
 
 class _OrderFormState extends State<OrderForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   ProductModel? _productDetailsToShow;
 
   @override
   Widget build(BuildContext context) {
     final ProductModel? productDetail = _productDetailsToShow;
 
+    final futureDateMax = DateTime.now().add(
+      addFutureDateIncrement,
+    );
+
     return SingleChildScrollView(
       child: Container(
         padding: edgeInsetsPadding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: edgeInsetsFormFieldPadding,
-              constraints: boxFieldWidthConstraintsStandard,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                padding: edgeInsetsFormFieldPadding,
+                constraints: boxFieldWidthConstraintsStandard,
 
-              // - TODO: Replace with autocomplete
-              child: PatientAutocomplete<PatientModel>(
-                options: widget.patients,
-                focusNode: FocusNode(),
-                textEditingController: TextEditingController(),
-                onSelected: (option) {
-                  // Do something
-                  // Save
+                // - TODO: Replace with autocomplete
+                child: PatientAutocomplete<PatientModel>(
+                  options: widget.patients,
+                  focusNode: FocusNode(),
+                  textEditingController: TextEditingController(),
+                  onSelected: (option) {
+                    // Do something
+                    // Save
+                  },
+                ),
+              ),
+
+              ElevatedButton(
+                onPressed: () {
+                  // setState isNewPatient
                 },
+                child: const Text(
+                  'Create new patient',
+                ),
               ),
-            ),
 
-            ElevatedButton(
-              onPressed: () {
-                // setState isNewPatient
-              },
-              child: const Text(
-                'Create new patient',
+              // Could add the patient creation fields directly here for better UX
+
+              Container(
+                padding: edgeInsetsFormFieldPadding,
+                constraints: boxFieldWidthConstraintsLong,
+                child: ProductAutocompleteField(
+                  options: widget.products,
+                  focusNode: FocusNode(),
+                  textEditingController: TextEditingController(),
+                  onSelected: (option) {
+                    // Do something
+                    // Save
+                  },
+                ),
               ),
-            ),
 
-            // Could add the patient creation fields directly here for better UX
-
-            Container(
-              padding: edgeInsetsFormFieldPadding,
-              constraints: boxFieldWidthConstraintsLong,
-              child: ProductAutocompleteField(
-                options: widget.products,
-                focusNode: FocusNode(),
-                textEditingController: TextEditingController(),
-                onSelected: (option) {
-                  // Do something
-                  // Save
-                },
+              // Blank it vs possible visibility tween
+              Visibility(
+                visible: productDetail != null,
+                child: _showValidProductDetail(
+                  _productDetailsToShow,
+                ),
               ),
-            ),
 
-            // Blank it vs possible visibility tween
-            Visibility(
-              visible: productDetail != null,
-              child: _showValidProductDetail(
-                _productDetailsToShow,
+              Container(
+                padding: edgeInsetsFormFieldPadding,
+                constraints: boxFieldWidthConstraintsShort,
+
+                // - TODO: Replace with generated number of dose fields
+                child: DoseField(
+                  drug: widget.products[0].drugs[0],
+                ),
               ),
-            ),
 
-            Container(
-              padding: edgeInsetsFormFieldPadding,
-              constraints: boxFieldWidthConstraintsShort,
-
-              // - TODO: Replace with generated number of dose fields
-              child: DoseField(
-                drug: widget.products[0].drugs[0],
+              Container(
+                padding: edgeInsetsFormFieldPadding,
+                width: 120,
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Required date',
+                    helperText: '',
+                  ),
+                  onTap: () {
+                    showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2021, 4, 24),
+                      initialEntryMode: DatePickerEntryMode.input,
+                    );
+                  },
+                ),
               ),
-            ),
+              Container(
+                padding: edgeInsetsFormFieldPadding,
+                // 120 for date field width;
+                // 240 for long error message
+                width: 240,
+                child: CustomInputDateTextFormField(
+                  firstDate: DateTime.now(),
+                  lastDate: futureDateMax,
+                  // Note field width
+                  errorFormatText: 'Please enter (dd/MM/yyyy) format',
+                  // Date range or date-selectable predicate
+                  // 'Outside date range 16/04/2021–21/05/2022'
+                  errorInvalidText: 'Outside date range '
+                      '${ausFullDateDisplayFormat.format(DateTime.now())}'
+                      '–'
+                      '${ausFullDateDisplayFormat.format(futureDateMax)}',
+                  fieldHintText: 'Hint',
+                  fieldLabelText: 'Required date',
+                  onDateSubmitted: (date) {
+                    // Only called when datetime is in valid format + range predicate
+                    debugPrint('Valid date submitted');
 
-            Container(
-              padding: edgeInsetsFormFieldPadding,
-              width: 120,
-              child: TextFormField(
+                    // Validate input again?
+                    // Or save into form model?
+                    // Ideally save only in one place to prevent possible bugs
+                    //
+                  },
+                  onTextSubmitted: (text) {
+                    _formKey.currentState?.validate();
+                  },
+                  onDateSaved: (date) {
+                    // Potentially called with invalid text? on formState.save()
+                    debugPrint('Valid date saved');
+                    // Save to form model
+                  },
+                ),
+              ),
+              // Free text notes
+              TextFormField(
                 decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Required date',
+                  border: OutlineInputBorder(),
+                  labelText: 'Notes',
                   helperText: '',
+                  alignLabelWithHint: true,
                 ),
-                onTap: () {
-                  showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2021, 4, 24),
-                    initialEntryMode: DatePickerEntryMode.input,
-                  );
-                },
+                textAlignVertical: TextAlignVertical.top,
+                // Note that shift arrow selection on Flutter web does not autoscroll
+                //
+                // Also note that multi line selection has unintuitive behaviour
+                // Selecting from a line that does not have the text caret cursor on
+                // it causes the field to scroll instead of selecting from that line
+                // * Vertical dragging gesture override seems to be the root issue
+                // You can use mouse cursor to select within one line though
+                // *and multi-lines* if you initate the cursor drag selection
+                // **horizontally**
+                //
+                // ...
+                minLines: 4,
+                maxLines: 6,
+                maxLength: maxNumTextCharacters,
+                // https://flutter.dev/docs/release/breaking-changes/use-maxLengthEnforcement-instead-of-maxLengthEnforced#default-values-of-maxlengthenforcement
+                // Composition end may not be working correctly. Appears to hard-limit
+                maxLengthEnforcement:
+                    MaxLengthEnforcement.truncateAfterCompositionEnds,
               ),
-            ),
 
-            CustomInputDateTextFormField(
-              firstDate: DateTime.now(),
-              lastDate: DateTime.now().add(
-                const Duration(
-                  days: 400,
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text(
+                  'Submit order to cart',
                 ),
-              ),
-              // Note field width
-              errorFormatText: 'Please enter (dd/MM/yyyy) format',
-              // Date range or date-selectable predicate
-              errorInvalidText: 'Outside date range '
-                  '${DateTime.now().toString()}'
-                  '–'
-                  '${DateTime.now().add(
-                const Duration(
-                  days: 400,
-                ),
-              )}',
-              fieldHintText: 'Hint',
-              fieldLabelText: 'Required date',
-              onDateSubmitted: (date) {
-                // Only called when datetime is in valid format + range predicate
-                debugPrint('Valid date submitted');
-
-                // Validate input again?
-                // Or save into form model?
-                // Ideally save only in one place to prevent possible bugs
-              },
-              onDateSaved: (date) {
-                // Potentially called with invalid text? on formState.save()
-                debugPrint('Valid date saved');
-                // Save to form model
-              },
-            ),
-
-            // Free text notes
-            TextFormField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Notes',
-                helperText: '',
-                alignLabelWithHint: true,
-              ),
-              textAlignVertical: TextAlignVertical.top,
-              // Note that shift arrow selection on Flutter web does not autoscroll
-              //
-              // Also note that multi line selection has unintuitive behaviour
-              // Selecting from a line that does not have the text caret cursor on
-              // it causes the field to scroll instead of selecting from that line
-              // * Vertical dragging gesture override seems to be the root issue
-              // You can use mouse cursor to select within one line though
-              // *and multi-lines* if you initate the cursor drag selection
-              // **horizontally**
-              //
-              // ...
-              minLines: 4,
-              maxLines: 6,
-              maxLength: maxNumTextCharacters,
-              // https://flutter.dev/docs/release/breaking-changes/use-maxLengthEnforcement-instead-of-maxLengthEnforced#default-values-of-maxlengthenforcement
-              // Composition end may not be working correctly. Appears to hard-limit
-              maxLengthEnforcement:
-                  MaxLengthEnforcement.truncateAfterCompositionEnds,
-            ),
-
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text(
-                'Submit order to cart',
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

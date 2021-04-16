@@ -76,6 +76,7 @@ class CustomInputDateTextFormField extends StatefulWidget {
     DateTime? initialDate,
     required DateTime firstDate,
     required DateTime lastDate,
+    this.onTextSubmitted,
     this.onDateSubmitted,
     this.onDateSaved,
     this.selectableDayPredicate,
@@ -121,6 +122,13 @@ class CustomInputDateTextFormField extends StatefulWidget {
   /// the text in the field. Will only be called if the input represents a valid
   /// [DateTime].
   final ValueChanged<DateTime>? onDateSubmitted;
+
+  /// Optional method to call on input text to provide more information when a
+  /// user inputs an invalid date format [String]
+  ///
+  /// For error validation triggering.
+  /// By parent form formKey.currentState.validate()
+  final ValueChanged<String?>? onTextSubmitted;
 
   /// An optional method to call with the final date when the form is
   /// saved via [FormState.save]. Will only be called if the input represents
@@ -268,9 +276,9 @@ class _CustomInputDateTextFormFieldState
     // Retain as many of same anchor points as possible.
     //
     // May be more maintainable to absorb validateDate into this text function
-    final String? validateDateFormatRangeValidMessage = _validateDate(date);
-    if (validateDateFormatRangeValidMessage != null) {
-      return validateDateFormatRangeValidMessage;
+    final String? validateDateFormatRangeErrorMessage = _validateDate(date);
+    if (validateDateFormatRangeErrorMessage != null) {
+      return validateDateFormatRangeErrorMessage;
     }
 
     return null;
@@ -286,12 +294,15 @@ class _CustomInputDateTextFormFieldState
   }
 
   void _handleSaved(String? text) {
-    // - TODO: Add a validator call here
     _updateDate(text, widget.onDateSaved);
   }
 
   void _handleSubmitted(String text) {
-    // - TODO: Add a validator call here
+    /// Allow form to call validator or other functionality on raw submit
+    /// Rather than wrapping focus changes or other alternatives.
+    /// Not blocked by waiting for only valid date inputs.
+    widget.onTextSubmitted?.call(text);
+
     _updateDate(text, widget.onDateSubmitted);
   }
 
