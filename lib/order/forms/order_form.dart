@@ -58,6 +58,10 @@ class _OrderFormState extends State<OrderForm> {
       addFutureDateIncrement,
     );
 
+    const String dateFormatErrorMessage = 'Please enter (dd/MM/yyyy) format';
+    final String dateInvalidOutOfRangeErrorMessage =
+        getDateOutOfRangeInvalidErrorMessage(DateTime.now(), futureDateMax);
+
     return SingleChildScrollView(
       child: Container(
         padding: edgeInsetsPadding,
@@ -179,13 +183,10 @@ class _OrderFormState extends State<OrderForm> {
                     firstDate: DateTime.now(),
                     lastDate: futureDateMax,
                     // Note field width
-                    errorFormatText: 'Please enter (dd/MM/yyyy) format',
+                    errorFormatText: dateFormatErrorMessage,
                     // Date range or date-selectable predicate
                     // 'Outside date range 16/04/2021–21/05/2022'
-                    errorInvalidText: 'Outside date range '
-                        '${ausFullDateDisplayFormat.format(DateTime.now())}'
-                        '–'
-                        '${ausFullDateDisplayFormat.format(futureDateMax)}',
+                    errorInvalidText: dateInvalidOutOfRangeErrorMessage,
                     fieldHintText: 'dd/MM/yyyy',
                     fieldLabelText: 'Required date',
                     onDateSubmitted: (date) {
@@ -267,4 +268,14 @@ class _OrderFormState extends State<OrderForm> {
 
     return product.drugs.length;
   }
+}
+
+String getDateOutOfRangeInvalidErrorMessage(
+  DateTime startDateMin,
+  DateTime futureDateMax,
+) {
+  return 'Outside date range '
+      '${ausFullDateDisplayFormat.format(startDateMin)}'
+      '–'
+      '${ausFullDateDisplayFormat.format(futureDateMax)}';
 }
