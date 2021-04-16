@@ -34,7 +34,7 @@ class ProductDetail extends StatelessWidget {
     return ListTile(
       leading: const Icon(Icons.science),
       title: Text(
-        '${productData.productName} - ${productData.containerName}',
+        productData.productName,
         maxLines: titleFirstLineMax,
       ),
       subtitle: Text(

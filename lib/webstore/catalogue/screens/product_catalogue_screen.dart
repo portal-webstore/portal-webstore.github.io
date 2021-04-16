@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:testable_web_app/webstore/catalogue/product/seeds/products_seed.dart'
+    show seedProducts;
 import 'package:testable_web_app/webstore/catalogue/widgets/product_list_widget.dart';
 
 class ProductCatalogueScreen extends StatelessWidget {
@@ -12,7 +14,7 @@ class ProductCatalogueScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Product catalogue'),
       ),
-      body: const ProductList(),
+      body: const ProductList(products: seedProducts),
     );
   }
 }

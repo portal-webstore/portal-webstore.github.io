@@ -1,4 +1,7 @@
 /// Hold the routes strings
+/// Can be seen in flutter web address bar
+///
+/// Consideration for # fragment hash vs path strategy
 class Routes {
   /// "Static" class for namespacing
   const Routes._();
@@ -13,4 +16,5 @@ class Routes {
   static const String loginHome = '/loginHome';
 
   static const String productCatalogue = '/productCatalogue';
+  static const String oncologyOrder = '/oncologyOrder';
 }

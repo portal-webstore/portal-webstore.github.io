@@ -6,9 +6,15 @@ import 'package:testable_web_app/login/screens/base_login_landing_app_screen.dar
 import 'package:testable_web_app/login/screens/home_screen.dart'
     show LoginHomeScreen;
 import 'package:testable_web_app/login/splash/screens/splash_screen.dart';
+import 'package:testable_web_app/order/screens/order_screen.dart'
+    show OrderScreen;
+import 'package:testable_web_app/patient/seeds/patients_seed.dart'
+    show seedPatients;
 import 'package:testable_web_app/sample/counter/counter.dart';
 import 'package:testable_web_app/sample/timer/screen/timer_screen.dart';
 import 'package:testable_web_app/shared/navigation/routes_constant.dart';
+import 'package:testable_web_app/webstore/catalogue/product/seeds/products_seed.dart'
+    show seedProducts;
 import 'package:testable_web_app/webstore/catalogue/screens/product_catalogue_screen.dart'
     show ProductCatalogueScreen;
 
@@ -92,9 +98,39 @@ class Router {
           settings: settings,
         );
 
+      /// Catalogue is no longer suitable for onc ordering online
+      ///
+      /// Dissimilar to a retail web store
+      ///
       case Routes.productCatalogue:
         return MaterialPageRoute<void>(
           builder: (BuildContext context) => const ProductCatalogueScreen(),
+          settings: settings,
+        );
+
+      /// More like OCS batch label dispense form fields.
+      ///
+      /// onc ordering lite
+      case Routes.oncologyOrder:
+        final Object? data = settings.arguments;
+        // For reusability we should probably load this on the page itself
+        // vs
+        //
+        // This initial screen flow is going to load spinner and then complete
+        // to navigate to the page though
+        //
+        // More testable to construct;
+        // however, refreshing on the same route may break things with no data.
+        //
+        // Reusable load on Order page itself and then use localstorage to mediate
+        // and cache with a skip load button maybe (bells and whistles)
+        //
+
+        return MaterialPageRoute<void>(
+          builder: (BuildContext context) => const OrderScreen(
+            products: seedProducts,
+            patients: seedPatients,
+          ),
           settings: settings,
         );
 

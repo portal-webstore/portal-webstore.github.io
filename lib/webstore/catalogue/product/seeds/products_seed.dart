@@ -3,60 +3,76 @@ import 'package:testable_web_app/webstore/catalogue/product/models/product_model
 
 const List<ProductModel> seedProducts = [
   ProductModel(
-    1,
-    'Pralatrexate - Syringe',
-    'Syringe', // 20mL
-    [
+    productID: '16ec5ac0-f31c-45d1-8011-c65868d744f1',
+    productName: 'Pralatrexate - Syringe',
+    containerName: 'Syringe', // 20mL
+    drugs: [
       DrugModel(
-        'Pralatrexate',
-        'mg',
+        drugID: '18e11c42-26d4-41a8-83cd-ef7e770d0f5f',
+        drugName: 'Pralatrexate',
+        drugUnits: 'mg',
+        ocsDrugID: 1,
       ),
     ],
-    'IVINF',
+    productAdministrationRoute: 'IVINF',
+    ocsProductID: 1,
   ),
   ProductModel(
-    2,
-    'Pembrolizumab N/S 50mL Freeflex',
-    'N/S 50mL Freeflex', // 127mL
-    [
+    productID: '26ec5ac0-f31c-45d1-8011-c65868d744f1',
+    productName: 'Pembrolizumab N/S 50mL Freeflex',
+    containerName: 'N/S 50mL Freeflex', // 127mL
+    drugs: [
       DrugModel(
-        'Pembrolizumab',
-        'mg',
+        drugID: '28e11c42-26d4-41a8-83cd-ef7e770d0f5f',
+        drugName: 'Pembrolizumab',
+        drugUnits: 'mg',
+        ocsDrugID: 2,
       ),
     ],
-    'IVENOS',
+    productAdministrationRoute: 'IVENOS',
+    ocsProductID: 2,
   ),
   ProductModel(
-    3,
-    'Pembrolizumab N/S 100mL Freeflex',
-    'N/S 100mL Freeflex', // 198mL
-    [
+    productID: '36ec5ac0-f31c-45d1-8011-c65868d744f1',
+    productName: 'Pembrolizumab N/S 100mL Freeflex',
+    containerName: 'N/S 100mL Freeflex', // 198mL
+    drugs: [
       DrugModel(
-        'Pembrolizumab',
-        'mg',
+        drugID: '38e11c42-26d4-41a8-83cd-ef7e770d0f5f',
+        drugName: 'Pembrolizumab',
+        drugUnits: 'mg',
+        ocsDrugID: 3,
       ),
     ],
-    'IVENOS',
+    productAdministrationRoute: 'IVENOS',
+    ocsProductID: 3,
   ),
   ProductModel(
-    4,
-    'Doxorubicin / Vincristine / Etoposide (E/phos br) - '
+    productID: '46ec5ac0-f31c-45d1-8011-c65868d744f1',
+    productName: 'Doxorubicin / Vincristine / Etoposide (E/phos br) - '
         '24-hour Surefuser, Surefuser 250mL 1 day',
-    '24-hour Surefuser, Surefuser 250mL 1 day', // 241mL
-    [
+    containerName: '24-hour Surefuser, Surefuser 250mL 1 day', // 241mL
+    drugs: [
       DrugModel(
-        'Doxorubicin',
-        'mg',
+        drugID: '48e11c42-26d4-41a8-83cd-ef7e770d0f5f',
+        drugName: 'Doxorubicin',
+        drugUnits: 'mg',
+        ocsDrugID: 4,
       ),
       DrugModel(
-        'Vincristine',
-        'mg',
+        drugID: '58e11c42-26d4-41a8-83cd-ef7e770d0f5f',
+        drugName: 'Vincristine',
+        drugUnits: 'mg',
+        ocsDrugID: 5,
       ),
       DrugModel(
-        'Etoposide (E/phos br)',
-        'mg',
+        drugID: '68e11c42-26d4-41a8-83cd-ef7e770d0f5f',
+        drugName: 'Etoposide (E/phos br)',
+        drugUnits: 'mg',
+        ocsDrugID: 6,
       ),
     ],
-    'IVINF',
+    productAdministrationRoute: 'IVINF',
+    ocsProductID: 4,
   ),
 ];
