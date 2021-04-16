@@ -161,7 +161,7 @@ class _OrderFormState extends State<OrderForm> {
                       '${ausFullDateDisplayFormat.format(DateTime.now())}'
                       '–'
                       '${ausFullDateDisplayFormat.format(futureDateMax)}',
-                  fieldHintText: 'Hint',
+                  fieldHintText: 'dd/MM/yyyy',
                   fieldLabelText: 'Required date',
                   onDateSubmitted: (date) {
                     // Only called when datetime is in valid format + range predicate
