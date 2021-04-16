@@ -235,15 +235,44 @@ class _CustomInputDateTextFormFieldState
             widget.selectableDayPredicate!(date));
   }
 
-  String? _validateDate(String? text) {
-    final DateTime? date = _parseDate(text);
-    if (date == null) {
-      return widget.errorFormatText ??
-          MaterialLocalizations.of(context).invalidDateFormatLabel;
-    } else if (!_isValidAcceptableDate(date)) {
+  String? _validateDate(DateTime date) {
+    if (!_isValidAcceptableDate(date)) {
       return widget.errorInvalidText ??
           MaterialLocalizations.of(context).dateOutOfRangeLabel;
     }
+    return null;
+  }
+
+  ///
+  String? _validateDateText(String? text) {
+    final DateTime? date = _parseDate(text);
+    // Slightly confusing if-branching. Whether to exit error cases early
+    // or null escape early.
+    // Reverse convention with validators where null is the success message.
+    //
+    if (date == null) {
+      // Do we handle invalid day month year inputs or silently wrap.
+      // e.g. 0 = last day of the previous month.
+      // 32 = extra days starting from the next month. 13 = next year january
+
+      // A separate partial text checker function here?
+      // Otherwise defaults to the invalid date format less-informative text.
+      //
+
+      return widget.errorFormatText ??
+          MaterialLocalizations.of(context).invalidDateFormatLabel;
+    }
+
+    // Superfluous code deduplication
+    // Kept in case SDK changes in the future. Or if we contribute to library
+    // Retain as many of same anchor points as possible.
+    //
+    // May be more maintainable to absorb validateDate into this text function
+    final String? validateDateFormatRangeValidMessage = _validateDate(date);
+    if (validateDateFormatRangeValidMessage != null) {
+      return validateDateFormatRangeValidMessage;
+    }
+
     return null;
   }
 
@@ -257,10 +286,12 @@ class _CustomInputDateTextFormFieldState
   }
 
   void _handleSaved(String? text) {
+    // - TODO: Add a validator call here
     _updateDate(text, widget.onDateSaved);
   }
 
   void _handleSubmitted(String text) {
+    // - TODO: Add a validator call here
     _updateDate(text, widget.onDateSubmitted);
   }
 
@@ -278,7 +309,7 @@ class _CustomInputDateTextFormFieldState
         hintText: widget.fieldHintText ?? localizations.dateHelpText,
         labelText: widget.fieldLabelText ?? localizations.dateInputLabel,
       ),
-      validator: _validateDate,
+      validator: _validateDateText,
       keyboardType: TextInputType.datetime,
       onSaved: _handleSaved,
       onFieldSubmitted: _handleSubmitted,

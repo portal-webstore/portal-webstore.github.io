@@ -140,8 +140,17 @@ class _OrderFormState extends State<OrderForm> {
                   days: 400,
                 ),
               ),
-              errorFormatText: 'Invalid date format',
-              errorInvalidText: 'Outside date range', // Or selectable predicate
+              // Note field width
+              errorFormatText: 'Please enter (dd/MM/yyyy) format',
+              // Date range or date-selectable predicate
+              errorInvalidText: 'Outside date range '
+                  '${DateTime.now().toString()}'
+                  '–'
+                  '${DateTime.now().add(
+                const Duration(
+                  days: 400,
+                ),
+              )}',
               fieldHintText: 'Hint',
               fieldLabelText: 'Required date',
               onDateSubmitted: (date) {
