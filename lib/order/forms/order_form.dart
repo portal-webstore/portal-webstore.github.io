@@ -150,36 +150,62 @@ class _OrderFormState extends State<OrderForm> {
                 // 120 for date field width;
                 // 240 for long error message
                 width: 240,
-                child: CustomInputDateTextFormField(
-                  firstDate: DateTime.now(),
-                  lastDate: futureDateMax,
-                  // Note field width
-                  errorFormatText: 'Please enter (dd/MM/yyyy) format',
-                  // Date range or date-selectable predicate
-                  // 'Outside date range 16/04/2021–21/05/2022'
-                  errorInvalidText: 'Outside date range '
-                      '${ausFullDateDisplayFormat.format(DateTime.now())}'
-                      '–'
-                      '${ausFullDateDisplayFormat.format(futureDateMax)}',
-                  fieldHintText: 'dd/MM/yyyy',
-                  fieldLabelText: 'Required date',
-                  onDateSubmitted: (date) {
-                    // Only called when datetime is in valid format + range predicate
-                    debugPrint('Valid date submitted');
+                child: Focus(
+                  onFocusChange: (bool isFocusedIn) {
+                    // Trigger validator on focus out
+                    // to handle:
+                    // 1. Tap out
+                    // 2. Tab key
+                    // 3. Loss of focus due to unforeseen platform issues
+                    // For the non-enter key event (may duplicate?) for when
+                    // text is input / submitted and user is "finished"
 
-                    // Validate input again?
-                    // Or save into form model?
-                    // Ideally save only in one place to prevent possible bugs
-                    //
-                  },
-                  onTextSubmitted: (text) {
+                    // Kept variable here for verbosity
+                    // ignore: unused_local_variable
+                    final bool isFocusedOut = !isFocusedIn;
+
+                    if (isFocusedIn) {
+                      // Do nothing on entering into the field itself.
+                      return;
+                    }
+
+                    // We could run an additional check here for pristine
+                    // or too-early input to ignore.
+
+                    // Run the validator
                     _formKey.currentState?.validate();
                   },
-                  onDateSaved: (date) {
-                    // Potentially called with invalid text? on formState.save()
-                    debugPrint('Valid date saved');
-                    // Save to form model
-                  },
+                  child: CustomInputDateTextFormField(
+                    firstDate: DateTime.now(),
+                    lastDate: futureDateMax,
+                    // Note field width
+                    errorFormatText: 'Please enter (dd/MM/yyyy) format',
+                    // Date range or date-selectable predicate
+                    // 'Outside date range 16/04/2021–21/05/2022'
+                    errorInvalidText: 'Outside date range '
+                        '${ausFullDateDisplayFormat.format(DateTime.now())}'
+                        '–'
+                        '${ausFullDateDisplayFormat.format(futureDateMax)}',
+                    fieldHintText: 'dd/MM/yyyy',
+                    fieldLabelText: 'Required date',
+                    onDateSubmitted: (date) {
+                      // Only called when datetime is in valid format + range predicate
+                      debugPrint('Valid date submitted');
+
+                      // Validate input again?
+                      // Or save into form model?
+                      // Ideally save only in one place to prevent possible bugs
+                      //
+                    },
+                    onTextSubmitted: (text) {
+                      _formKey.currentState?.validate();
+                    },
+                    onDateSaved: (date) {
+                      // Potentially called with invalid text? on formState.save()
+                      debugPrint('Valid date saved');
+                      // Save to form model
+                    },
+                  ),
                 ),
               ),
               // Free text notes
