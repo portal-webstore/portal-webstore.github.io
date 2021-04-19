@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testable_web_app/order/forms/widgets/cart_spreadsheet_widget.dart';
 import 'package:testable_web_app/shared/navigation/widgets/side_menu_nav_drawer/side_menu_nav_drawer_widget.dart';
 
 class CartBuilderSpreadsheetScreen extends StatelessWidget {
@@ -19,7 +20,7 @@ class CartBuilderSpreadsheetScreen extends StatelessWidget {
         ),
       ),
       drawer: const SideMenuNavigationDrawer(),
-      body: Container(),
+      body: const CartSpreadsheet(),
     );
   }
 }
