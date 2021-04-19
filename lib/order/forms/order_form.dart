@@ -60,7 +60,10 @@ class _OrderFormState extends State<OrderForm> {
 
     const String dateFormatErrorMessage = 'Please enter (dd/MM/yyyy) format';
     final String dateInvalidOutOfRangeErrorMessage =
-        getDateOutOfRangeInvalidErrorMessage(DateTime.now(), futureDateMax);
+        getDateOutOfRangeInvalidErrorMessage(
+      DateTime.now(),
+      futureDateMax,
+    );
 
     return SingleChildScrollView(
       child: Container(
@@ -155,30 +158,10 @@ class _OrderFormState extends State<OrderForm> {
                 // 240 for long error message
                 width: 240,
                 child: Focus(
-                  onFocusChange: (bool isFocusedIn) {
-                    // Trigger validator on focus out
-                    // to handle:
-                    // 1. Tap out
-                    // 2. Tab key
-                    // 3. Loss of focus due to unforeseen platform issues
-                    // For the non-enter key event (may duplicate?) for when
-                    // text is input / submitted and user is "finished"
-
-                    // Kept variable here for verbosity
-                    // ignore: unused_local_variable
-                    final bool isFocusedOut = !isFocusedIn;
-
-                    if (isFocusedIn) {
-                      // Do nothing on entering into the field itself.
-                      return;
-                    }
-
-                    // We could run an additional check here for pristine
-                    // or too-early input to ignore.
-
-                    // Run the validator
-                    _formKey.currentState?.validate();
-                  },
+                  onFocusChange: (bool isFocusedIn) => validateOnFocusOut(
+                    isFocusedIn: isFocusedIn,
+                    formKey: _formKey,
+                  ),
                   child: CustomInputDateTextFormField(
                     firstDate: DateTime.now(),
                     lastDate: futureDateMax,
@@ -249,6 +232,34 @@ class _OrderFormState extends State<OrderForm> {
         ),
       ),
     );
+  }
+
+  void validateOnFocusOut({
+    required bool isFocusedIn,
+    required GlobalKey<FormState> formKey,
+  }) {
+    // Trigger validator on focus out
+    // to handle:
+    // 1. Tap out
+    // 2. Tab key
+    // 3. Loss of focus due to unforeseen platform issues
+    // For the non-enter key event (may duplicate?) for when
+    // text is input / submitted and user is "finished"
+
+    // Kept variable here for verbosity
+    // ignore: unused_local_variable
+    final bool isFocusedOut = !isFocusedIn;
+
+    if (isFocusedIn) {
+      // Do nothing on entering into the field itself.
+      return;
+    }
+
+    // We could run an additional check here for pristine
+    // or too-early input to ignore.
+
+    // Run the validator
+    formKey.currentState?.validate();
   }
 
   Widget _showValidProductDetail(ProductModel? product) {
