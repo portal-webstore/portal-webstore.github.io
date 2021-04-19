@@ -55,6 +55,9 @@ class CustomLocalization extends DefaultMaterialLocalizations {
   String get dateInputLabel => 'Enter date';
 
   @override
+  String get invalidDateFormatLabel => 'Invalid format (dd/MM/yyyy)';
+
+  @override
   String formatCompactDate(DateTime date) {
     // Assumes Aus dd/MM/yyyy rather than  US mm/dd/yyyy format
     final day = _formatTwoDigitZeroPad(date.day);

@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+/// Otherwise we spam the user that they did something wrong in the first key
+/// entering a single number!
+/// UX anxiety
+const AutovalidateMode disabledAutovalidatePreventEarlyPartialTextErrors =
+    AutovalidateMode.disabled;
+
 /// Fork of [InputDatePickerFormField]
 ///
 ///
@@ -15,6 +21,17 @@ import 'package:flutter/material.dart';
 ///
 /// TextFormField should response to text inputs (/) it does pass `String?`
 /// _handleSaved
+///
+/// no - triple checking again now
+/// The callbacks are only run through _updateDate which only run the
+/// `onDateSubmitted` and `onDateSaved` callbacks with valid date times
+/// Which means we are unable to customise by default.
+/// Which means we are also unable to trigger .validate() when datetime is null
+/// which is when we actually want to see the validate error message in the
+/// first place in response to potential text !!
+///
+///
+/// Callback is only run when _isValidAcceptableDate . ParseDate is run first
 ///
 ///
 /// Inspired original 2014 The Flutter Authors. All rights reserved.
@@ -59,6 +76,7 @@ class CustomInputDateTextFormField extends StatefulWidget {
     DateTime? initialDate,
     required DateTime firstDate,
     required DateTime lastDate,
+    this.onTextSubmitted,
     this.onDateSubmitted,
     this.onDateSaved,
     this.selectableDayPredicate,
@@ -104,6 +122,13 @@ class CustomInputDateTextFormField extends StatefulWidget {
   /// the text in the field. Will only be called if the input represents a valid
   /// [DateTime].
   final ValueChanged<DateTime>? onDateSubmitted;
+
+  /// Optional method to call on input text to provide more information when a
+  /// user inputs an invalid date format [String]
+  ///
+  /// For error validation triggering.
+  /// By parent form formKey.currentState.validate()
+  final ValueChanged<String?>? onTextSubmitted;
 
   /// An optional method to call with the final date when the form is
   /// saved via [FormState.save]. Will only be called if the input represents
@@ -218,15 +243,44 @@ class _CustomInputDateTextFormFieldState
             widget.selectableDayPredicate!(date));
   }
 
-  String? _validateDate(String? text) {
-    final DateTime? date = _parseDate(text);
-    if (date == null) {
-      return widget.errorFormatText ??
-          MaterialLocalizations.of(context).invalidDateFormatLabel;
-    } else if (!_isValidAcceptableDate(date)) {
+  String? _validateDate(DateTime date) {
+    if (!_isValidAcceptableDate(date)) {
       return widget.errorInvalidText ??
           MaterialLocalizations.of(context).dateOutOfRangeLabel;
     }
+    return null;
+  }
+
+  ///
+  String? _validateDateText(String? text) {
+    final DateTime? date = _parseDate(text);
+    // Slightly confusing if-branching. Whether to exit error cases early
+    // or null escape early.
+    // Reverse convention with validators where null is the success message.
+    //
+    if (date == null) {
+      // Do we handle invalid day month year inputs or silently wrap.
+      // e.g. 0 = last day of the previous month.
+      // 32 = extra days starting from the next month. 13 = next year january
+
+      // A separate partial text checker function here?
+      // Otherwise defaults to the invalid date format less-informative text.
+      //
+
+      return widget.errorFormatText ??
+          MaterialLocalizations.of(context).invalidDateFormatLabel;
+    }
+
+    // Superfluous code deduplication
+    // Kept in case SDK changes in the future. Or if we contribute to library
+    // Retain as many of same anchor points as possible.
+    //
+    // May be more maintainable to absorb validateDate into this text function
+    final String? validateDateFormatRangeErrorMessage = _validateDate(date);
+    if (validateDateFormatRangeErrorMessage != null) {
+      return validateDateFormatRangeErrorMessage;
+    }
+
     return null;
   }
 
@@ -244,6 +298,11 @@ class _CustomInputDateTextFormFieldState
   }
 
   void _handleSubmitted(String text) {
+    /// Allow form to call validator or other functionality on raw submit
+    /// Rather than wrapping focus changes or other alternatives.
+    /// Not blocked by waiting for only valid date inputs.
+    widget.onTextSubmitted?.call(text);
+
     _updateDate(text, widget.onDateSubmitted);
   }
 
@@ -253,6 +312,7 @@ class _CustomInputDateTextFormFieldState
         MaterialLocalizations.of(context);
     final InputDecorationTheme inputTheme =
         Theme.of(context).inputDecorationTheme;
+
     return TextFormField(
       decoration: InputDecoration(
         border: inputTheme.border ?? const UnderlineInputBorder(),
@@ -260,12 +320,16 @@ class _CustomInputDateTextFormFieldState
         hintText: widget.fieldHintText ?? localizations.dateHelpText,
         labelText: widget.fieldLabelText ?? localizations.dateInputLabel,
       ),
-      validator: _validateDate,
+      validator: _validateDateText,
       keyboardType: TextInputType.datetime,
       onSaved: _handleSaved,
       onFieldSubmitted: _handleSubmitted,
       autofocus: widget.autofocus,
       controller: _controller,
+      // Explicitly disable as we want to customise the partial interactions first
+      // Do not show annoying red alert messages on first keystroke!
+      //
+      autovalidateMode: disabledAutovalidatePreventEarlyPartialTextErrors,
     );
   }
 }

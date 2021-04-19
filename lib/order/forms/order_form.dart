@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show MaxLengthEnforcement;
+import 'package:testable_web_app/i18n/date/australia_date_locale_format.dart';
 import 'package:testable_web_app/order/forms/widgets/dose_field_widget.dart';
 import 'package:testable_web_app/patient/autocomplete/widgets/patient_autocomplete_widget.dart';
 import 'package:testable_web_app/patient/models/patient_model.dart';
@@ -27,6 +28,10 @@ const boxFieldWidthConstraintsLong = BoxConstraints(
   maxWidth: 960,
 );
 
+const addFutureDateIncrement = Duration(
+  days: 400,
+);
+
 class OrderForm extends StatefulWidget {
   const OrderForm({
     Key? key,
@@ -41,163 +46,220 @@ class OrderForm extends StatefulWidget {
 }
 
 class _OrderFormState extends State<OrderForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   ProductModel? _productDetailsToShow;
 
   @override
   Widget build(BuildContext context) {
     final ProductModel? productDetail = _productDetailsToShow;
 
+    final futureDateMax = DateTime.now().add(
+      addFutureDateIncrement,
+    );
+
+    const String dateFormatErrorMessage = 'Please enter (dd/MM/yyyy) format';
+    final String dateInvalidOutOfRangeErrorMessage =
+        getDateOutOfRangeInvalidErrorMessage(
+      DateTime.now(),
+      futureDateMax,
+    );
+
     return SingleChildScrollView(
       child: Container(
         padding: edgeInsetsPadding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: edgeInsetsFormFieldPadding,
-              constraints: boxFieldWidthConstraintsStandard,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                padding: edgeInsetsFormFieldPadding,
+                constraints: boxFieldWidthConstraintsStandard,
 
-              // - TODO: Replace with autocomplete
-              child: PatientAutocomplete<PatientModel>(
-                options: widget.patients,
-                focusNode: FocusNode(),
-                textEditingController: TextEditingController(),
-                onSelected: (option) {
-                  // Do something
-                  // Save
-                },
-              ),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                // setState isNewPatient
-              },
-              child: const Text(
-                'Create new patient',
-              ),
-            ),
-
-            // Could add the patient creation fields directly here for better UX
-
-            Container(
-              padding: edgeInsetsFormFieldPadding,
-              constraints: boxFieldWidthConstraintsLong,
-              child: ProductAutocompleteField(
-                options: widget.products,
-                focusNode: FocusNode(),
-                textEditingController: TextEditingController(),
-                onSelected: (option) {
-                  // Do something
-                  // Save
-                },
-              ),
-            ),
-
-            // Blank it vs possible visibility tween
-            Visibility(
-              visible: productDetail != null,
-              child: _showValidProductDetail(
-                _productDetailsToShow,
-              ),
-            ),
-
-            Container(
-              padding: edgeInsetsFormFieldPadding,
-              constraints: boxFieldWidthConstraintsShort,
-
-              // - TODO: Replace with generated number of dose fields
-              child: DoseField(
-                drug: widget.products[0].drugs[0],
-              ),
-            ),
-
-            Container(
-              padding: edgeInsetsFormFieldPadding,
-              width: 120,
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Required date',
-                  helperText: '',
+                // - TODO: Replace with autocomplete
+                child: PatientAutocomplete<PatientModel>(
+                  options: widget.patients,
+                  focusNode: FocusNode(),
+                  textEditingController: TextEditingController(),
+                  onSelected: (option) {
+                    // Do something
+                    // Save
+                  },
                 ),
-                onTap: () {
-                  showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
+              ),
+
+              ElevatedButton(
+                onPressed: () {
+                  // setState isNewPatient
+                },
+                child: const Text(
+                  'Create new patient',
+                ),
+              ),
+
+              // Could add the patient creation fields directly here for better UX
+
+              Container(
+                padding: edgeInsetsFormFieldPadding,
+                constraints: boxFieldWidthConstraintsLong,
+                child: ProductAutocompleteField(
+                  options: widget.products,
+                  focusNode: FocusNode(),
+                  textEditingController: TextEditingController(),
+                  onSelected: (option) {
+                    // Do something
+                    // Save
+                  },
+                ),
+              ),
+
+              // Blank it vs possible visibility tween
+              Visibility(
+                visible: productDetail != null,
+                child: _showValidProductDetail(
+                  _productDetailsToShow,
+                ),
+              ),
+
+              Container(
+                padding: edgeInsetsFormFieldPadding,
+                constraints: boxFieldWidthConstraintsShort,
+
+                // - TODO: Replace with generated number of dose fields
+                child: DoseField(
+                  drug: widget.products[0].drugs[0],
+                ),
+              ),
+
+              Container(
+                padding: edgeInsetsFormFieldPadding,
+                width: 120,
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Required date',
+                    helperText: '',
+                  ),
+                  onTap: () {
+                    showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2021, 4, 24),
+                      initialEntryMode: DatePickerEntryMode.input,
+                    );
+                  },
+                ),
+              ),
+              Container(
+                padding: edgeInsetsFormFieldPadding,
+                // 120 for date field width;
+                // 240 for long error message
+                width: 240,
+                child: Focus(
+                  onFocusChange: (bool isFocusedIn) => validateOnFocusOut(
+                    isFocusedIn: isFocusedIn,
+                    formKey: _formKey,
+                  ),
+                  child: CustomInputDateTextFormField(
                     firstDate: DateTime.now(),
-                    lastDate: DateTime(2021, 4, 24),
-                    initialEntryMode: DatePickerEntryMode.input,
-                  );
-                },
-              ),
-            ),
+                    lastDate: futureDateMax,
+                    // Note field width
+                    errorFormatText: dateFormatErrorMessage,
+                    // Date range or date-selectable predicate
+                    // 'Outside date range 16/04/2021–21/05/2022'
+                    errorInvalidText: dateInvalidOutOfRangeErrorMessage,
+                    fieldHintText: 'dd/MM/yyyy',
+                    fieldLabelText: 'Required date',
+                    onDateSubmitted: (date) {
+                      // Only called when datetime is in valid format + range predicate
+                      debugPrint('Valid date submitted');
 
-            CustomInputDateTextFormField(
-              firstDate: DateTime.now(),
-              lastDate: DateTime.now().add(
-                const Duration(
-                  days: 400,
+                      // Validate input again?
+                      // Or save into form model?
+                      // Ideally save only in one place to prevent possible bugs
+                      //
+                    },
+                    onTextSubmitted: (text) {
+                      _formKey.currentState?.validate();
+                    },
+                    onDateSaved: (date) {
+                      // Potentially called with invalid text? on formState.save()
+                      debugPrint('Valid date saved');
+                      // Save to form model
+                    },
+                  ),
                 ),
               ),
-              errorFormatText: 'Invalid date format',
-              errorInvalidText: 'Outside date range', // Or selectable predicate
-              fieldHintText: 'Hint',
-              fieldLabelText: 'Required date',
-              onDateSubmitted: (date) {
-                // Only called when datetime is in valid format + range predicate
-                debugPrint('Valid date submitted');
-
-                // Validate input again?
-                // Or save into form model?
-                // Ideally save only in one place to prevent possible bugs
-              },
-              onDateSaved: (date) {
-                // Potentially called with invalid text? on formState.save()
-                debugPrint('Valid date saved');
-                // Save to form model
-              },
-            ),
-
-            // Free text notes
-            TextFormField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Notes',
-                helperText: '',
-                alignLabelWithHint: true,
+              // Free text notes
+              TextFormField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Notes',
+                  helperText: '',
+                  alignLabelWithHint: true,
+                ),
+                textAlignVertical: TextAlignVertical.top,
+                // Note that shift arrow selection on Flutter web does not autoscroll
+                //
+                // Also note that multi line selection has unintuitive behaviour
+                // Selecting from a line that does not have the text caret cursor on
+                // it causes the field to scroll instead of selecting from that line
+                // * Vertical dragging gesture override seems to be the root issue
+                // You can use mouse cursor to select within one line though
+                // *and multi-lines* if you initate the cursor drag selection
+                // **horizontally**
+                //
+                // ...
+                minLines: 4,
+                maxLines: 6,
+                maxLength: maxNumTextCharacters,
+                // https://flutter.dev/docs/release/breaking-changes/use-maxLengthEnforcement-instead-of-maxLengthEnforced#default-values-of-maxlengthenforcement
+                // Composition end may not be working correctly. Appears to hard-limit
+                maxLengthEnforcement:
+                    MaxLengthEnforcement.truncateAfterCompositionEnds,
               ),
-              textAlignVertical: TextAlignVertical.top,
-              // Note that shift arrow selection on Flutter web does not autoscroll
-              //
-              // Also note that multi line selection has unintuitive behaviour
-              // Selecting from a line that does not have the text caret cursor on
-              // it causes the field to scroll instead of selecting from that line
-              // * Vertical dragging gesture override seems to be the root issue
-              // You can use mouse cursor to select within one line though
-              // *and multi-lines* if you initate the cursor drag selection
-              // **horizontally**
-              //
-              // ...
-              minLines: 4,
-              maxLines: 6,
-              maxLength: maxNumTextCharacters,
-              // https://flutter.dev/docs/release/breaking-changes/use-maxLengthEnforcement-instead-of-maxLengthEnforced#default-values-of-maxlengthenforcement
-              // Composition end may not be working correctly. Appears to hard-limit
-              maxLengthEnforcement:
-                  MaxLengthEnforcement.truncateAfterCompositionEnds,
-            ),
 
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text(
-                'Submit order to cart',
-              ),
-            )
-          ],
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text(
+                  'Submit order to cart',
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void validateOnFocusOut({
+    required bool isFocusedIn,
+    required GlobalKey<FormState> formKey,
+  }) {
+    // Trigger validator on focus out
+    // to handle:
+    // 1. Tap out
+    // 2. Tab key
+    // 3. Loss of focus due to unforeseen platform issues
+    // For the non-enter key event (may duplicate?) for when
+    // text is input / submitted and user is "finished"
+
+    // Kept variable here for verbosity
+    // ignore: unused_local_variable
+    final bool isFocusedOut = !isFocusedIn;
+
+    if (isFocusedIn) {
+      // Do nothing on entering into the field itself.
+      return;
+    }
+
+    // We could run an additional check here for pristine
+    // or too-early input to ignore.
+
+    // Run the validator
+    formKey.currentState?.validate();
   }
 
   Widget _showValidProductDetail(ProductModel? product) {
@@ -217,4 +279,14 @@ class _OrderFormState extends State<OrderForm> {
 
     return product.drugs.length;
   }
+}
+
+String getDateOutOfRangeInvalidErrorMessage(
+  DateTime startDateMin,
+  DateTime futureDateMax,
+) {
+  return 'Outside date range '
+      '${ausFullDateDisplayFormat.format(startDateMin)}'
+      '–'
+      '${ausFullDateDisplayFormat.format(futureDateMax)}';
 }
