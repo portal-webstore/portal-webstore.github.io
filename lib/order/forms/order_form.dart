@@ -134,6 +134,20 @@ class _OrderFormState extends State<OrderForm> {
 
               Container(
                 padding: edgeInsetsFormFieldPadding,
+                constraints: boxFieldWidthConstraintsShort,
+                width: 80,
+                // - TODO: Replace with generated number of dose fields
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Enter quantity',
+                    helperText: '',
+                  ),
+                ),
+              ),
+
+              Container(
+                padding: edgeInsetsFormFieldPadding,
                 width: 120,
                 child: TextFormField(
                   decoration: const InputDecoration(
