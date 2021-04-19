@@ -6,6 +6,7 @@ import 'package:testable_web_app/login/screens/base_login_landing_app_screen.dar
 import 'package:testable_web_app/login/screens/home_screen.dart'
     show LoginHomeScreen;
 import 'package:testable_web_app/login/splash/screens/splash_screen.dart';
+import 'package:testable_web_app/order/screens/cart_builder_spreadsheet_screen.dart';
 import 'package:testable_web_app/order/screens/order_screen.dart'
     show OrderScreen;
 import 'package:testable_web_app/patient/seeds/patients_seed.dart'
@@ -131,6 +132,13 @@ class Router {
             products: seedProducts,
             patients: seedPatients,
           ),
+          settings: settings,
+        );
+
+      case Routes.cartBuilderSpreadsheet:
+        return MaterialPageRoute<void>(
+          builder: (BuildContext context) =>
+              const CartBuilderSpreadsheetScreen(),
           settings: settings,
         );
 

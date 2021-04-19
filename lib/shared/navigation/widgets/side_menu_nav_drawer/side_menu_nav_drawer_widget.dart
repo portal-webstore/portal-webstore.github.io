@@ -41,6 +41,14 @@ class SideMenuNavigationDrawer extends StatelessWidget {
               Routes.oncologyOrder,
             ),
           ),
+          _SideMenuNavDrawerItem(
+            icon: Icons.shopping_cart_outlined,
+            name: 'Cart builder spreadsheet',
+            onTap: () => Navigator.pushReplacementNamed(
+              context,
+              Routes.cartBuilderSpreadsheet,
+            ),
+          ),
           const Divider(),
           _SideMenuNavDrawerItem(
             icon: Icons.timer,

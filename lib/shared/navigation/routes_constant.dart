@@ -17,4 +17,5 @@ class Routes {
 
   static const String productCatalogue = '/productCatalogue';
   static const String oncologyOrder = '/oncologyOrder';
+  static const String cartBuilderSpreadsheet = '/cartBuilderSpreadsheet';
 }
