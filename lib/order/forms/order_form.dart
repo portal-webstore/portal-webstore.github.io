@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show MaxLengthEnforcement;
-import 'package:testable_web_app/i18n/date/australia_date_locale_format.dart';
+import 'package:testable_web_app/order/forms/helpers/get_date_out_of_range_invalid_error_message.dart';
+import 'package:testable_web_app/order/forms/helpers/validate_form_on_focus_out.dart';
 import 'package:testable_web_app/order/forms/widgets/dose_field_widget.dart';
 import 'package:testable_web_app/patient/autocomplete/widgets/patient_autocomplete_widget.dart';
 import 'package:testable_web_app/patient/forms/create_patient_form.dart';
@@ -232,7 +233,7 @@ class _OrderFormState extends State<OrderForm> {
                 // 240 for long error message
                 width: 240,
                 child: Focus(
-                  onFocusChange: (bool isFocusedIn) => validateOnFocusOut(
+                  onFocusChange: (bool isFocusedIn) => validateFormOnFocusOut(
                     isFocusedIn: isFocusedIn,
                     formKey: _formKey,
                   ),
@@ -308,34 +309,6 @@ class _OrderFormState extends State<OrderForm> {
     );
   }
 
-  void validateOnFocusOut({
-    required bool isFocusedIn,
-    required GlobalKey<FormState> formKey,
-  }) {
-    // Trigger validator on focus out
-    // to handle:
-    // 1. Tap out
-    // 2. Tab key
-    // 3. Loss of focus due to unforeseen platform issues
-    // For the non-enter key event (may duplicate?) for when
-    // text is input / submitted and user is "finished"
-
-    // Kept variable here for verbosity
-    // ignore: unused_local_variable
-    final bool isFocusedOut = !isFocusedIn;
-
-    if (isFocusedIn) {
-      // Do nothing on entering into the field itself.
-      return;
-    }
-
-    // We could run an additional check here for pristine
-    // or too-early input to ignore.
-
-    // Run the validator
-    formKey.currentState?.validate();
-  }
-
   Widget _showValidProductDetail(ProductModel? product) {
     if (product == null) {
       return Container();
@@ -353,14 +326,4 @@ class _OrderFormState extends State<OrderForm> {
 
     return product.drugs.length;
   }
-}
-
-String getDateOutOfRangeInvalidErrorMessage(
-  DateTime startDateMin,
-  DateTime futureDateMax,
-) {
-  return 'Outside date range '
-      '${ausFullDateDisplayFormat.format(startDateMin)}'
-      '–'
-      '${ausFullDateDisplayFormat.format(futureDateMax)}';
 }
