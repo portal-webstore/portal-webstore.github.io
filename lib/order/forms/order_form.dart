@@ -3,6 +3,7 @@ import 'package:flutter/services.dart' show MaxLengthEnforcement;
 import 'package:testable_web_app/i18n/date/australia_date_locale_format.dart';
 import 'package:testable_web_app/order/forms/widgets/dose_field_widget.dart';
 import 'package:testable_web_app/patient/autocomplete/widgets/patient_autocomplete_widget.dart';
+import 'package:testable_web_app/patient/forms/create_patient_form.dart';
 import 'package:testable_web_app/patient/models/patient_model.dart';
 import 'package:testable_web_app/shared/forms/date/widgets/input_custom_date_text_field.dart';
 import 'package:testable_web_app/webstore/catalogue/product/autocomplete/product_autocomplete_field_widget.dart'
@@ -47,6 +48,7 @@ class OrderForm extends StatefulWidget {
 
 class _OrderFormState extends State<OrderForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _patientSubFormKey = GlobalKey<FormState>();
 
   ProductModel? _productDetailsToShow;
 
@@ -137,7 +139,20 @@ class _OrderFormState extends State<OrderForm> {
                 ),
               ),
 
-              // - TODO: Add patient creation fields subform directly faster UX
+              Visibility(
+                visible: isNewPatientEntry,
+                child: Container(
+                  height: 440,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).accentColor,
+                    ),
+                  ),
+                  child: CreatePatientForm(
+                    formKey: _patientSubFormKey,
+                  ),
+                ),
+              ),
 
               Container(
                 padding: edgeInsetsFormFieldPadding,
