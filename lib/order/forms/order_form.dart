@@ -213,26 +213,6 @@ class _OrderFormState extends State<OrderForm> {
 
               Container(
                 padding: edgeInsetsFormFieldPadding,
-                width: 120,
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Required date',
-                    helperText: '',
-                  ),
-                  onTap: () {
-                    showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime(2021, 4, 24),
-                      initialEntryMode: DatePickerEntryMode.input,
-                    );
-                  },
-                ),
-              ),
-              Container(
-                padding: edgeInsetsFormFieldPadding,
                 // 120 for date field width;
                 // 240 for long error message
                 width: 240,
