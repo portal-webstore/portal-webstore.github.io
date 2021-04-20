@@ -9,6 +9,7 @@ class LabelledAutocompleteField extends StatelessWidget {
     required this.textEditingController,
     required this.onFieldSubmitted,
     required this.labelText,
+    required this.isEnabled,
     this.helperText = '',
   }) : super(key: key);
 
@@ -24,6 +25,11 @@ class LabelledAutocompleteField extends StatelessWidget {
   final TextEditingController textEditingController;
 
   final String labelText;
+
+  /// Whether text field being built/rendered should show as enabled
+  /// For customising complex forms (order form) to allow for alternate
+  /// free text subforms to popup without confusing the user too much.
+  final bool isEnabled;
 
   final String helperText;
 
@@ -41,6 +47,7 @@ class LabelledAutocompleteField extends StatelessWidget {
         // No value check!
         onFieldSubmitted();
       },
+      enabled: isEnabled,
     );
   }
 }

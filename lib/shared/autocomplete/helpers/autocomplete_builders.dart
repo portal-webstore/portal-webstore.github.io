@@ -21,33 +21,18 @@ class LabelledAutocomplete {
       textEditingController: textEditingController,
       onFieldSubmitted: onFieldSubmitted,
       labelText: 'Search patient',
+      isEnabled: true,
     );
-  }
-
-  static AutocompleteFieldViewBuilder getLabelledFieldViewBuilder(
-      String labelText) {
-    // ignore: prefer_function_declarations_over_variables
-    final LabelledAutocompleteFieldViewBuilder preLabelledFieldViewBuilder = (
-      BuildContext context,
-      TextEditingController textEditingController,
-      FocusNode focusNode,
-      VoidCallback onFieldSubmitted,
-    ) {
-      return LabelledAutocompleteField(
-        focusNode: focusNode,
-        textEditingController: textEditingController,
-        onFieldSubmitted: onFieldSubmitted,
-        labelText: labelText,
-      );
-    };
-
-    return preLabelledFieldViewBuilder;
   }
 
   /// Alternate syntax to above function [getLabelledFieldViewBuilder]
   /// Works around the lint.
+  ///
+  /// added isTextFieldEnabled for more UI flexibility of hiding vs disabling
+  /// Disabling shows the standard form state rather than hiding completely.
   static LabelledAutocompleteFieldViewBuilder getFieldBuilder({
     required String labelText,
+    bool isTextFieldEnabled = true,
     String helperText = '',
   }) {
     return (
@@ -61,6 +46,7 @@ class LabelledAutocomplete {
           textEditingController: textEditingController,
           onFieldSubmitted: onFieldSubmitted,
           labelText: labelText,
+          isEnabled: isTextFieldEnabled,
           helperText: helperText,
         );
   }

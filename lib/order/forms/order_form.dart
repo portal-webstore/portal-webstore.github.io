@@ -50,6 +50,27 @@ class _OrderFormState extends State<OrderForm> {
 
   ProductModel? _productDetailsToShow;
 
+  /// Show/hide
+
+  /// Bloc state makes sense here to map the relevant states rather than
+  /// convoluting the form "view" parts with more mappers getters
+  ///
+  /// Create new should hide the selection dropdown field as they are mutually
+  /// exclusive.
+  ///
+  bool isNewPatientEntry = false;
+
+  /// Hide if new patient rather than selecting pre-existing.
+  bool get isPatientSelectHidden => !isNewPatientEntry;
+
+  /// Is new product for free text subform entry
+  bool isNewProductFreeText = false;
+
+  /// Hide if free texting the product instead of selecting from the list.
+  bool get isProductSelectHidden => !isNewProductFreeText;
+
+  // _show/hide
+
   @override
   Widget build(BuildContext context) {
     final ProductModel? productDetail = _productDetailsToShow;
@@ -82,6 +103,7 @@ class _OrderFormState extends State<OrderForm> {
                   options: widget.patients,
                   focusNode: FocusNode(),
                   textEditingController: TextEditingController(),
+                  isTextFieldEnabled: isPatientSelectHidden,
                   onSelected: (option) {
                     // Do something
                     // Save
@@ -92,13 +114,30 @@ class _OrderFormState extends State<OrderForm> {
               ElevatedButton(
                 onPressed: () {
                   // setState isNewPatient
+                  setState(() {
+                    isNewPatientEntry = true;
+                  });
                 },
                 child: const Text(
-                  'Create new patient',
+                  'Enter new patient',
                 ),
               ),
 
-              // Could add the patient creation fields directly here for better UX
+              Visibility(
+                visible: isNewPatientEntry,
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      // Reset toggle
+                      // Reset subform
+                      isNewPatientEntry = false;
+                    });
+                  },
+                  icon: const Icon(Icons.undo),
+                ),
+              ),
+
+              // - TODO: Add patient creation fields subform directly faster UX
 
               Container(
                 padding: edgeInsetsFormFieldPadding,
@@ -107,6 +146,7 @@ class _OrderFormState extends State<OrderForm> {
                   options: widget.products,
                   focusNode: FocusNode(),
                   textEditingController: TextEditingController(),
+                  isTextFieldEnabled: isProductSelectHidden,
                   onSelected: (option) {
                     // Do something
                     // Save
@@ -114,6 +154,31 @@ class _OrderFormState extends State<OrderForm> {
                 ),
               ),
 
+              ElevatedButton(
+                onPressed: () {
+                  // setState isNewPatient
+                  setState(() {
+                    isNewProductFreeText = true;
+                  });
+                },
+                child: const Text(
+                  'Enter new product details',
+                ),
+              ),
+
+              Visibility(
+                visible: isNewProductFreeText,
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      // Reset toggle
+                      // Reset subform
+                      isNewProductFreeText = false;
+                    });
+                  },
+                  icon: const Icon(Icons.undo),
+                ),
+              ),
               // Blank it vs possible visibility tween
               Visibility(
                 visible: productDetail != null,
@@ -140,7 +205,7 @@ class _OrderFormState extends State<OrderForm> {
                 child: TextFormField(
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
-                    labelText: 'Enter quantity',
+                    labelText: 'Quantity',
                     helperText: '',
                   ),
                 ),

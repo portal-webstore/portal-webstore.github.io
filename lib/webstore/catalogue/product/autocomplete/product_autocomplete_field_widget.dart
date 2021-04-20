@@ -21,6 +21,7 @@ class ProductAutocompleteField extends StatelessWidget {
     required this.onSelected,
     required this.focusNode,
     required this.textEditingController,
+    this.isTextFieldEnabled,
   }) : super(key: key);
 
   /// Base options
@@ -41,6 +42,8 @@ class ProductAutocompleteField extends StatelessWidget {
   ///
   final TextEditingController? textEditingController;
 
+  final bool? isTextFieldEnabled;
+
   @override
   Widget build(BuildContext context) {
     /// Use RawAutocomplete to retain access to
@@ -50,7 +53,9 @@ class ProductAutocompleteField extends StatelessWidget {
       optionsViewBuilder: getProductOptionsViewBuilder(),
       onSelected: onSelected,
       displayStringForOption: getProductViewModel,
-      fieldViewBuilder: getFieldViewBuilder(),
+      fieldViewBuilder: getFieldViewBuilder(
+        isTextFieldEnabled: isTextFieldEnabled ?? true,
+      ),
       focusNode: focusNode,
       textEditingController: textEditingController,
     );
@@ -169,9 +174,12 @@ class ProductAutocompleteField extends StatelessWidget {
     );
   }
 
-  static AutocompleteFieldViewBuilder getFieldViewBuilder() {
+  static AutocompleteFieldViewBuilder getFieldViewBuilder({
+    required bool isTextFieldEnabled,
+  }) {
     return LabelledAutocomplete.getFieldBuilder(
       labelText: 'Search product',
+      isTextFieldEnabled: isTextFieldEnabled,
     );
   }
 }
