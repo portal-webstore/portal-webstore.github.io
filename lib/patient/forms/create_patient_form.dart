@@ -39,81 +39,84 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      children: <Widget>[
-        TextFormField(
-          decoration: const InputDecoration(
-            border: UnderlineInputBorder(),
-            labelText: 'Record number (URN/MRN)',
-            helperText: '',
+    return Form(
+      key: widget.formKey,
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        children: <Widget>[
+          TextFormField(
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Record number (URN/MRN)',
+              helperText: '',
+            ),
+            validator: (input) => null,
+            onSaved: (String? text) {
+              //
+            },
           ),
-          validator: (input) => null,
-          onSaved: (String? text) {
-            //
-          },
-        ),
-        TextFormField(
-          decoration: const InputDecoration(
-            border: UnderlineInputBorder(),
-            labelText: 'Last name',
-            helperText: '',
+          TextFormField(
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Last name',
+              helperText: '',
+            ),
+            validator: (input) => null,
+            onSaved: (String? text) {
+              //
+            },
           ),
-          validator: (input) => null,
-          onSaved: (String? text) {
-            //
-          },
-        ),
-        TextFormField(
-          decoration: const InputDecoration(
-            border: UnderlineInputBorder(),
-            labelText: 'First name',
-            helperText: '',
+          TextFormField(
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'First name',
+              helperText: '',
+            ),
+            validator: (input) => null,
+            onSaved: (String? text) {
+              //
+            },
           ),
-          validator: (input) => null,
-          onSaved: (String? text) {
-            //
-          },
-        ),
-        Row(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 16,
-              ),
-              width: 120,
-              child: Focus(
-                onFocusChange: (bool isFocusedIn) => validateFormOnFocusOut(
-                  isFocusedIn: isFocusedIn,
-                  formKey: widget.formKey,
+          Row(
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
                 ),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Date of birth',
-                    helperText: '',
+                width: 120,
+                child: Focus(
+                  onFocusChange: (bool isFocusedIn) => validateFormOnFocusOut(
+                    isFocusedIn: isFocusedIn,
+                    formKey: widget.formKey,
                   ),
-                  controller: dobTextController,
-                  validator: (String? text) {
-                    if (text == null) {
-                      return MaterialLocalizations.of(context)
-                          .invalidDateFormatLabel;
-                    }
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Date of birth',
+                      helperText: '',
+                    ),
+                    controller: dobTextController,
+                    validator: (String? text) {
+                      if (text == null) {
+                        return MaterialLocalizations.of(context)
+                            .invalidDateFormatLabel;
+                      }
 
-                    return _validateDateText(text);
-                  },
+                      return _validateDateText(text);
+                    },
+                  ),
                 ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.calendar_today),
-              onPressed: () {
-                _setTextControllerFromDatePicked(context);
-              },
-            ),
-          ],
-        ),
-      ],
+              IconButton(
+                icon: const Icon(Icons.calendar_today),
+                onPressed: () {
+                  _setTextControllerFromDatePicked(context);
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -139,7 +142,11 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
     final String dateTimeText = ausFullDateDisplayFormat.format(date);
 
     dobTextController.text = dateTimeText;
-    widget.formKey.currentState?.validate();
+    final bool? isValid = widget.formKey.currentState?.validate();
+
+    if (isValid == null || !isValid) {
+      return;
+    }
     // Assuming setState is redundant rebuilt via form state validate trigger
     // setState(() {
     //   //
