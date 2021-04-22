@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show MaxLengthEnforcement;
+import 'package:flutter/services.dart'
+    show LengthLimitingTextInputFormatter, MaxLengthEnforcement;
 import 'package:testable_web_app/order/forms/helpers/get_date_out_of_range_invalid_error_message.dart';
 import 'package:testable_web_app/order/forms/helpers/validate_form_on_focus_out.dart';
 import 'package:testable_web_app/order/forms/widgets/dose_field_widget.dart';
@@ -215,8 +216,7 @@ class _OrderFormState extends State<OrderForm> {
 
               Container(
                 padding: edgeInsetsFormFieldPadding,
-                constraints: boxFieldWidthConstraintsShort,
-                width: 80,
+                width: 60,
                 // - TODO: Replace with generated number of dose fields
                 child: TextFormField(
                   decoration: const InputDecoration(
@@ -224,6 +224,11 @@ class _OrderFormState extends State<OrderForm> {
                     labelText: 'Quantity',
                     helperText: '',
                   ),
+                  inputFormatters: [
+                    // Rather than using maxLengthEnforcement
+                    // which takes up space with a 0/6 char counter.
+                    LengthLimitingTextInputFormatter(6),
+                  ],
                 ),
               ),
 
