@@ -17,7 +17,23 @@ const edgeInsetsPadding = EdgeInsets.fromLTRB(16, 16, 16, 16);
 const edgeInsetsFormFieldPadding = EdgeInsets.symmetric(
   vertical: 16,
 );
-const maxNumTextCharacters = 1000;
+
+/// Microoptimisations recurring cost minimisation driver
+///
+/// at least one byte per character
+/// extended character sets go 2–4 bytes each! Emoji 😲
+/// DynamoDB AWS Amplify keep batches rolled into 1KB parts for capacity units
+/// Optimising for PaaS serverless cloud native services
+///
+///
+/// limit to less than one kilobyte per treatment.
+/// Notes could potentially take up more than half of the record quota sizing
+///
+///
+/// Some slightly poor UX.
+/// Usually want to afford and then cut down text
+///
+const maxNumTextCharacters = 255;
 const boxFieldWidthConstraintsStandard = BoxConstraints(
   minWidth: 480,
   maxWidth: 600,
