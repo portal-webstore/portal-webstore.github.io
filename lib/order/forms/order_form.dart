@@ -268,6 +268,8 @@ class _OrderFormState extends State<OrderForm> {
                     _selectedProduct = null;
 
                     _isNewProductFreeText = true;
+
+                    _productAutocompleteController.clear();
                   });
                 },
                 child: const Text(
