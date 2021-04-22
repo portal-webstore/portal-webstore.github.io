@@ -69,6 +69,9 @@ class _OrderFormState extends State<OrderForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _patientSubFormKey = GlobalKey<FormState>();
 
+  final TextEditingController _patientAutocompleteController =
+      TextEditingController();
+
   /// Show/hide
 
   /// Bloc state makes sense here to map the relevant states rather than
@@ -101,7 +104,14 @@ class _OrderFormState extends State<OrderForm> {
     return _selectedProduct != null || _isNewProductFreeText;
   }
 
-  /// _show/hide
+  // _show/hide
+
+  @override
+  void dispose() {
+    _patientAutocompleteController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,19 +140,36 @@ class _OrderFormState extends State<OrderForm> {
                 padding: edgeInsetsFormFieldPadding,
                 constraints: boxFieldWidthConstraintsStandard,
 
-                // - TODO: Replace with autocomplete
-                child: PatientAutocomplete<PatientModel>(
-                  options: widget.patients,
-                  focusNode: FocusNode(),
-                  textEditingController: TextEditingController(),
-                  isTextFieldEnabled: _isPatientSelectHidden,
-                  onSelected: (option) {
-                    // Do something
-                    // Save
+                // Quick fix with Focus for proof of behaviour
+                // Can then customise the autocomplete more to allow
+                // onTap onChange or other behaviours
+                // to clear the selection when attempting to start a search
+                // To enforce more consistent behaviour
+                child: Focus(
+                  onFocusChange: (focusedIn) {
+                    final bool focusedOut = !focusedIn;
+                    if (focusedOut) {
+                      return;
+                    }
+
+                    _patientAutocompleteController.clear();
+                    _selectedPatientOrAdHocCreated = null;
                   },
+                  child: PatientAutocomplete<PatientModel>(
+                    options: widget.patients,
+                    focusNode: FocusNode(),
+                    textEditingController: _patientAutocompleteController,
+                    isTextFieldEnabled: _isPatientSelectHidden,
+                    onSelected: (PatientModel option) {
+                      // Do something
+                      // Save
+                      _selectedPatientOrAdHocCreated = option;
+
+                      // Focus Product field
+                    },
+                  ),
                 ),
               ),
-
               ElevatedButton(
                 onPressed: () {
                   // setState isNewPatient
@@ -370,6 +397,8 @@ class _OrderFormState extends State<OrderForm> {
 
   /// The visual state of a fresh patient treatment order submission page
   void _resetState() {
+    _patientAutocompleteController.clear();
+
     _isNewPatientEntry = false;
     _selectedPatientOrAdHocCreated = null;
 
