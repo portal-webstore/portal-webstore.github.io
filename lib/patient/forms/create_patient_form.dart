@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testable_web_app/i18n/date/australia_date_locale_format.dart';
 import 'package:testable_web_app/order/forms/helpers/get_date_out_of_range_invalid_error_message.dart';
 import 'package:testable_web_app/order/forms/helpers/validate_form_on_focus_out.dart';
+import 'package:testable_web_app/shared/forms/helpers/formatters/uppercase_text_formatter.dart';
 
 class CreatePatientForm extends StatefulWidget {
   const CreatePatientForm({
@@ -58,9 +59,12 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
           TextFormField(
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
-              labelText: 'Last name',
+              labelText: 'LAST name',
               helperText: '',
             ),
+            inputFormatters: [
+              UpperCaseTextFormatter(),
+            ],
             validator: (input) => null,
             onSaved: (String? text) {
               //
