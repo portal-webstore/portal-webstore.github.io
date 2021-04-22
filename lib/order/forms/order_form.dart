@@ -155,8 +155,10 @@ class _OrderFormState extends State<OrderForm> {
                       return;
                     }
 
-                    _patientAutocompleteController.clear();
+                    // Calling setState rebuild appears to
+                    // close the autocomplete panel
                     _selectedPatientOrAdHocCreated = null;
+                    _patientAutocompleteController.clear();
                   },
                   child: PatientAutocomplete<PatientModel>(
                     options: widget.patients,
@@ -166,7 +168,10 @@ class _OrderFormState extends State<OrderForm> {
                     onSelected: (PatientModel option) {
                       // Do something
                       // Save
-                      _selectedPatientOrAdHocCreated = option;
+
+                      setState(() {
+                        _selectedPatientOrAdHocCreated = option;
+                      });
 
                       // Focus Product field
                     },
@@ -177,10 +182,10 @@ class _OrderFormState extends State<OrderForm> {
                 onPressed: () {
                   // setState isNewPatient
                   setState(() {
-                    _patientAutocompleteController.clear();
-
                     _isNewPatientEntry = true;
                     _selectedPatientOrAdHocCreated = null;
+
+                    _patientAutocompleteController.clear();
                   });
                 },
                 child: const Text(
