@@ -307,7 +307,7 @@ class _OrderFormState extends State<OrderForm> {
                 // Check each dose to their respective (ordered) drug
                 // Array of textfield controllers or handled within widget
                 child: DrugDoseFields(
-                  drugs: widget.products[3].drugs,
+                  drugs: _selectedProduct?.drugs ?? [],
                 ),
               ),
 
