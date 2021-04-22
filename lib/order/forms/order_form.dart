@@ -94,7 +94,9 @@ class _OrderFormState extends State<OrderForm> {
   /// Hide if free texting the product instead of selecting from the list.
   bool get _isProductSelectHidden => !_isNewProductFreeText;
 
-  // _show/hide
+  String? _adhocCreatedProductFreeText;
+
+  /// _show/hide
 
   @override
   Widget build(BuildContext context) {
@@ -364,5 +366,6 @@ class _OrderFormState extends State<OrderForm> {
     _adhocCreatedPatient = null;
 
     _isNewProductFreeText = false;
+    _adhocCreatedProductFreeText = null;
   }
 }
