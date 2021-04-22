@@ -69,7 +69,7 @@ class _OrderFormState extends State<OrderForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _patientSubFormKey = GlobalKey<FormState>();
 
-  ProductModel? _productDetailsToShow;
+  ProductModel? _selectedProduct;
 
   /// Show/hide
 
@@ -96,11 +96,15 @@ class _OrderFormState extends State<OrderForm> {
 
   String? _adhocCreatedProductFreeText;
 
+  bool get _isEveryDoseFieldHidden {
+    return _selectedProduct != null || _isNewProductFreeText;
+  }
+
   /// _show/hide
 
   @override
   Widget build(BuildContext context) {
-    final ProductModel? productDetail = _productDetailsToShow;
+    final ProductModel? productDetail = _selectedProduct;
 
     final futureDateMax = DateTime.now().add(
       addFutureDateIncrement,
@@ -190,9 +194,12 @@ class _OrderFormState extends State<OrderForm> {
                   focusNode: FocusNode(),
                   textEditingController: TextEditingController(),
                   isTextFieldEnabled: _isProductSelectHidden,
+
+                  // - FIXME: Add onTap or other reset to clear.
                   onSelected: (option) {
                     // Do something
                     // Save
+                    _selectedProduct = option;
                   },
                 ),
               ),
@@ -226,7 +233,7 @@ class _OrderFormState extends State<OrderForm> {
               Visibility(
                 visible: productDetail != null,
                 child: _showValidProductDetail(
-                  _productDetailsToShow,
+                  _selectedProduct,
                 ),
               ),
 
@@ -367,5 +374,7 @@ class _OrderFormState extends State<OrderForm> {
 
     _isNewProductFreeText = false;
     _adhocCreatedProductFreeText = null;
+
+    _selectedProduct = null;
   }
 }
