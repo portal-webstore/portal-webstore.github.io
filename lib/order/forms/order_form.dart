@@ -74,6 +74,9 @@ class _OrderFormState extends State<OrderForm> {
   final TextEditingController _productAutocompleteController =
       TextEditingController();
 
+  final FocusNode _patientAutocompleteFocus = FocusNode();
+  final FocusNode _productAutocompleteFocus = FocusNode();
+
   /// Show/hide
 
   /// Bloc state makes sense here to map the relevant states rather than
@@ -162,7 +165,7 @@ class _OrderFormState extends State<OrderForm> {
                   },
                   child: PatientAutocomplete<PatientModel>(
                     options: widget.patients,
-                    focusNode: FocusNode(),
+                    focusNode: _patientAutocompleteFocus,
                     textEditingController: _patientAutocompleteController,
                     isTextFieldEnabled: _isPatientSelectHidden,
                     onSelected: (PatientModel option) {
@@ -243,7 +246,7 @@ class _OrderFormState extends State<OrderForm> {
                   },
                   child: ProductAutocompleteField(
                     options: widget.products,
-                    focusNode: FocusNode(),
+                    focusNode: _productAutocompleteFocus,
                     textEditingController: _productAutocompleteController,
                     isTextFieldEnabled: _isProductSelectHidden,
 
