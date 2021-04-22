@@ -71,6 +71,8 @@ class _OrderFormState extends State<OrderForm> {
 
   final TextEditingController _patientAutocompleteController =
       TextEditingController();
+  final TextEditingController _productAutocompleteController =
+      TextEditingController();
 
   /// Show/hide
 
@@ -109,6 +111,7 @@ class _OrderFormState extends State<OrderForm> {
   @override
   void dispose() {
     _patientAutocompleteController.dispose();
+    _productAutocompleteController.dispose();
 
     super.dispose();
   }
@@ -222,24 +225,40 @@ class _OrderFormState extends State<OrderForm> {
               Container(
                 padding: edgeInsetsFormFieldPadding,
                 constraints: boxFieldWidthConstraintsLong,
-                child: ProductAutocompleteField(
-                  options: widget.products,
-                  focusNode: FocusNode(),
-                  textEditingController: TextEditingController(),
-                  isTextFieldEnabled: _isProductSelectHidden,
+                child: Focus(
+                  onFocusChange: (bool focusedIn) {
+                    final bool focusedOut = !focusedIn;
+                    if (focusedOut) {
+                      return;
+                    }
 
-                  // - FIXME: Add onTap or other reset to clear.
-                  onSelected: (option) {
-                    // Do something
-                    // Save
-                    _selectedProduct = option;
+                    // Do not call setState here as it force closes the panel?
+                    _selectedProduct = null;
+                    _productAutocompleteController.clear();
                   },
+                  child: ProductAutocompleteField(
+                    options: widget.products,
+                    focusNode: FocusNode(),
+                    textEditingController: _productAutocompleteController,
+                    isTextFieldEnabled: _isProductSelectHidden,
+
+                    // - FIXME: Add onTap or other reset to clear.
+                    onSelected: (ProductModel option) {
+                      // Do something
+                      // Save
+                      setState(() {
+                        _selectedProduct = option;
+                      });
+                    },
+                  ),
                 ),
               ),
 
               ElevatedButton(
                 onPressed: () {
                   setState(() {
+                    _selectedProduct = null;
+
                     _isNewProductFreeText = true;
                   });
                 },
@@ -251,14 +270,17 @@ class _OrderFormState extends State<OrderForm> {
               Visibility(
                 visible: _isNewProductFreeText,
                 child: IconButton(
+                  icon: const Icon(Icons.undo),
                   onPressed: () {
                     setState(() {
                       // Reset toggle
-                      // Reset subform
                       _isNewProductFreeText = false;
+                      _selectedProduct = null;
+
+                      // Reset subform
+                      _adhocCreatedProductFreeText = null;
                     });
                   },
-                  icon: const Icon(Icons.undo),
                 ),
               ),
               // Blank it vs possible visibility tween
@@ -401,14 +423,17 @@ class _OrderFormState extends State<OrderForm> {
 
   /// The visual state of a fresh patient treatment order submission page
   void _resetState() {
-    _patientAutocompleteController.clear();
+    setState(() {
+      _patientAutocompleteController.clear();
+      _productAutocompleteController.clear();
 
-    _isNewPatientEntry = false;
-    _selectedPatientOrAdHocCreated = null;
+      _isNewPatientEntry = false;
+      _selectedPatientOrAdHocCreated = null;
 
-    _isNewProductFreeText = false;
-    _adhocCreatedProductFreeText = null;
+      _isNewProductFreeText = false;
+      _adhocCreatedProductFreeText = null;
 
-    _selectedProduct = null;
+      _selectedProduct = null;
+    });
   }
 }
