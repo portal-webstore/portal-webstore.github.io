@@ -69,8 +69,6 @@ class _OrderFormState extends State<OrderForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _patientSubFormKey = GlobalKey<FormState>();
 
-  ProductModel? _selectedProduct;
-
   /// Show/hide
 
   /// Bloc state makes sense here to map the relevant states rather than
@@ -85,8 +83,9 @@ class _OrderFormState extends State<OrderForm> {
   bool get _isPatientSelectHidden => !_isNewPatientEntry;
 
   /// After new patient entry saved
+  /// or directly searched and selected patient
   /// Null on reset
-  PatientModel? _adhocCreatedPatient;
+  PatientModel? _selectedPatientOrAdHocCreated;
 
   /// Is new product for free text subform entry
   bool _isNewProductFreeText = false;
@@ -95,6 +94,8 @@ class _OrderFormState extends State<OrderForm> {
   bool get _isProductSelectHidden => !_isNewProductFreeText;
 
   String? _adhocCreatedProductFreeText;
+
+  ProductModel? _selectedProduct;
 
   bool get _isEveryDoseFieldHidden {
     return _selectedProduct != null || _isNewProductFreeText;
@@ -370,7 +371,7 @@ class _OrderFormState extends State<OrderForm> {
   /// The visual state of a fresh patient treatment order submission page
   void _resetState() {
     _isNewPatientEntry = false;
-    _adhocCreatedPatient = null;
+    _selectedPatientOrAdHocCreated = null;
 
     _isNewProductFreeText = false;
     _adhocCreatedProductFreeText = null;
