@@ -226,6 +226,18 @@ class _OrderFormState extends State<OrderForm> {
                   ),
                   child: CreatePatientForm(
                     formKey: _patientSubFormKey,
+                    onSaveSuccess: (PatientModel? savedPatientDetails) {
+                      final bool unsuccessfulSave = savedPatientDetails == null;
+                      if (unsuccessfulSave) {
+                        return;
+                      }
+                      final PatientModel successfulSavedPatient =
+                          savedPatientDetails;
+
+                      setState(() {
+                        _selectedPatientOrAdHocCreated = successfulSavedPatient;
+                      });
+                    },
                   ),
                 ),
               ),

@@ -2,16 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:testable_web_app/i18n/date/australia_date_locale_format.dart';
 import 'package:testable_web_app/order/forms/helpers/get_date_out_of_range_invalid_error_message.dart';
 import 'package:testable_web_app/order/forms/helpers/validate_form_on_focus_out.dart';
+import 'package:testable_web_app/patient/models/patient_model.dart'
+    show PatientModel;
 import 'package:testable_web_app/shared/forms/helpers/formatters/uppercase_text_formatter.dart';
 
 class CreatePatientForm extends StatefulWidget {
   const CreatePatientForm({
     Key? key,
     required this.formKey,
+    required this.onSaveSuccess,
   }) : super(key: key);
 
   final GlobalKey<FormState> formKey;
 
+  /// Optional to allow ux feedback flexibility rather than
+  /// only running when completely successful non-null?
+  ///
+  /// Rename this?
+  final void Function(PatientModel?) onSaveSuccess;
   @override
   _CreatePatientFormState createState() => _CreatePatientFormState();
 }
@@ -151,6 +159,32 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                   // Validate near end on button and date
                   // to check for errors and defer big red alert messages
                   // when partial early text is being filled in.
+                  //
+
+                  final bool isValidForm =
+                      widget.formKey.currentState?.validate() ?? false;
+
+                  final bool isInvalidForm = !isValidForm;
+
+                  // Check progressive model;
+
+                  if (isInvalidForm) {
+                    widget.onSaveSuccess(null);
+
+                    return;
+                  }
+
+                  // - FIXME: Replace these placeholders
+                  final PatientModel? validatedPatient = null;
+                  final isInvalidPatientInput = true;
+
+                  if (isInvalidPatientInput) {
+                    widget.onSaveSuccess(null);
+
+                    return;
+                  }
+
+                  widget.onSaveSuccess(validatedPatient);
                 },
                 icon: const Icon(Icons.save_alt_outlined),
                 label: const Text('Save fields'),
