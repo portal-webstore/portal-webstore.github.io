@@ -174,7 +174,10 @@ class _OrderFormState extends State<OrderForm> {
                 onPressed: () {
                   // setState isNewPatient
                   setState(() {
+                    _patientAutocompleteController.clear();
+
                     _isNewPatientEntry = true;
+                    _selectedPatientOrAdHocCreated = null;
                   });
                 },
                 child: const Text(
@@ -189,9 +192,10 @@ class _OrderFormState extends State<OrderForm> {
                   onPressed: () {
                     setState(() {
                       // Reset toggle
-                      // Reset subform
                       _isNewPatientEntry = false;
+
                       _selectedPatientOrAdHocCreated = null;
+                      // Reset subform
                     });
                   },
                 ),
@@ -235,7 +239,6 @@ class _OrderFormState extends State<OrderForm> {
 
               ElevatedButton(
                 onPressed: () {
-                  // setState isNewPatient
                   setState(() {
                     _isNewProductFreeText = true;
                   });
