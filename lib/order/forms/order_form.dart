@@ -160,9 +160,10 @@ class _OrderFormState extends State<OrderForm> {
               Visibility(
                 visible: isNewPatientEntry,
                 child: Container(
+                  padding: const EdgeInsets.all(8.0),
                   // Golden ratio!
-                  height: 380,
-                  width: 234,
+                  height: 388,
+                  width: 239,
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Theme.of(context).accentColor,
