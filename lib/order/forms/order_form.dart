@@ -79,20 +79,20 @@ class _OrderFormState extends State<OrderForm> {
   /// Create new should hide the selection dropdown field as they are mutually
   /// exclusive.
   ///
-  bool isNewPatientEntry = false;
+  bool _isNewPatientEntry = false;
 
   /// Hide if new patient rather than selecting pre-existing.
-  bool get isPatientSelectHidden => !isNewPatientEntry;
+  bool get _isPatientSelectHidden => !_isNewPatientEntry;
 
   /// After new patient entry saved
   /// Null on reset
   PatientModel? _adhocCreatedPatient;
 
   /// Is new product for free text subform entry
-  bool isNewProductFreeText = false;
+  bool _isNewProductFreeText = false;
 
   /// Hide if free texting the product instead of selecting from the list.
-  bool get isProductSelectHidden => !isNewProductFreeText;
+  bool get _isProductSelectHidden => !_isNewProductFreeText;
 
   // _show/hide
 
@@ -128,7 +128,7 @@ class _OrderFormState extends State<OrderForm> {
                   options: widget.patients,
                   focusNode: FocusNode(),
                   textEditingController: TextEditingController(),
-                  isTextFieldEnabled: isPatientSelectHidden,
+                  isTextFieldEnabled: _isPatientSelectHidden,
                   onSelected: (option) {
                     // Do something
                     // Save
@@ -140,7 +140,7 @@ class _OrderFormState extends State<OrderForm> {
                 onPressed: () {
                   // setState isNewPatient
                   setState(() {
-                    isNewPatientEntry = true;
+                    _isNewPatientEntry = true;
                   });
                 },
                 child: const Text(
@@ -149,13 +149,13 @@ class _OrderFormState extends State<OrderForm> {
               ),
 
               Visibility(
-                visible: isNewPatientEntry,
+                visible: _isNewPatientEntry,
                 child: IconButton(
                   onPressed: () {
                     setState(() {
                       // Reset toggle
                       // Reset subform
-                      isNewPatientEntry = false;
+                      _isNewPatientEntry = false;
                     });
                   },
                   icon: const Icon(Icons.undo),
@@ -163,7 +163,7 @@ class _OrderFormState extends State<OrderForm> {
               ),
 
               Visibility(
-                visible: isNewPatientEntry,
+                visible: _isNewPatientEntry,
                 child: Container(
                   padding: const EdgeInsets.all(8.0),
                   // Golden ratio!
@@ -187,7 +187,7 @@ class _OrderFormState extends State<OrderForm> {
                   options: widget.products,
                   focusNode: FocusNode(),
                   textEditingController: TextEditingController(),
-                  isTextFieldEnabled: isProductSelectHidden,
+                  isTextFieldEnabled: _isProductSelectHidden,
                   onSelected: (option) {
                     // Do something
                     // Save
@@ -199,7 +199,7 @@ class _OrderFormState extends State<OrderForm> {
                 onPressed: () {
                   // setState isNewPatient
                   setState(() {
-                    isNewProductFreeText = true;
+                    _isNewProductFreeText = true;
                   });
                 },
                 child: const Text(
@@ -208,13 +208,13 @@ class _OrderFormState extends State<OrderForm> {
               ),
 
               Visibility(
-                visible: isNewProductFreeText,
+                visible: _isNewProductFreeText,
                 child: IconButton(
                   onPressed: () {
                     setState(() {
                       // Reset toggle
                       // Reset subform
-                      isNewProductFreeText = false;
+                      _isNewProductFreeText = false;
                     });
                   },
                   icon: const Icon(Icons.undo),
@@ -360,6 +360,9 @@ class _OrderFormState extends State<OrderForm> {
 
   /// The visual state of a fresh patient treatment order submission page
   void _resetState() {
+    _isNewPatientEntry = false;
     _adhocCreatedPatient = null;
+
+    _isNewProductFreeText = false;
   }
 }
