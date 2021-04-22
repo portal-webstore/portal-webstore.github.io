@@ -84,6 +84,10 @@ class _OrderFormState extends State<OrderForm> {
   /// Hide if new patient rather than selecting pre-existing.
   bool get isPatientSelectHidden => !isNewPatientEntry;
 
+  /// After new patient entry saved
+  /// Null on reset
+  PatientModel? _adhocCreatedPatient;
+
   /// Is new product for free text subform entry
   bool isNewProductFreeText = false;
 
@@ -352,5 +356,10 @@ class _OrderFormState extends State<OrderForm> {
     }
 
     return product.drugs.length;
+  }
+
+  /// The visual state of a fresh patient treatment order submission page
+  void _resetState() {
+    _adhocCreatedPatient = null;
   }
 }
