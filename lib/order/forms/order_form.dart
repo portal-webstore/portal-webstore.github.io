@@ -160,7 +160,7 @@ class _OrderFormState extends State<OrderForm> {
               Visibility(
                 visible: isNewPatientEntry,
                 child: Container(
-                  height: 440,
+                  height: 380,
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Theme.of(context).accentColor,

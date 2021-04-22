@@ -45,41 +45,64 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         children: <Widget>[
-          TextFormField(
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Record number (URN/MRN)',
-              helperText: '',
-            ),
-            validator: (input) => null,
-            onSaved: (String? text) {
-              //
-            },
-          ),
-          TextFormField(
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'LAST name',
-              helperText: '',
-            ),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
+          Row(
+            children: [
+              SizedBox(
+                width: 120,
+                height: 80,
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Record number',
+                    helperText: '(URN/MRN)',
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (input) => null,
+                  onSaved: (String? text) {
+                    //
+                  },
+                ),
+              ),
             ],
-            validator: (input) => null,
-            onSaved: (String? text) {
-              //
-            },
           ),
-          TextFormField(
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'First name',
-              helperText: '',
-            ),
-            validator: (input) => null,
-            onSaved: (String? text) {
-              //
-            },
+          Row(
+            children: [
+              SizedBox(
+                width: 160,
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'LAST name',
+                    helperText: '',
+                  ),
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                  ],
+                  validator: (input) => null,
+                  onSaved: (String? text) {
+                    //
+                  },
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: 180,
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'First name',
+                    helperText: '',
+                  ),
+                  validator: (input) => null,
+                  onSaved: (String? text) {
+                    //
+                  },
+                ),
+              ),
+            ],
           ),
           Row(
             children: <Widget>[
