@@ -7,6 +7,8 @@ const List<PatientModel> seedPatients = [
     patientLastName: 'testLastName',
     patientHealthcareRecordNumber: '1232131231',
     patientBirthDate: '15/04/2021',
+    ocsPatientLink: -1,
+    clinicID: '',
   ),
   PatientModel(
     patientID: 'test',
@@ -14,6 +16,8 @@ const List<PatientModel> seedPatients = [
     patientLastName: 'testLastName1111',
     patientHealthcareRecordNumber: '1232131231',
     patientBirthDate: '15/04/2021',
+    ocsPatientLink: -1,
+    clinicID: '',
   ),
   PatientModel(
     patientID: 'test',
@@ -21,6 +25,8 @@ const List<PatientModel> seedPatients = [
     patientLastName: 'testLastName222222',
     patientHealthcareRecordNumber: '1232131231',
     patientBirthDate: '15/04/2021',
+    ocsPatientLink: -1,
+    clinicID: '',
   ),
   PatientModel(
     patientID: 'test',
@@ -28,5 +34,7 @@ const List<PatientModel> seedPatients = [
     patientLastName: 'testLastName345345',
     patientHealthcareRecordNumber: '1232131231',
     patientBirthDate: '15/04/2021',
+    ocsPatientLink: -1,
+    clinicID: '',
   ),
 ];

@@ -7,6 +7,8 @@ class PatientModel extends Equatable {
     required this.patientLastName,
     required this.patientHealthcareRecordNumber,
     required this.patientBirthDate,
+    required this.ocsPatientLink,
+    required this.clinicID,
   });
 
   final String patientID;
@@ -18,6 +20,14 @@ class PatientModel extends Equatable {
 
   /// Danger format
   final String patientBirthDate;
+
+  /// For use case of OCS source of truth scraped overnight to fill the
+  /// onc webstore ordering portal dropdowns per clinic
+  ///
+  final int ocsPatientLink;
+
+  /// Present here for simplicity. Not necessary for retrieval if covered by query.
+  final String clinicID;
 
   @override
   List<Object> get props => [
