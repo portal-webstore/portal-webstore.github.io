@@ -142,6 +142,21 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
               ),
             ],
           ),
+          Row(
+            children: [
+              TextButton.icon(
+                onPressed: () {
+                  // Validate
+
+                  // Validate near end on button and date
+                  // to check for errors and defer big red alert messages
+                  // when partial early text is being filled in.
+                },
+                icon: const Icon(Icons.save_alt_outlined),
+                label: const Text('Save fields'),
+              )
+            ],
+          )
         ],
       ),
     );
