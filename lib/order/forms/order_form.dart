@@ -3,7 +3,8 @@ import 'package:flutter/services.dart'
     show LengthLimitingTextInputFormatter, MaxLengthEnforcement;
 import 'package:testable_web_app/order/forms/helpers/get_date_out_of_range_invalid_error_message.dart';
 import 'package:testable_web_app/order/forms/helpers/validate_form_on_focus_out.dart';
-import 'package:testable_web_app/order/forms/widgets/dose_field_widget.dart';
+import 'package:testable_web_app/order/forms/widgets/dose_fields_widget.dart'
+    show DrugDoseFields;
 import 'package:testable_web_app/patient/autocomplete/widgets/patient_autocomplete_widget.dart';
 import 'package:testable_web_app/patient/forms/create_patient_form.dart';
 import 'package:testable_web_app/patient/models/patient_model.dart';
@@ -228,8 +229,10 @@ class _OrderFormState extends State<OrderForm> {
                 constraints: boxFieldWidthConstraintsShort,
 
                 // - TODO: Replace with generated number of dose fields
-                child: DoseField(
-                  drug: widget.products[0].drugs[0],
+                // Check each dose to their respective (ordered) drug
+                // Array of textfield controllers or handled within widget
+                child: DrugDoseFields(
+                  drugs: widget.products[3].drugs,
                 ),
               ),
 
