@@ -185,14 +185,15 @@ class _OrderFormState extends State<OrderForm> {
               Visibility(
                 visible: _isNewPatientEntry,
                 child: IconButton(
+                  icon: const Icon(Icons.undo),
                   onPressed: () {
                     setState(() {
                       // Reset toggle
                       // Reset subform
                       _isNewPatientEntry = false;
+                      _selectedPatientOrAdHocCreated = null;
                     });
                   },
-                  icon: const Icon(Icons.undo),
                 ),
               ),
 
