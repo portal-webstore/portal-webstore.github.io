@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:testable_web_app/i18n/date/australia_date_locale_format.dart';
 import 'package:testable_web_app/order/forms/helpers/get_date_out_of_range_invalid_error_message.dart';
 import 'package:testable_web_app/order/forms/helpers/validate_form_on_focus_out.dart';
@@ -65,7 +66,23 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     helperText: '(URN/MRN)',
                   ),
                   keyboardType: TextInputType.number,
-                  validator: (input) => null,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  validator: (String? input) {
+                    if (input == null) {
+                      return null;
+                    }
+
+                    // Google code base follows paradigm of
+                    // evaluating all the errors to messages first
+                    // and falling back to null success/ignore at final point
+                    if (input.isEmpty) {
+                      return 'Please enter number';
+                    }
+
+                    return null;
+                  },
                   onSaved: (String? text) {
                     //
                   },
@@ -86,7 +103,16 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
-                  validator: (input) => null,
+                  validator: (String? input) {
+                    if (input == null) {
+                      return null;
+                    }
+                    if (input.isEmpty) {
+                      return 'Please enter NAME';
+                    }
+
+                    return null;
+                  },
                   onSaved: (String? text) {
                     //
                   },
@@ -104,7 +130,15 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     labelText: 'First name',
                     helperText: '',
                   ),
-                  validator: (input) => null,
+                  validator: (String? input) {
+                    if (input == null) {
+                      return null;
+                    }
+                    if (input.isEmpty) {
+                      return 'Please enter first name';
+                    }
+                    return null;
+                  },
                   onSaved: (String? text) {
                     //
                   },
@@ -128,9 +162,10 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: 'Date of birth',
-                      helperText: '',
+                      helperText: 'dd/MM/yyyy',
                     ),
                     controller: dobTextController,
+                    keyboardType: TextInputType.datetime,
                     validator: (String? text) {
                       if (text == null) {
                         return MaterialLocalizations.of(context)
@@ -138,6 +173,9 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                       }
 
                       return _validateDateText(text);
+                    },
+                    onSaved: (String? text) {
+                      //
                     },
                   ),
                 ),
