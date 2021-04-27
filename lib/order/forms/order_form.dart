@@ -366,6 +366,16 @@ class _OrderFormState extends State<OrderForm> {
                 // Array of textfield controllers or handled within widget
                 child: DrugDoseFields(
                   drugs: _selectedProduct?.drugs ?? [],
+                  onSubmitDrugDoseField: (
+                    int drugIndexToSaveTo,
+                    double dose,
+                  ) {
+                    // On valid entries only. Wary of trailing "."
+                    // as invalid decimal text for [text] -> [double] conversion
+                    setState(() {
+                      _drugDoses[drugIndexToSaveTo] = dose;
+                    });
+                  },
                   onSaveDrugDoseField: (
                     int drugIndexToSaveTo,
                     double dose,
