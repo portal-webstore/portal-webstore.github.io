@@ -43,9 +43,13 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
     veryOldYears,
   );
 
+  /// Reset by creating a new blank object.
   PartialPatientInputModel _savedPatientInputFormModel =
       PartialPatientInputModel();
 
+  /// Simples. Non null + valid input form. - Though what if they want to undo and
+  /// resave
+  ///
   bool get _isSaved => _savedPatientInputFormModel.valid;
 
   @override
@@ -298,35 +302,27 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     return;
                   }
 
+                  widget.formKey.currentState?.save();
+
                   // - FIXME: Replace these placeholders
-                  final PartialPatientInputModel? validatedPatient =
+                  final PartialPatientInputModel savedPatient =
                       _savedPatientInputFormModel;
 
-                  final bool isNullInput = validatedPatient == null;
-
-                  if (isNullInput) {
-                    widget.onSaveSuccess(null);
-
-                    return;
-                  }
-                  final bool isInvalidPatientInput = validatedPatient.invalid;
+                  final bool isInvalidPatientInput = savedPatient.invalid;
                   if (isInvalidPatientInput) {
                     widget.onSaveSuccess(null);
 
                     return;
                   }
 
-                  final PartialPatientInputModel validPartialInput =
-                      validatedPatient;
-
                   try {
                     final PatientBaseInputModel validPatientInput =
                         PatientBaseInputModel(
-                      patientFirstName: validatedPatient.patientFirstName!,
-                      patientLastName: validatedPatient.patientLastName!,
+                      patientFirstName: savedPatient.patientFirstName!,
+                      patientLastName: savedPatient.patientLastName!,
                       patientHealthcareRecordNumber:
-                          validatedPatient.patientHealthcareRecordNumber!,
-                      patientBirthDate: validatedPatient.patientBirthDate!,
+                          savedPatient.patientHealthcareRecordNumber!,
+                      patientBirthDate: savedPatient.patientBirthDate!,
                       clinicID: widget.clinicIDToSave,
                     );
 
@@ -349,6 +345,14 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
         ],
       ),
     );
+  }
+
+  void resetState() {
+    return;
+  }
+
+  void resetSavedPatientInputs() {
+    _savedPatientInputFormModel = PartialPatientInputModel();
   }
 
   Future<void> _setTextControllerFromDatePicked(
