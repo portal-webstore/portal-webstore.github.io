@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
     show LengthLimitingTextInputFormatter, MaxLengthEnforcement;
+import 'package:testable_web_app/i18n/date/australia_date_locale_format.dart';
 import 'package:testable_web_app/order/forms/helpers/get_date_out_of_range_invalid_error_message.dart';
 import 'package:testable_web_app/order/forms/helpers/validate_form_on_focus_out.dart';
+import 'package:testable_web_app/order/forms/models/order_form_input_model.dart';
 import 'package:testable_web_app/order/forms/widgets/dose_fields_widget.dart'
     show DrugDoseFields;
 import 'package:testable_web_app/patient/autocomplete/widgets/patient_autocomplete_widget.dart';
@@ -83,6 +85,8 @@ class _OrderFormState extends State<OrderForm> {
 
   final FocusNode _patientAutocompleteFocus = FocusNode();
   final FocusNode _productAutocompleteFocus = FocusNode();
+
+  OrderFormInputModel _orderFormInputModel = OrderFormInputModel();
 
   /// Show/hide
 
@@ -362,6 +366,21 @@ class _OrderFormState extends State<OrderForm> {
                     // which takes up space with a 0/6 char counter.
                     LengthLimitingTextInputFormatter(6),
                   ],
+                  onSaved: (String? quantityText) {
+                    if (quantityText == null || quantityText.isEmpty) {
+                      _orderFormInputModel.quantity = null;
+
+                      return;
+                    }
+
+                    final int? quantity = int.tryParse(quantityText);
+                    if (quantity == null) {
+                      _orderFormInputModel.quantity = null;
+                      return;
+                    }
+
+                    _orderFormInputModel.quantity = quantity;
+                  },
                 ),
               ),
 
@@ -398,10 +417,15 @@ class _OrderFormState extends State<OrderForm> {
                     onTextSubmitted: (text) {
                       _formKey.currentState?.validate();
                     },
-                    onDateSaved: (date) {
+                    onDateSaved: (DateTime date) {
                       // Potentially called with invalid text? on formState.save()
                       debugPrint('Valid date saved');
                       // Save to form model
+
+                      _orderFormInputModel.requiredDate =
+                          ausFullDateDisplayFormat.format(
+                        date,
+                      );
                     },
                   ),
                 ),
@@ -434,10 +458,20 @@ class _OrderFormState extends State<OrderForm> {
                 // Composition end may not be working correctly. Appears to hard-limit
                 maxLengthEnforcement:
                     MaxLengthEnforcement.truncateAfterCompositionEnds,
+
+                onSaved: (String? notesText) {
+                  if (notesText == null || notesText.isEmpty) {
+                    _orderFormInputModel.notes = null;
+
+                    return;
+                  }
+
+                  _orderFormInputModel.notes = notesText;
+                },
               ),
 
               ElevatedButton(
-                onPressed: () {},
+                onPressed: _saveForm,
                 child: const Text(
                   'Save order to cart',
                 ),
@@ -495,6 +529,18 @@ class _OrderFormState extends State<OrderForm> {
       _adhocCreatedProductFreeText = null;
 
       _selectedProduct = null;
+
+      _orderFormInputModel = OrderFormInputModel();
     });
+  }
+
+  void _saveForm() {
+    final bool isFormValid = _formKey.currentState?.validate() ?? false;
+    if (!isFormValid) {
+      return;
+    }
+    _formKey.currentState?.save();
+
+    // - TODO: Set up DoseFields saving
   }
 }
