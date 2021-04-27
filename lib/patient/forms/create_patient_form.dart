@@ -281,62 +281,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
           Row(
             children: [
               TextButton.icon(
-                onPressed: () {
-                  // Validate
-
-                  // Validate near end on button and date
-                  // to check for errors and defer big red alert messages
-                  // when partial early text is being filled in.
-                  //
-
-                  final bool isValidForm =
-                      widget.formKey.currentState?.validate() ?? false;
-
-                  final bool isInvalidForm = !isValidForm;
-
-                  // Check progressive model;
-
-                  if (isInvalidForm) {
-                    widget.onSaveSuccess(null);
-
-                    return;
-                  }
-
-                  widget.formKey.currentState?.save();
-
-                  // - FIXME: Replace these placeholders
-                  final PartialPatientInputModel savedPatient =
-                      _savedPatientInputFormModel;
-
-                  final bool isInvalidPatientInput = savedPatient.invalid;
-                  if (isInvalidPatientInput) {
-                    widget.onSaveSuccess(null);
-
-                    return;
-                  }
-
-                  try {
-                    final PatientBaseInputModel validPatientInput =
-                        PatientBaseInputModel(
-                      patientFirstName: savedPatient.patientFirstName!,
-                      patientLastName: savedPatient.patientLastName!,
-                      patientHealthcareRecordNumber:
-                          savedPatient.patientHealthcareRecordNumber!,
-                      patientBirthDate: savedPatient.patientBirthDate!,
-                      clinicID: widget.clinicIDToSave,
-                    );
-
-                    widget.onSaveSuccess(validPatientInput);
-
-                    return;
-                  } on Exception catch (exc) {
-                    //
-                    debugPrint(
-                      'Error saving patient fields',
-                    );
-                    return;
-                  }
-                },
+                onPressed: saveFields,
                 icon: const Icon(Icons.save_alt_outlined),
                 label: const Text('Save fields'),
               )
@@ -345,6 +290,60 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
         ],
       ),
     );
+  }
+
+  void saveFields() {
+    // Validate
+
+    // Validate near end on button and date
+    // to check for errors and defer big red alert messages
+    // when partial early text is being filled in.
+    //
+
+    final bool isValidForm = widget.formKey.currentState?.validate() ?? false;
+
+    final bool isInvalidForm = !isValidForm;
+
+    // Check progressive model;
+
+    if (isInvalidForm) {
+      widget.onSaveSuccess(null);
+
+      return;
+    }
+
+    widget.formKey.currentState?.save();
+
+    // - FIXME: Replace these placeholders
+    final PartialPatientInputModel savedPatient = _savedPatientInputFormModel;
+
+    final bool isInvalidPatientInput = savedPatient.invalid;
+    if (isInvalidPatientInput) {
+      widget.onSaveSuccess(null);
+
+      return;
+    }
+
+    try {
+      final PatientBaseInputModel validPatientInput = PatientBaseInputModel(
+        patientFirstName: savedPatient.patientFirstName!,
+        patientLastName: savedPatient.patientLastName!,
+        patientHealthcareRecordNumber:
+            savedPatient.patientHealthcareRecordNumber!,
+        patientBirthDate: savedPatient.patientBirthDate!,
+        clinicID: widget.clinicIDToSave,
+      );
+
+      widget.onSaveSuccess(validPatientInput);
+
+      return;
+    } on Exception catch (exc) {
+      //
+      debugPrint(
+        'Error saving patient fields',
+      );
+      return;
+    }
   }
 
   void resetState() {
