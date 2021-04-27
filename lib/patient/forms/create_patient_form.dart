@@ -31,30 +31,25 @@ class CreatePatientForm extends StatefulWidget {
 class _CreatePatientFormState extends State<CreatePatientForm> {
   final TextEditingController dobTextController = TextEditingController();
 
-  static const String dateFormatErrorMessage =
+  static const String _dateFormatErrorMessage =
       'Please enter (dd/MM/yyyy) format';
-  static const Duration veryOldYears = Duration(
+  static const Duration _veryOldYears = Duration(
     days: 365 * 123,
   );
-  final DateTime currentDateTime = DateTime.now();
+  final DateTime _currentDateTime = DateTime.now();
 
-  final veryOldMinimumStartBirthDate = DateTime.now().subtract(
+  final _veryOldMinimumStartBirthDate = DateTime.now().subtract(
     // 123 years old?
-    veryOldYears,
+    _veryOldYears,
   );
 
   /// Reset by creating a new blank object.
   PartialPatientInputModel _savedPatientInputFormModel =
       PartialPatientInputModel();
 
-  /// Simples. Non null + valid input form. - Though what if they want to undo and
-  /// resave
-  ///
-  bool get _isSaved => _savedPatientInputFormModel.valid;
-
   /// Lock on successful save
-  bool isFormLocked = false;
-  bool get isFormEnabled => !isFormLocked;
+  bool _isSavedFormLocked = false;
+  bool get _isFormEnabled => !_isSavedFormLocked;
 
   @override
   void dispose() {
@@ -81,7 +76,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     labelText: 'Record number',
                     helperText: '(URN/MRN)',
                   ),
-                  enabled: isFormEnabled,
+                  enabled: _isFormEnabled,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -135,7 +130,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     labelText: 'LAST name',
                     helperText: '',
                   ),
-                  enabled: isFormEnabled,
+                  enabled: _isFormEnabled,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -181,7 +176,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     labelText: 'First name',
                     helperText: '',
                   ),
-                  enabled: isFormEnabled,
+                  enabled: _isFormEnabled,
                   validator: (String? input) {
                     if (input == null) {
                       return null;
@@ -231,7 +226,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                       labelText: 'Date of birth',
                       helperText: 'dd/MM/yyyy',
                     ),
-                    enabled: isFormEnabled,
+                    enabled: _isFormEnabled,
                     controller: dobTextController,
                     keyboardType: TextInputType.datetime,
                     validator: (String? text) {
@@ -289,7 +284,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
           Row(
             children: [
               TextButton.icon(
-                onPressed: isFormLocked ? null : saveFields,
+                onPressed: _isSavedFormLocked ? null : _saveFields,
                 icon: const Icon(Icons.save_alt_outlined),
                 label: const Text('Save fields'),
               ),
@@ -310,13 +305,13 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
 
   void _resetForm() {
     setState(() {
-      isFormLocked = false;
+      _isSavedFormLocked = false;
       _resetTextFields();
-      resetSavedPatientInputs();
+      _resetSavedPatientInputs();
     });
   }
 
-  void saveFields() {
+  void _saveFields() {
     // Validate
 
     // Validate near end on button and date
@@ -358,7 +353,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
         clinicID: widget.clinicIDToSave,
       );
 
-      isFormLocked = true;
+      _isSavedFormLocked = true;
       widget.onSaveSuccess(validPatientInput);
 
       return;
@@ -373,11 +368,11 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
 
   void _resetTextFields() {}
 
-  void resetState() {
+  void _resetState() {
     return;
   }
 
-  void resetSavedPatientInputs() {
+  void _resetSavedPatientInputs() {
     _savedPatientInputFormModel = PartialPatientInputModel();
   }
 
@@ -389,9 +384,9 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
       context: context,
       // We could probably hard-code an average age of 60 to 80 for initial view
       // Though input mode makes the calendar view redundant.
-      initialDate: currentDateTime,
-      firstDate: veryOldMinimumStartBirthDate,
-      lastDate: currentDateTime,
+      initialDate: _currentDateTime,
+      firstDate: _veryOldMinimumStartBirthDate,
+      lastDate: _currentDateTime,
       initialEntryMode: DatePickerEntryMode.input,
     );
 
@@ -420,7 +415,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
     final DateTime? date = _parseDate(text);
 
     if (date == null) {
-      return dateFormatErrorMessage;
+      return _dateFormatErrorMessage;
       // ?? MaterialLocalizations.of(context).invalidDateFormatLabel;
     }
 
@@ -441,8 +436,8 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
   String? _validateDate(DateTime date) {
     if (!_isDateWithinRange(date)) {
       return getDateOutOfRangeInvalidErrorMessage(
-        veryOldMinimumStartBirthDate,
-        currentDateTime,
+        _veryOldMinimumStartBirthDate,
+        _currentDateTime,
       );
     }
     return null;
@@ -450,7 +445,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
 
   bool _isDateWithinRange(DateTime? date) {
     return date != null &&
-        !date.isBefore(veryOldMinimumStartBirthDate) &&
-        !date.isAfter(currentDateTime);
+        !date.isBefore(_veryOldMinimumStartBirthDate) &&
+        !date.isAfter(_currentDateTime);
   }
 }
