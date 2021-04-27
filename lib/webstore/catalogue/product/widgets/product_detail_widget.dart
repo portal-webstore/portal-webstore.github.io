@@ -64,7 +64,7 @@ class ProductDetail extends StatelessWidget {
   }
 
   String getContainerProductDetailViewModel(ProductModel data) {
-    const String prefix = 'Container: ';
+    const String prefix = 'Container';
     final String containerListLine = '$prefix: ${data.containerName}';
 
     return containerListLine;
