@@ -383,8 +383,8 @@ class _OrderFormState extends State<OrderForm> {
                 children: List.generate(
                   _selectedProduct?.drugs.length ?? 0,
                   (int index) => SizedBox(
-                    width: 50,
-                    child: Text('Drug dose th ${_drugDoses[index]}'),
+                    width: 100,
+                    child: Text('Drug dose th ${_drugDoses[index]};'),
                   ),
                   growable: false,
                 ),
