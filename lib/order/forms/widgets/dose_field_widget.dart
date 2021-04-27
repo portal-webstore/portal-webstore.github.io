@@ -19,7 +19,7 @@ class DoseField extends StatelessWidget {
     return TextFormField(
       decoration: InputDecoration(
         border: const UnderlineInputBorder(),
-        labelText: '${drug.drugName} dose (${drug.drugUnits})',
+        labelText: _getDrugDoseLabel,
         helperText: '',
       ),
       inputFormatters: [
@@ -29,4 +29,6 @@ class DoseField extends StatelessWidget {
       autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
+
+  String get _getDrugDoseLabel => '${drug.drugName} dose (${drug.drugUnits})';
 }

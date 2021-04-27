@@ -1,4 +1,6 @@
-import 'package:equatable/equatable.dart';
+import 'package:equatable/equatable.dart' show Equatable;
+import 'package:testable_web_app/webstore/catalogue/product/models/get_drug_viewmodel.dart'
+    show getDrugViewModel;
 
 class DrugModel extends Equatable {
   const DrugModel({
@@ -20,4 +22,9 @@ class DrugModel extends Equatable {
         drugUnits,
         ocsDrugID,
       ];
+
+  @override
+  String toString() {
+    return getDrugViewModel(this);
+  }
 }
