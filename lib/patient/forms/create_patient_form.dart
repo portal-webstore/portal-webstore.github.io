@@ -4,7 +4,7 @@ import 'package:testable_web_app/i18n/date/australia_date_locale_format.dart';
 import 'package:testable_web_app/order/forms/helpers/get_date_out_of_range_invalid_error_message.dart';
 import 'package:testable_web_app/order/forms/helpers/validate_form_on_focus_out.dart';
 import 'package:testable_web_app/patient/models/patient_model.dart'
-    show PatientModel;
+    show PartialPatientInputModel, PatientBaseInputModel, PatientModel;
 import 'package:testable_web_app/shared/forms/helpers/formatters/uppercase_text_formatter.dart';
 
 class CreatePatientForm extends StatefulWidget {
@@ -12,15 +12,18 @@ class CreatePatientForm extends StatefulWidget {
     Key? key,
     required this.formKey,
     required this.onSaveSuccess,
+    required this.clinicIDToSave,
   }) : super(key: key);
 
   final GlobalKey<FormState> formKey;
+
+  final String clinicIDToSave;
 
   /// Optional to allow ux feedback flexibility rather than
   /// only running when completely successful non-null?
   ///
   /// Rename this?
-  final void Function(PatientModel?) onSaveSuccess;
+  final void Function(PatientBaseInputModel?) onSaveSuccess;
   @override
   _CreatePatientFormState createState() => _CreatePatientFormState();
 }
@@ -39,6 +42,11 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
     // 123 years old?
     veryOldYears,
   );
+
+  PartialPatientInputModel _savedPatientInputFormModel =
+      PartialPatientInputModel();
+
+  bool get _isSaved => _savedPatientInputFormModel.valid;
 
   @override
   void dispose() {
@@ -84,7 +92,25 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     return null;
                   },
                   onSaved: (String? text) {
-                    //
+                    if (text == null) {
+                      // Assign null for required inputs.
+                      setState(() {
+                        _savedPatientInputFormModel
+                            .patientHealthcareRecordNumber = null;
+                      });
+                      return;
+                    }
+                    if (text.isEmpty) {
+                      setState(() {
+                        _savedPatientInputFormModel
+                            .patientHealthcareRecordNumber = null;
+                      });
+                    }
+
+                    setState(() {
+                      _savedPatientInputFormModel
+                          .patientHealthcareRecordNumber = text;
+                    });
                   },
                 ),
               ),
@@ -114,7 +140,22 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     return null;
                   },
                   onSaved: (String? text) {
-                    //
+                    if (text == null) {
+                      // Assign null for required inputs.
+                      setState(() {
+                        _savedPatientInputFormModel.patientLastName = null;
+                      });
+                      return;
+                    }
+                    if (text.isEmpty) {
+                      setState(() {
+                        _savedPatientInputFormModel.patientLastName = null;
+                      });
+                    }
+
+                    setState(() {
+                      _savedPatientInputFormModel.patientLastName = text;
+                    });
                   },
                 ),
               ),
@@ -140,7 +181,22 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     return null;
                   },
                   onSaved: (String? text) {
-                    //
+                    if (text == null) {
+                      // Assign null for required inputs.
+                      setState(() {
+                        _savedPatientInputFormModel.patientFirstName = null;
+                      });
+                      return;
+                    }
+                    if (text.isEmpty) {
+                      setState(() {
+                        _savedPatientInputFormModel.patientFirstName = null;
+                      });
+                    }
+
+                    setState(() {
+                      _savedPatientInputFormModel.patientFirstName = text;
+                    });
                   },
                 ),
               ),
@@ -175,7 +231,33 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                       return _validateDateText(text);
                     },
                     onSaved: (String? text) {
-                      //
+                      if (text == null) {
+                        // Assign null for required inputs.
+                        setState(() {
+                          _savedPatientInputFormModel.patientBirthDate = null;
+                        });
+                        return;
+                      }
+                      if (text.isEmpty) {
+                        setState(() {
+                          _savedPatientInputFormModel.patientBirthDate = null;
+                        });
+                      }
+
+                      final String? errorInvalidMessage =
+                          _validateDateText(text);
+                      final bool isInvalidDateText =
+                          errorInvalidMessage == null;
+                      final DateTime? validDate = _parseDate(text);
+
+                      if (isInvalidDateText || validDate == null) {
+                        // This should not have been possible
+                        return;
+                      }
+
+                      setState(() {
+                        _savedPatientInputFormModel.patientBirthDate = text;
+                      });
                     },
                   ),
                 ),
@@ -213,16 +295,44 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                   }
 
                   // - FIXME: Replace these placeholders
-                  final PatientModel? validatedPatient = null;
-                  final isInvalidPatientInput = true;
+                  final PartialPatientInputModel? validatedPatient =
+                      _savedPatientInputFormModel;
 
+                  final bool isNullInput = validatedPatient == null;
+
+                  if (isNullInput) {
+                    widget.onSaveSuccess(null);
+
+                    return;
+                  }
+                  final bool isInvalidPatientInput = validatedPatient.invalid;
                   if (isInvalidPatientInput) {
                     widget.onSaveSuccess(null);
 
                     return;
                   }
 
-                  widget.onSaveSuccess(validatedPatient);
+                  final PartialPatientInputModel validPartialInput =
+                      validatedPatient;
+
+                  try {
+                    final PatientBaseInputModel validPatientInput =
+                        PatientBaseInputModel(
+                      patientFirstName: validatedPatient.patientFirstName!,
+                      patientLastName: validatedPatient.patientLastName!,
+                      patientHealthcareRecordNumber:
+                          validatedPatient.patientHealthcareRecordNumber!,
+                      patientBirthDate: validatedPatient.patientBirthDate!,
+                      clinicID: widget.clinicIDToSave,
+                    );
+
+                    widget.onSaveSuccess(validPatientInput);
+
+                    return;
+                  } on Exception catch (exc) {
+                    //
+                    return;
+                  }
                 },
                 icon: const Icon(Icons.save_alt_outlined),
                 label: const Text('Save fields'),

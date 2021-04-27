@@ -79,14 +79,38 @@ class PatientModel extends Equatable {
 ///
 ///
 @immutable
-class PatientInputModel {
-  const PatientInputModel({
+class PatientBaseInputModel {
+  const PatientBaseInputModel({
     required this.patientFirstName,
     required this.patientLastName,
     required this.patientHealthcareRecordNumber,
     required this.patientBirthDate,
     required this.clinicID,
   });
+
+  /// Adapt queried patient model to the inputs we use locally
+  ///
+  ///
+  /// Potential issue if we really want to see the link or timestamps
+  /// that are only part of the query model
+  ///
+  /// (not shared from the base required inputs of input + display)
+  /// when creating a new patient vs selecting existing
+  factory PatientBaseInputModel.fromPatientModel(
+    PatientModel queriedFullPatient,
+  ) {
+    // Could cache memoize based on non null hashcode here depending on where /
+    // frequency of use
+    return PatientBaseInputModel(
+      patientFirstName: queriedFullPatient.patientFirstName,
+      patientLastName: queriedFullPatient.patientLastName,
+      patientHealthcareRecordNumber:
+          queriedFullPatient.patientHealthcareRecordNumber,
+      patientBirthDate: queriedFullPatient.patientBirthDate,
+      clinicID: queriedFullPatient.clinicID,
+    );
+  }
+
   final String patientFirstName;
   final String patientLastName;
 

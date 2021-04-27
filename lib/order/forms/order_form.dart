@@ -57,6 +57,10 @@ class OrderForm extends StatefulWidget {
     Key? key,
     required this.products,
     required this.patients,
+    // - TODO: Replace with a clinic object with information details in case
+    // we wish to display it
+
+    // required this.clinic,
   }) : super(key: key);
 
   final List<ProductModel> products;
@@ -93,7 +97,7 @@ class _OrderFormState extends State<OrderForm> {
   /// After new patient entry saved
   /// or directly searched and selected patient
   /// Null on reset
-  PatientModel? _selectedPatientOrAdHocCreated;
+  PatientBaseInputModel? _selectedPatientOrAdHocCreated;
 
   /// Is new product for free text subform entry
   bool _isNewProductFreeText = false;
@@ -173,7 +177,10 @@ class _OrderFormState extends State<OrderForm> {
                       // Save
 
                       setState(() {
-                        _selectedPatientOrAdHocCreated = option;
+                        _selectedPatientOrAdHocCreated =
+                            PatientBaseInputModel.fromPatientModel(
+                          option,
+                        );
                       });
 
                       // Focus Product field
@@ -226,12 +233,19 @@ class _OrderFormState extends State<OrderForm> {
                   ),
                   child: CreatePatientForm(
                     formKey: _patientSubFormKey,
-                    onSaveSuccess: (PatientModel? savedPatientDetails) {
+                    // - FIXME: OrderForm should have this clinic id
+                    // or we should have it within the global app context
+                    //
+                    // As long as admin app is kept separate.
+                    //
+                    clinicIDToSave: 'PLACEHOLDER_STRING',
+                    onSaveSuccess:
+                        (PatientBaseInputModel? savedPatientDetails) {
                       final bool unsuccessfulSave = savedPatientDetails == null;
                       if (unsuccessfulSave) {
                         return;
                       }
-                      final PatientModel successfulSavedPatient =
+                      final PatientBaseInputModel successfulSavedPatient =
                           savedPatientDetails;
 
                       setState(() {
