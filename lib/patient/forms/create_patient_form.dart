@@ -52,6 +52,10 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
   ///
   bool get _isSaved => _savedPatientInputFormModel.valid;
 
+  /// Lock on successful save
+  bool isFormLocked = false;
+  bool get isFormEnabled => !isFormLocked;
+
   @override
   void dispose() {
     dobTextController.dispose();
@@ -77,6 +81,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     labelText: 'Record number',
                     helperText: '(URN/MRN)',
                   ),
+                  enabled: isFormEnabled,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -130,6 +135,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     labelText: 'LAST name',
                     helperText: '',
                   ),
+                  enabled: isFormEnabled,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -175,6 +181,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     labelText: 'First name',
                     helperText: '',
                   ),
+                  enabled: isFormEnabled,
                   validator: (String? input) {
                     if (input == null) {
                       return null;
@@ -224,6 +231,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                       labelText: 'Date of birth',
                       helperText: 'dd/MM/yyyy',
                     ),
+                    enabled: isFormEnabled,
                     controller: dobTextController,
                     keyboardType: TextInputType.datetime,
                     validator: (String? text) {
@@ -281,15 +289,31 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
           Row(
             children: [
               TextButton.icon(
-                onPressed: saveFields,
+                onPressed: isFormLocked ? null : saveFields,
                 icon: const Icon(Icons.save_alt_outlined),
                 label: const Text('Save fields'),
+              ),
+              const SizedBox(
+                width: 8.0,
+              ),
+              TextButton.icon(
+                onPressed: _resetForm,
+                icon: const Icon(Icons.undo_sharp),
+                label: const Text('Reset'),
               )
             ],
           )
         ],
       ),
     );
+  }
+
+  void _resetForm() {
+    setState(() {
+      isFormLocked = false;
+      _resetTextFields();
+      resetSavedPatientInputs();
+    });
   }
 
   void saveFields() {
@@ -334,6 +358,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
         clinicID: widget.clinicIDToSave,
       );
 
+      isFormLocked = true;
       widget.onSaveSuccess(validPatientInput);
 
       return;
@@ -345,6 +370,8 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
       return;
     }
   }
+
+  void _resetTextFields() {}
 
   void resetState() {
     return;
