@@ -77,6 +77,9 @@ class _OrderFormState extends State<OrderForm> {
       TextEditingController();
   final TextEditingController _productAutocompleteController =
       TextEditingController();
+  final TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _requiredDateController = TextEditingController();
+  final TextEditingController _notesController = TextEditingController();
 
   final FocusNode _patientAutocompleteFocus = FocusNode();
   final FocusNode _productAutocompleteFocus = FocusNode();
@@ -353,6 +356,7 @@ class _OrderFormState extends State<OrderForm> {
                     labelText: 'Quantity',
                     helperText: '',
                   ),
+                  controller: _quantityController,
                   inputFormatters: [
                     // Rather than using maxLengthEnforcement
                     // which takes up space with a 0/6 char counter.
@@ -374,6 +378,7 @@ class _OrderFormState extends State<OrderForm> {
                   child: CustomInputDateTextFormField(
                     firstDate: DateTime.now(),
                     lastDate: futureDateMax,
+                    controller: _requiredDateController,
                     // Note field width
                     errorFormatText: dateFormatErrorMessage,
                     // Date range or date-selectable predicate
@@ -409,6 +414,7 @@ class _OrderFormState extends State<OrderForm> {
                   helperText: '',
                   alignLabelWithHint: true,
                 ),
+                controller: _notesController,
                 textAlignVertical: TextAlignVertical.top,
                 // Note that shift arrow selection on Flutter web does not autoscroll
                 //
@@ -435,7 +441,19 @@ class _OrderFormState extends State<OrderForm> {
                 child: const Text(
                   'Save order to cart',
                 ),
-              )
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              TextButton(
+                style: const ButtonStyle(
+                  tapTargetSize: MaterialTapTargetSize.padded,
+                ),
+                onPressed: _resetState,
+                child: const Text(
+                  'Reset form',
+                ),
+              ),
             ],
           ),
         ),
@@ -466,6 +484,9 @@ class _OrderFormState extends State<OrderForm> {
     setState(() {
       _patientAutocompleteController.clear();
       _productAutocompleteController.clear();
+      _quantityController.clear();
+      _requiredDateController.clear();
+      _notesController.clear();
 
       _isNewPatientEntry = false;
       _selectedPatientOrAdHocCreated = null;
