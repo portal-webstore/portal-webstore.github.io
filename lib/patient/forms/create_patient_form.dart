@@ -337,6 +337,9 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
     });
   }
 
+  /// Attempts to save the given patient fields into a patient
+  /// with the given clinic ID
+  ///
   void _saveFields() {
     // Validate
 

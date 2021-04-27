@@ -239,8 +239,9 @@ class _OrderFormState extends State<OrderForm> {
                     // As long as admin app is kept separate.
                     //
                     clinicIDToSave: 'PLACEHOLDER_STRING',
-                    onSaveSuccess:
-                        (PatientBaseInputModel? savedPatientDetails) {
+                    onSaveSuccess: (
+                      PatientBaseInputModel? savedPatientDetails,
+                    ) {
                       final bool unsuccessfulSave = savedPatientDetails == null;
                       if (unsuccessfulSave) {
                         return;
@@ -251,6 +252,9 @@ class _OrderFormState extends State<OrderForm> {
                       setState(() {
                         _selectedPatientOrAdHocCreated = successfulSavedPatient;
                       });
+
+                      // Focus next node
+                      _productAutocompleteFocus.requestFocus();
                     },
                   ),
                 ),
@@ -429,7 +433,7 @@ class _OrderFormState extends State<OrderForm> {
               ElevatedButton(
                 onPressed: () {},
                 child: const Text(
-                  'Submit order to cart',
+                  'Save order to cart',
                 ),
               )
             ],
