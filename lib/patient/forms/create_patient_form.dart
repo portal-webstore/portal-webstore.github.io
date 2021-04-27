@@ -246,11 +246,13 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
 
                       final String? errorInvalidMessage =
                           _validateDateText(text);
-                      final bool isInvalidDateText =
-                          errorInvalidMessage != null;
-                      final DateTime? validDate = _parseDate(text);
+                      final bool isValidDateText = errorInvalidMessage == null;
+                      final bool isInvalidDateTextErrored = !isValidDateText;
 
-                      if (isInvalidDateText || validDate == null) {
+                      final DateTime? parsedDate = _parseDate(text);
+                      final bool isUnparsableDate = parsedDate == null;
+
+                      if (isInvalidDateTextErrored || isUnparsableDate) {
                         // This should not have been possible
                         _savedPatientInputFormModel.patientBirthDate = null;
 
