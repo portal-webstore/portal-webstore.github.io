@@ -10,9 +10,12 @@ class DoseField extends StatelessWidget {
   const DoseField({
     Key? key,
     required this.drug,
+    required this.onSaved,
   }) : super(key: key);
 
   final DrugModel drug;
+
+  final void Function(String?) onSaved;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,7 @@ class DoseField extends StatelessWidget {
       ],
       validator: doseInputValidator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      onSaved: onSaved,
     );
   }
 

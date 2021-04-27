@@ -120,6 +120,12 @@ class _OrderFormState extends State<OrderForm> {
     return _selectedProduct != null || _isNewProductFreeText;
   }
 
+  /// Drug doses should be initialised to allow access
+  ///
+  ///
+  /// Dart array not a sparse index
+  List<double> _drugDoses = [];
+
   // _show/hide
 
   @override
@@ -293,6 +299,19 @@ class _OrderFormState extends State<OrderForm> {
                       // Save
                       setState(() {
                         _selectedProduct = option;
+                        // Potential code smell. We could potentially
+                        // leave it initialised with three elements
+                        // as we probably will never see a five-drug product
+                        //
+                        // **Carefully manage this mutable referenceable state**
+                        // We initialise this so that Flutter does not error
+                        // out when it tries to access an index that does not
+                        // exist in the array
+                        // (The demo drug dose detail display)
+                        _drugDoses = List.filled(
+                          option.drugs.length,
+                          0,
+                        );
                       });
                     },
                   ),
@@ -347,6 +366,27 @@ class _OrderFormState extends State<OrderForm> {
                 // Array of textfield controllers or handled within widget
                 child: DrugDoseFields(
                   drugs: _selectedProduct?.drugs ?? [],
+                  onSaveDrugDoseField: (
+                    int drugIndexToSaveTo,
+                    double dose,
+                  ) {
+                    // This seems fraught with issues
+
+                    // Mutate parent array by reference?
+                    setState(() {
+                      _drugDoses[drugIndexToSaveTo] = dose;
+                    });
+                  },
+                ),
+              ),
+              Row(
+                children: List.generate(
+                  _selectedProduct?.drugs.length ?? 0,
+                  (int index) => SizedBox(
+                    width: 50,
+                    child: Text('Drug dose th ${_drugDoses[index]}'),
+                  ),
+                  growable: false,
                 ),
               ),
 

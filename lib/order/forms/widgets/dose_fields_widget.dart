@@ -7,9 +7,12 @@ class DrugDoseFields extends StatelessWidget {
   const DrugDoseFields({
     Key? key,
     required this.drugs,
+    required this.onSaveDrugDoseField,
   }) : super(key: key);
 
   final List<DrugModel> drugs;
+
+  final Function(int index, double dose) onSaveDrugDoseField;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +24,21 @@ class DrugDoseFields extends StatelessWidget {
 
           return DoseField(
             drug: drug,
+            onSaved: (String? doseText) {
+              if (doseText == null) {
+                return;
+              }
+
+              // Marry up the dose to the drug (should be ordered) with index
+
+              final double? dose = double.tryParse(doseText);
+              if (dose == null) {
+                return;
+              }
+
+              // Check formKey.currentState.save() context works in this nested widget
+              onSaveDrugDoseField(index, dose);
+            },
           );
         },
       ),
