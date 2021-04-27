@@ -68,10 +68,10 @@ class ProductModel extends Equatable {
       ];
 
   String getDrugsListCommaSeparatedText() {
-    return drugs.join(',');
+    return drugs.join(', ');
   }
 }
 
 String productViewModelDrugs(List<DrugModel> drugs) {
-  return drugs.join(',');
+  return drugs.join(', ');
 }
