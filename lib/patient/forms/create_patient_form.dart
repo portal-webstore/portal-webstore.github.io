@@ -298,15 +298,35 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                 width: 8.0,
               ),
               TextButton.icon(
-                onPressed: _resetForm,
+                onPressed: _isSavedFormLocked ? _unlockForm : _resetForm,
                 icon: const Icon(Icons.undo_sharp),
-                label: const Text('Reset'),
+                label: _isSavedFormLocked
+                    ? const Text('Unlock')
+                    : const Text('Reset'),
               )
             ],
           )
         ],
       ),
     );
+  }
+
+  /// Allow unlocking form first
+  ///
+  /// 1. If form is locked, allow unlocking form.
+  /// 2. If form is already unlocked, allow resetting form.
+  ///
+  /// Map events to states
+  void _unlockForm() {
+    /// Ideally allow unlocking the form the first time pressed
+    /// and then allow resetting when the form is unlocked.
+    ///
+    /// Rather than resetting everything after a save
+    /// in case a user wants to edit one specific field backtracked
+    /// without needing to enter free-text new patient info in all fields again.
+    setState(() {
+      _isSavedFormLocked = false;
+    });
   }
 
   void _resetForm() {
