@@ -247,11 +247,13 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                       final String? errorInvalidMessage =
                           _validateDateText(text);
                       final bool isInvalidDateText =
-                          errorInvalidMessage == null;
+                          errorInvalidMessage != null;
                       final DateTime? validDate = _parseDate(text);
 
                       if (isInvalidDateText || validDate == null) {
                         // This should not have been possible
+                        _savedPatientInputFormModel.patientBirthDate = null;
+
                         return;
                       }
 
@@ -331,6 +333,9 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     return;
                   } on Exception catch (exc) {
                     //
+                    debugPrint(
+                      'Error saving patient fields',
+                    );
                     return;
                   }
                 },
