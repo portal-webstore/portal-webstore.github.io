@@ -29,7 +29,10 @@ class CreatePatientForm extends StatefulWidget {
 }
 
 class _CreatePatientFormState extends State<CreatePatientForm> {
-  final TextEditingController dobTextController = TextEditingController();
+  final TextEditingController _recordNumberController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _dobTextController = TextEditingController();
 
   static const String _dateFormatErrorMessage =
       'Please enter (dd/MM/yyyy) format';
@@ -53,7 +56,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
 
   @override
   void dispose() {
-    dobTextController.dispose();
+    _dobTextController.dispose();
 
     super.dispose();
   }
@@ -77,6 +80,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     helperText: '(URN/MRN)',
                   ),
                   enabled: _isFormEnabled,
+                  controller: _recordNumberController,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -131,6 +135,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     helperText: '',
                   ),
                   enabled: _isFormEnabled,
+                  controller: _lastNameController,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
@@ -177,6 +182,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     helperText: '',
                   ),
                   enabled: _isFormEnabled,
+                  controller: _firstNameController,
                   validator: (String? input) {
                     if (input == null) {
                       return null;
@@ -227,7 +233,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                       helperText: 'dd/MM/yyyy',
                     ),
                     enabled: _isFormEnabled,
-                    controller: dobTextController,
+                    controller: _dobTextController,
                     keyboardType: TextInputType.datetime,
                     validator: (String? text) {
                       if (text == null) {
@@ -366,9 +372,23 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
     }
   }
 
-  void _resetTextFields() {}
+  void _resetTextFields() {
+    setState(() {
+      _recordNumberController.clear();
+      _lastNameController.clear();
+      _firstNameController.clear();
+      _dobTextController.clear();
+    });
+
+    return;
+  }
 
   void _resetState() {
+    setState(() {
+      _isSavedFormLocked = false;
+      _resetSavedPatientInputs();
+    });
+
     return;
   }
 
@@ -397,7 +417,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
     // For user feedback on completing the picking or input via calendar widget
     final String dateTimeText = ausFullDateDisplayFormat.format(date);
 
-    dobTextController.text = dateTimeText;
+    _dobTextController.text = dateTimeText;
     final bool? isValid = widget.formKey.currentState?.validate();
 
     if (isValid == null || !isValid) {
