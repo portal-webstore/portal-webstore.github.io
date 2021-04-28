@@ -10,8 +10,15 @@ class DrugDoseFields extends StatelessWidget {
     required this.onSubmitDrugDoseField,
     required this.onSaveDrugDoseField,
     required this.baseFocusNodes,
+    required this.baseTextEditingControllers,
     required this.onFinishedLastDoseFieldSubmitted,
-  }) : super(key: key);
+  })   : assert(
+          baseFocusNodes.length >= drugs.length,
+        ),
+        assert(
+          baseTextEditingControllers.length >= drugs.length,
+        ),
+        super(key: key);
 
   final List<DrugModel> drugs;
 
@@ -34,6 +41,16 @@ class DrugDoseFields extends StatelessWidget {
   ///
   /// Accessed by index.
   final List<FocusNode> baseFocusNodes;
+
+  /// Attempt to use the references controllers from parent
+  ///
+  /// To allow parent to reset view stateless child widget without
+  /// additional bloc/notify logic
+  ///
+  ///
+  /// i.e. Clear doses text when changing the product to enforce consistent
+  /// UX and reduce edge cases.
+  final List<TextEditingController> baseTextEditingControllers;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +98,8 @@ class DrugDoseFields extends StatelessWidget {
               // Check formKey.currentState.save() context works in this nested widget
               onSaveDrugDoseField(index, dose);
             },
+            focusNode: baseFocusNodes[index],
+            textEditingController: baseTextEditingControllers[index],
           );
         },
       ),

@@ -173,6 +173,18 @@ class _OrderFormState extends State<OrderForm> {
     FocusNode(),
     FocusNode(),
   ];
+
+  /// Allow us to clear the text editing controllers used in child dose fields
+  ///
+  /// To enforce consistent UX and reduce edge behaviours
+  /// i.e. Select product -> change first dose -> change product -> cached dose!
+  final List<TextEditingController> _drugDosesTextEditingControllers = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+  ];
   // _show/hide
 
   @override
@@ -185,6 +197,8 @@ class _OrderFormState extends State<OrderForm> {
 
     // Dispose hard-coded dose field focus usability.
     _drugDosesFocusNodes.forEach(_disposeFocus);
+
+    _drugDosesTextEditingControllers.forEach(_disposeTextController);
 
     super.dispose();
   }
@@ -353,6 +367,9 @@ class _OrderFormState extends State<OrderForm> {
                       // Save
                       setState(() {
                         _selectedProduct = option;
+
+                        /// 1 Reset drug doses and 2 clear drug dose text fields
+
                         // Potential code smell. We could potentially
                         // leave it initialised with three elements
                         // as we probably will never see a five-drug product
@@ -366,6 +383,9 @@ class _OrderFormState extends State<OrderForm> {
                           option.drugs.length,
                           0,
                         );
+
+                        /// 2 Clear drug dose text fields for consistency.
+                        _clearDrugDoseFieldsTextControllers();
                       });
                       // Focus next field
                       // the DoseFields should be built after the setState
@@ -428,6 +448,7 @@ class _OrderFormState extends State<OrderForm> {
                 child: DrugDoseFields(
                   drugs: _selectedProduct?.drugs ?? [],
                   baseFocusNodes: _drugDosesFocusNodes,
+                  baseTextEditingControllers: _drugDosesTextEditingControllers,
                   onSubmitDrugDoseField: (
                     int drugIndexToSaveTo,
                     double dose,
@@ -623,6 +644,17 @@ class _OrderFormState extends State<OrderForm> {
     );
   }
 
+  void _clearDrugDoseFieldsTextControllers() {
+    _drugDosesTextEditingControllers.forEach(
+      _clearTextEditingController,
+    );
+  }
+
+  /// Declarative lint preference rather than in-line function literal
+  void _clearTextEditingController(TextEditingController element) {
+    element.clear();
+  }
+
   Widget _showValidProductDetail(ProductModel? product) {
     if (product == null) {
       return Container();
@@ -645,6 +677,12 @@ class _OrderFormState extends State<OrderForm> {
   /// Wrapper for code maintainibility (linter preference)
   ///
   void _disposeFocus(FocusNode focus) {
+    focus.dispose();
+  }
+
+  /// Declarative wrapper for code maintainibility (linter preference)
+  ///
+  void _disposeTextController(TextEditingController focus) {
     focus.dispose();
   }
 

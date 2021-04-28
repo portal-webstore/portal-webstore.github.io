@@ -12,10 +12,14 @@ class DoseField extends StatelessWidget {
     required this.drug,
     required this.onFieldSubmitted,
     required this.onSaved,
+    required this.focusNode,
+    required this.textEditingController,
   }) : super(key: key);
 
   final DrugModel drug;
 
+  final FocusNode focusNode;
+  final TextEditingController textEditingController;
   final void Function(String?) onFieldSubmitted;
   final void Function(String?) onSaved;
 
@@ -27,6 +31,8 @@ class DoseField extends StatelessWidget {
         labelText: _getDrugDoseLabel,
         helperText: '',
       ),
+      focusNode: focusNode,
+      controller: textEditingController,
       inputFormatters: [
         allowDecimalTwoPlacesInput,
       ],
