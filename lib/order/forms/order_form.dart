@@ -427,6 +427,7 @@ class _OrderFormState extends State<OrderForm> {
                 // Array of textfield controllers or handled within widget
                 child: DrugDoseFields(
                   drugs: _selectedProduct?.drugs ?? [],
+                  baseFocusNodes: _drugDosesFocusNodes,
                   onSubmitDrugDoseField: (
                     int drugIndexToSaveTo,
                     double dose,
@@ -436,6 +437,9 @@ class _OrderFormState extends State<OrderForm> {
                     setState(() {
                       _drugDoses[drugIndexToSaveTo] = dose;
                     });
+                  },
+                  onFinishedLastDoseFieldSubmitted: () {
+                    _quantityFocusNode.requestFocus();
                   },
                   onSaveDrugDoseField: (
                     int drugIndexToSaveTo,
@@ -472,6 +476,7 @@ class _OrderFormState extends State<OrderForm> {
                     helperText: '',
                   ),
                   controller: _quantityController,
+                  focusNode: _quantityFocusNode,
                   inputFormatters: [
                     // Rather than using maxLengthEnforcement
                     // which takes up space with a 0/6 char counter.
@@ -590,6 +595,7 @@ class _OrderFormState extends State<OrderForm> {
 
                   _orderFormInputModel.notes = notesText;
                 },
+                textInputAction: TextInputAction.done,
               ),
 
               ElevatedButton(

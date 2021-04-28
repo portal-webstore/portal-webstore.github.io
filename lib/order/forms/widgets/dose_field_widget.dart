@@ -34,6 +34,7 @@ class DoseField extends StatelessWidget {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       onFieldSubmitted: onFieldSubmitted,
       onSaved: onSaved,
+      textInputAction: TextInputAction.next,
     );
   }
 
