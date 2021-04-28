@@ -83,8 +83,19 @@ class _OrderFormState extends State<OrderForm> {
   final TextEditingController _requiredDateController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
 
+  /// More bespoke UX control required here
+  /// Otherwise possible lite maintainable solution is a
+  /// broad form FocusScopeTraversal and falling back on .next and nextFocus().
+  ///
+  /// Users appear to be heavily keyboard-driven/trained (pharmacy)
+  ///
+  /// Though we do market a modern app experience for ordering off mobile.
   final FocusNode _patientAutocompleteFocus = FocusNode();
   final FocusNode _productAutocompleteFocus = FocusNode();
+
+  final FocusNode _quantityFocusNode = FocusNode();
+  final FocusNode _requiredDateFocusNode = FocusNode();
+  final FocusNode _notesFocusNode = FocusNode();
 
   OrderFormInputModel _orderFormInputModel = OrderFormInputModel();
 
@@ -122,16 +133,58 @@ class _OrderFormState extends State<OrderForm> {
 
   /// Drug doses should be initialised to allow access
   ///
-  ///
+  /// ! Dangerous array reference for child mutation
   /// Dart array not a sparse index
   List<double> _drugDoses = [];
 
+  /// Reference the index from the drugDoses only.
+  /// Access only up to _drugDoses.length
+  ///
+  /// ! Dangerous array reference for child mutation
+  /// Hacky usability inclusion
+  /// Multi drug is rare enough to be a minor use case
+  ///
+  /// Semi-hardcoded.
+  /// Competitors only have up to two drugs
+  ///
+  /// We have duo and trio infusion dox vinc etop treatment products
+  /// No use case for four or five combo; however, we can accommodate somewhat
+  ///
+  /// Perhaps a path in the future is to Scope the foci.
+  ///
+  /// However, this is adequate solution as parent context determines flow.
+  ///
+  /// Focus for next field flow.
+  ///
+  /// Dart only supports pass by reference.
+  /// So we should pass in a function that takes index with a primed length
+  /// limit
+  ///
+  /// the function will be regenerated on build (and we setState and rebuild
+  /// on each time drugDoses array is changed
+  /// )
+  /// so this should be safe
+  ///
+  /// Should be disposed of
+  final List<FocusNode> _drugDosesFocusNodes = [
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+  ];
   // _show/hide
 
   @override
   void dispose() {
     _patientAutocompleteController.dispose();
     _productAutocompleteController.dispose();
+
+    _patientAutocompleteFocus.dispose();
+    _productAutocompleteFocus.dispose();
+
+    // Dispose hard-coded dose field focus usability.
+    _drugDosesFocusNodes.forEach(_disposeFocus);
 
     super.dispose();
   }
@@ -197,6 +250,7 @@ class _OrderFormState extends State<OrderForm> {
                       });
 
                       // Focus Product field
+                      _productAutocompleteFocus.requestFocus();
                     },
                   ),
                 ),
@@ -313,6 +367,13 @@ class _OrderFormState extends State<OrderForm> {
                           0,
                         );
                       });
+                      // Focus next field
+                      // the DoseFields should be built after the setState
+                      // uncertain focus race conditions
+                      //
+                      // Focus the first dose field as it will be guaranteed
+                      // (Product.drugs has minimum one drug)
+                      _drugDosesFocusNodes[0].requestFocus();
                     },
                   ),
                 ),
@@ -422,10 +483,13 @@ class _OrderFormState extends State<OrderForm> {
                     // an element is stealing focus between Qty and Req date
 
                     // Focus next field on submit (enter key on desktop)
+                    _requiredDateFocusNode.requestFocus();
                   },
                   onSaved: (String? quantityText) {
                     _checkSaveValidQuantityIntegerText(quantityText);
                   },
+                  // See submit focus for desktop behaviour without on-screen kb
+                  textInputAction: TextInputAction.next,
                 ),
               ),
 
@@ -443,6 +507,7 @@ class _OrderFormState extends State<OrderForm> {
                     firstDate: DateTime.now(),
                     lastDate: futureDateMax,
                     controller: _requiredDateController,
+                    focusNode: _requiredDateFocusNode,
                     // Note field width
                     errorFormatText: dateFormatErrorMessage,
                     // Date range or date-selectable predicate
@@ -459,8 +524,17 @@ class _OrderFormState extends State<OrderForm> {
                       // Ideally save only in one place to prevent possible bugs
                       //
                     },
-                    onTextSubmitted: (text) {
-                      _formKey.currentState?.validate();
+                    onTextSubmitted: (String? text) {
+                      final bool isFieldValid =
+                          _formKey.currentState?.validate() ?? false;
+
+                      if (!isFieldValid) {
+                        // Force refocus. Pressing enter defocuses desktop web.
+                        _requiredDateFocusNode.requestFocus();
+                        return;
+                      }
+
+                      _notesFocusNode.requestFocus();
                     },
                     onDateSaved: (DateTime date) {
                       // Potentially called with invalid text? on formState.save()
@@ -486,6 +560,7 @@ class _OrderFormState extends State<OrderForm> {
                   alignLabelWithHint: true,
                 ),
                 controller: _notesController,
+                focusNode: _notesFocusNode,
                 textAlignVertical: TextAlignVertical.top,
                 // Note that shift arrow selection on Flutter web does not autoscroll
                 //
@@ -558,6 +633,13 @@ class _OrderFormState extends State<OrderForm> {
     }
 
     return product.drugs.length;
+  }
+
+  /// Declarative in the forEach drugDosesFocusNodes dispose
+  /// Wrapper for code maintainibility (linter preference)
+  ///
+  void _disposeFocus(FocusNode focus) {
+    focus.dispose();
   }
 
   /// The visual state of a fresh patient treatment order submission page

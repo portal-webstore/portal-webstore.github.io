@@ -77,6 +77,7 @@ class CustomInputDateTextFormField extends StatefulWidget {
     required DateTime firstDate,
     required DateTime lastDate,
     this.controller,
+    this.focusNode,
     this.onTextSubmitted,
     this.onDateSubmitted,
     this.onDateSaved,
@@ -126,6 +127,11 @@ class CustomInputDateTextFormField extends StatefulWidget {
   /// per default behaviour.
   ///
   final TextEditingController? controller;
+
+  /// For parent form usability of auto focusing on submit/enter.
+  ///
+  /// Especially for manual desktop not driven by on-screen keyboard .next
+  final FocusNode? focusNode;
 
   /// An optional method to call when the user indicates they are done editing
   /// the text in the field. Will only be called if the input represents a valid
@@ -336,6 +342,7 @@ class _CustomInputDateTextFormFieldState
       onFieldSubmitted: _handleSubmitted,
       autofocus: widget.autofocus,
       controller: _controller,
+      focusNode: widget.focusNode,
       // Explicitly disable as we want to customise the partial interactions first
       // Do not show annoying red alert messages on first keystroke!
       //
