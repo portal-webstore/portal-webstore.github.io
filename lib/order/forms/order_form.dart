@@ -598,8 +598,11 @@ class _OrderFormState extends State<OrderForm> {
                     MaxLengthEnforcement.truncateAfterCompositionEnds,
 
                 onSaved: (String? notesText) {
-                  if (notesText == null || notesText.isEmpty) {
-                    _orderFormInputModel.notes = null;
+                  if (notesText == null) {
+                    // We do not use null here.
+                    // Maybe somewhat dependent on data adaptor interpretation
+                    //
+                    _orderFormInputModel.notes = '';
 
                     return;
                   }

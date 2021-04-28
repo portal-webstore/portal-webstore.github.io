@@ -14,7 +14,12 @@ class OrderFormInputModel {
 
   String? requiredDate;
 
-  String? notes;
+  /// Note blank empty string means given as blank (when field is submitted
+  /// as part of the form, although notes is unused)
+  ///
+  /// Rather than null meaning it is yet to be given or not given
+  ///
+  String notes = '';
 
   bool get isProductSelected => _freeTextedProduct != null;
 
