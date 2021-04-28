@@ -416,20 +416,15 @@ class _OrderFormState extends State<OrderForm> {
                     // which takes up space with a 0/6 char counter.
                     LengthLimitingTextInputFormatter(6),
                   ],
+                  onFieldSubmitted: (String? quantityText) {
+                    _checkSaveValidQuantityIntegerText(quantityText);
+                    // Note blank tab focus bug found here
+                    // an element is stealing focus between Qty and Req date
+
+                    // Focus next field on submit (enter key on desktop)
+                  },
                   onSaved: (String? quantityText) {
-                    if (quantityText == null || quantityText.isEmpty) {
-                      _orderFormInputModel.quantity = null;
-
-                      return;
-                    }
-
-                    final int? quantity = int.tryParse(quantityText);
-                    if (quantity == null) {
-                      _orderFormInputModel.quantity = null;
-                      return;
-                    }
-
-                    _orderFormInputModel.quantity = quantity;
+                    _checkSaveValidQuantityIntegerText(quantityText);
                   },
                 ),
               ),
@@ -472,10 +467,12 @@ class _OrderFormState extends State<OrderForm> {
                       debugPrint('Valid date saved');
                       // Save to form model
 
-                      _orderFormInputModel.requiredDate =
-                          ausFullDateDisplayFormat.format(
-                        date,
-                      );
+                      setState(() {
+                        _orderFormInputModel.requiredDate =
+                            ausFullDateDisplayFormat.format(
+                          date,
+                        );
+                      });
                     },
                   ),
                 ),
@@ -592,5 +589,30 @@ class _OrderFormState extends State<OrderForm> {
     _formKey.currentState?.save();
 
     // - TODO: Set up DoseFields saving
+  }
+
+  /// Saves to our progressive input model when valid
+  ///
+  /// Either on field submit or form submit (mandatory)
+  ///
+  ///
+  void _checkSaveValidQuantityIntegerText(
+    String? quantityText,
+  ) {
+    if (quantityText == null || quantityText.isEmpty) {
+      _orderFormInputModel.quantity = null;
+
+      return;
+    }
+
+    final int? quantity = int.tryParse(quantityText);
+    if (quantity == null) {
+      _orderFormInputModel.quantity = null;
+      return;
+    }
+
+    setState(() {
+      _orderFormInputModel.quantity = quantity;
+    });
   }
 }
