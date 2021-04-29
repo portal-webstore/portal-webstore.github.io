@@ -1,4 +1,8 @@
+import 'package:testable_web_app/order/forms/models/drug_dose_model.dart'
+    show DrugDose;
 import 'package:testable_web_app/patient/models/patient_model.dart';
+import 'package:testable_web_app/webstore/catalogue/product/models/drug_model.dart'
+    show DrugModel;
 import 'package:testable_web_app/webstore/catalogue/product/models/product_model.dart';
 
 class OrderFormInputModel {
@@ -20,6 +24,12 @@ class OrderFormInputModel {
   /// Rather than null meaning it is yet to be given or not given
   ///
   String notes = '';
+
+  /// Pre-transformed utility for colocated access of both the drug
+  /// with its respective dose
+  ///
+  /// For easier data saving next step.
+  List<DrugDose>? drugDoses;
 
   bool get isProductSelected => _freeTextedProduct != null;
 
@@ -44,6 +54,19 @@ class OrderFormInputModel {
         _selectedProduct == null && _freeTextedProduct == null;
 
     return isBothInput || isBothNotInput;
+  }
+
+  bool get _isQuantityValid => quantity != null && quantity! > 0;
+
+  bool get _isDoseFoundForEachProductDrugForSelectedProduct {
+    final List<DrugDose>? doses = drugDoses;
+    final List<DrugModel>? selectedProductDrugs = _selectedProduct?.drugs;
+
+    if (doses == null || selectedProductDrugs == null) {
+      return false;
+    }
+
+    return doses.length == selectedProductDrugs.length;
   }
 
   /// Control setters
@@ -74,15 +97,30 @@ class OrderFormInputModel {
   }
 
   bool isValid() {
-    final bool isQuantityValid = quantity != null && quantity! > 0;
+    final bool isQuantityValid = _isQuantityValid;
 
     // No redundant double check on date range, format submission?
     // localizations.parseCompactDate(text)
     final isRequiredDateValid = requiredDate != null;
 
+    final bool isAllowedFreeTextNoDoseOrSelectedDrugWithDoses =
+        _isAllowedNoDoseFreeTextProductOrSelectedProductDrugsWithDoses;
+
     return patient != null &&
         isProductInputValid &&
+        isAllowedFreeTextNoDoseOrSelectedDrugWithDoses &&
         isQuantityValid &&
         isRequiredDateValid;
+  }
+
+  ///
+  /// Should not have both a free text product and multi doses.
+  bool get _isAllowedNoDoseFreeTextProductOrSelectedProductDrugsWithDoses {
+    // OR would fulfill most of our cases
+    // We should XOR if we want to be really explicit that they could not both
+    // be true according to business rules.
+
+    return isProductFreeTexted ||
+        _isDoseFoundForEachProductDrugForSelectedProduct;
   }
 }
