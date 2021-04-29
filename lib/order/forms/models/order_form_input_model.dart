@@ -69,21 +69,47 @@ class OrderFormInputModel {
     return doses.length == selectedProductDrugs.length;
   }
 
+  ProductModel? get selectedProduct {
+    return _selectedProduct;
+  }
+
   /// Control setters
+  ///
+  /// Do not expect null
   ///
   /// Nullifies the free text as soon as we select a product.
   ///
   /// To maintain consistency
   /// Product selection and product free text are mutually exclusive
-  void inputProduct(ProductModel selectedProduct) {}
+  /// until we create ad hoc product information with more fields
+  set selectedProduct(ProductModel? selectedProduct) {
+    _freeTextedProduct = null;
+
+    if (selectedProduct == null) {
+      _selectedProduct = null;
+      return;
+    }
+
+    _selectedProduct = selectedProduct;
+  }
+
+  String? get freeTextedCreatedProduct {
+    return _freeTextedProduct;
+  }
 
   /// Nullifies the selected product as soon as we attempt to input free text.
   ///
   /// To maintain consistency
   /// Product selection and product free text are mutually exclusive
-  void inputCreateProductFreeText(String freeTextedProduct) {
-    // Needs dose and units as well in here.
-    //
+  set freeTextedCreatedProduct(String? freeTextedProduct) {
+    _selectedProduct = null;
+
+    if (freeTextedCreatedProduct == null) {
+      _freeTextedProduct = null;
+      return;
+    }
+
+    _freeTextedProduct = freeTextedProduct;
   }
 
   /// No type unions - could use dynamic
