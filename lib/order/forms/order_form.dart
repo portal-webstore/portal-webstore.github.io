@@ -4,6 +4,7 @@ import 'package:flutter/services.dart'
 import 'package:testable_web_app/i18n/date/australia_date_locale_format.dart';
 import 'package:testable_web_app/order/forms/helpers/get_date_out_of_range_invalid_error_message.dart';
 import 'package:testable_web_app/order/forms/helpers/validate_form_on_focus_out.dart';
+import 'package:testable_web_app/order/forms/models/drug_dose_model.dart';
 import 'package:testable_web_app/order/forms/models/order_form_input_model.dart';
 import 'package:testable_web_app/order/forms/widgets/dose_fields_widget.dart'
     show DrugDoseFields;
@@ -79,6 +80,8 @@ class _OrderFormState extends State<OrderForm> {
       TextEditingController();
   final TextEditingController _productAutocompleteController =
       TextEditingController();
+  final TextEditingController _productFreeTextController =
+      TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _requiredDateController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
@@ -92,6 +95,7 @@ class _OrderFormState extends State<OrderForm> {
   /// Though we do market a modern app experience for ordering off mobile.
   final FocusNode _patientAutocompleteFocus = FocusNode();
   final FocusNode _productAutocompleteFocus = FocusNode();
+  final FocusNode _productFreeTextFocus = FocusNode();
 
   final FocusNode _quantityFocusNode = FocusNode();
   final FocusNode _requiredDateFocusNode = FocusNode();
@@ -257,10 +261,14 @@ class _OrderFormState extends State<OrderForm> {
                       // Save
 
                       setState(() {
-                        _selectedPatientOrAdHocCreated =
+                        final PatientBaseInputModel selectedPatientDetail =
                             PatientBaseInputModel.fromPatientModel(
                           option,
                         );
+
+                        _selectedPatientOrAdHocCreated = selectedPatientDetail;
+
+                        _orderFormInputModel.patient = selectedPatientDetail;
                       });
 
                       // Focus Product field
@@ -331,7 +339,10 @@ class _OrderFormState extends State<OrderForm> {
                           savedPatientDetails;
 
                       setState(() {
+                        // Remove superfluous property. Replaced with InputModel
                         _selectedPatientOrAdHocCreated = successfulSavedPatient;
+
+                        _orderFormInputModel.patient = successfulSavedPatient;
                       });
 
                       // Focus next node
@@ -367,6 +378,9 @@ class _OrderFormState extends State<OrderForm> {
                       // Save
                       setState(() {
                         _selectedProduct = option;
+                        _adhocCreatedProductFreeText = null;
+
+                        _orderFormInputModel.selectedProduct = option;
 
                         /// 1 Reset drug doses and 2 clear drug dose text fields
 
@@ -393,7 +407,7 @@ class _OrderFormState extends State<OrderForm> {
                       //
                       // Focus the first dose field as it will be guaranteed
                       // (Product.drugs has minimum one drug)
-                      _drugDosesFocusNodes[0].requestFocus();
+                      _focusFirstDrugDoseField();
                     },
                   ),
                 ),
@@ -424,10 +438,49 @@ class _OrderFormState extends State<OrderForm> {
                       _isNewProductFreeText = false;
                       _selectedProduct = null;
 
+                      // No longer using the Product Autocomplete selection
+                      _productAutocompleteController.clear();
+                      // Resets both exclusive product inputs on null
+                      _orderFormInputModel.selectedProduct = null;
+
                       // Reset subform
                       _adhocCreatedProductFreeText = null;
                     });
                   },
+                ),
+              ),
+
+              Container(
+                padding: edgeInsetsFormFieldPadding,
+                width: 60,
+                // - TODO: Replace with generated number of dose fields
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Product details',
+                    helperText:
+                        'Drugs - Dose (units), Container, Diluent, Volume',
+                  ),
+                  controller: _productFreeTextController,
+                  focusNode: _productFreeTextFocus,
+                  inputFormatters: [
+                    // Rather than using maxLengthEnforcement
+                    // which takes up space with a 0/6 char counter.
+                    LengthLimitingTextInputFormatter(6),
+                  ],
+                  onFieldSubmitted: (String? quantityText) {
+                    _checkSaveValidQuantityIntegerText(quantityText);
+                    // Note blank tab focus bug found here
+                    // an element is stealing focus between Qty and Req date
+
+                    // Focus next field on submit (enter key on desktop)
+                    _focusFirstDrugDoseField();
+                  },
+                  onSaved: (String? quantityText) {
+                    _checkSaveValidQuantityIntegerText(quantityText);
+                  },
+                  // See submit focus for desktop behaviour without on-screen kb
+                  textInputAction: TextInputAction.next,
                 ),
               ),
               // Blank it vs possible visibility tween
@@ -615,7 +668,7 @@ class _OrderFormState extends State<OrderForm> {
               ElevatedButton(
                 onPressed: _saveForm,
                 child: const Text(
-                  'Save order to cart',
+                  'Add treatment product to order',
                 ),
               ),
               const SizedBox(
@@ -636,6 +689,8 @@ class _OrderFormState extends State<OrderForm> {
       ),
     );
   }
+
+  void _focusFirstDrugDoseField() => _drugDosesFocusNodes[0].requestFocus();
 
   void _clearDrugDoseFieldsTextControllers() {
     _drugDosesTextEditingControllers.forEach(
@@ -707,7 +762,47 @@ class _OrderFormState extends State<OrderForm> {
     }
     _formKey.currentState?.save();
 
-    // - TODO: Set up DoseFields saving
+    // onSave handles the distinct fields;
+    // however, we have additional logic around selection vs creation
+    // which should be handled
+    //
+    // We manually transform the multi-dose array into our input save model
+
+    final OrderFormInputModel localScopedFormModel = _orderFormInputModel;
+    final ProductModel? selectedProduct = localScopedFormModel.selectedProduct;
+
+    if (selectedProduct == null) {
+      return;
+    }
+    localScopedFormModel.patient = _selectedPatientOrAdHocCreated;
+
+    // - TODO: Change SelectedProduct to include adHocCreatedProduct
+    // Now both should use the same base model
+
+    // localScopedFormModel.drugDoses
+    final List<DrugDose> drugDoses = _getDrugDosesFromDosesProduct(
+      _drugDoses,
+      selectedProduct,
+    );
+
+    localScopedFormModel.drugDoses = drugDoses;
+
+    debugPrint(localScopedFormModel.toString());
+  }
+
+  List<DrugDose> _getDrugDosesFromDosesProduct(
+    List<double> doses,
+    ProductModel selectedProduct,
+  ) {
+    return doses.asMap().entries.map((entry) {
+      final int index = entry.key;
+      final double dose = entry.value;
+
+      return DrugDose(
+        drug: selectedProduct.drugs[index],
+        dose: dose,
+      );
+    }).toList();
   }
 
   /// Saves to our progressive input model when valid

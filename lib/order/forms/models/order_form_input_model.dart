@@ -16,6 +16,8 @@ class OrderFormInputModel {
 
   int? quantity;
 
+  /// Should be translated into a standard yyyy-MM-dd for database consistency
+  ///
   String? requiredDate;
 
   /// Note blank empty string means given as blank (when field is submitted
@@ -73,6 +75,8 @@ class OrderFormInputModel {
     return _selectedProduct;
   }
 
+  /// No type unions - could use dynamic
+
   /// Control setters
   ///
   /// Do not expect null
@@ -110,16 +114,6 @@ class OrderFormInputModel {
     }
 
     _freeTextedProduct = freeTextedProduct;
-  }
-
-  /// No type unions - could use dynamic
-
-  ProductModel? getSelectedProduct() {
-    return _selectedProduct;
-  }
-
-  String? getFreeTextedProduct() {
-    return _freeTextedProduct;
   }
 
   bool isValid() {
