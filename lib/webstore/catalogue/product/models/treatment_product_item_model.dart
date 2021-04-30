@@ -18,6 +18,7 @@ class TreatmentProductItemModel extends Equatable {
     required this.containerName,
     required this.drugDoses,
     required this.productAdministrationRoute,
+    required this.isOnHold,
   });
 
   /// Product name concatenates up the diluent container parts.
@@ -34,6 +35,8 @@ class TreatmentProductItemModel extends Equatable {
 
   /// ITHEC IVINF IVENOS
   final String productAdministrationRoute;
+
+  final bool isOnHold;
 
   @override
   List<Object> get props => [
