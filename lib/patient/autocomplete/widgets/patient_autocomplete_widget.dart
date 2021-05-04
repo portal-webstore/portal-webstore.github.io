@@ -14,6 +14,7 @@ class PatientAutocomplete<T extends PatientModel> extends StatelessWidget {
     required this.onSelected,
     required this.focusNode,
     required this.textEditingController,
+    this.isTextFieldEnabled,
   }) : super(key: key);
 
   /// The local options to be searched
@@ -32,6 +33,9 @@ class PatientAutocomplete<T extends PatientModel> extends StatelessWidget {
   /// Must be disposed of in parent form
   ///
   final TextEditingController? textEditingController;
+
+  final bool? isTextFieldEnabled;
+
   @override
   Widget build(BuildContext context) {
     /// Use RawAutocomplete to retain access to
@@ -41,7 +45,9 @@ class PatientAutocomplete<T extends PatientModel> extends StatelessWidget {
       optionsViewBuilder: getOptionsViewBuilder(),
       onSelected: onSelected,
       displayStringForOption: getViewModel(),
-      fieldViewBuilder: getFieldViewBuilder(),
+      fieldViewBuilder: getFieldViewBuilder(
+        isTextFieldEnabled: isTextFieldEnabled ?? true,
+      ),
       focusNode: focusNode,
       textEditingController: textEditingController,
     );
@@ -75,9 +81,12 @@ class PatientAutocomplete<T extends PatientModel> extends StatelessWidget {
     return getPatientViewModel;
   }
 
-  static AutocompleteFieldViewBuilder getFieldViewBuilder() {
+  static AutocompleteFieldViewBuilder getFieldViewBuilder({
+    required bool isTextFieldEnabled,
+  }) {
     return LabelledAutocomplete.getFieldBuilder(
       labelText: 'Search patient',
+      isTextFieldEnabled: isTextFieldEnabled,
     );
   }
 }

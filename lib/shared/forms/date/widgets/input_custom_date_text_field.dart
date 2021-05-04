@@ -76,6 +76,8 @@ class CustomInputDateTextFormField extends StatefulWidget {
     DateTime? initialDate,
     required DateTime firstDate,
     required DateTime lastDate,
+    this.controller,
+    this.focusNode,
     this.onTextSubmitted,
     this.onDateSubmitted,
     this.onDateSaved,
@@ -117,6 +119,19 @@ class CustomInputDateTextFormField extends StatefulWidget {
 
   /// The latest allowable [DateTime] that the user can input.
   final DateTime lastDate;
+
+  /// Allow parent to control controller in response to events like form
+  /// saving/resetting.
+  ///
+  /// If no/null controller is provided, we instantiate our own in initState
+  /// per default behaviour.
+  ///
+  final TextEditingController? controller;
+
+  /// For parent form usability of auto focusing on submit/enter.
+  ///
+  /// Especially for manual desktop not driven by on-screen keyboard .next
+  final FocusNode? focusNode;
 
   /// An optional method to call when the user indicates they are done editing
   /// the text in the field. Will only be called if the input represents a valid
@@ -169,7 +184,7 @@ class CustomInputDateTextFormField extends StatefulWidget {
 
 class _CustomInputDateTextFormFieldState
     extends State<CustomInputDateTextFormField> {
-  final TextEditingController _controller = TextEditingController();
+  late TextEditingController _controller;
   DateTime? _selectedDate;
   String? _inputText;
   bool _autoSelected = false;
@@ -178,6 +193,7 @@ class _CustomInputDateTextFormFieldState
   void initState() {
     super.initState();
     _selectedDate = widget.initialDate;
+    _controller = widget.controller ?? TextEditingController();
   }
 
   @override
@@ -326,6 +342,7 @@ class _CustomInputDateTextFormFieldState
       onFieldSubmitted: _handleSubmitted,
       autofocus: widget.autofocus,
       controller: _controller,
+      focusNode: widget.focusNode,
       // Explicitly disable as we want to customise the partial interactions first
       // Do not show annoying red alert messages on first keystroke!
       //

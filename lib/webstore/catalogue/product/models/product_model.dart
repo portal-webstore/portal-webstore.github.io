@@ -1,6 +1,47 @@
 import 'package:equatable/equatable.dart';
 import 'package:testable_web_app/webstore/catalogue/product/models/drug_model.dart';
 
+/// The divergence of the product models is likely going to be a source of bugs
+/// in the future
+///
+/// Add base product model reference
+/// Add ad hoc "created" semi-structured free-text product model that may be
+/// assisted through hard-coded dropdowns
+class BaseProductModel extends Equatable {
+  const BaseProductModel({
+    required this.productName,
+    required this.diluentName,
+    required this.containerName,
+    required this.drugs,
+    required this.productAdministrationRoute,
+  });
+
+  /// Simplified model has drugs and container name (diluent/type)
+  final String productName;
+
+  /// Null where not valid to have diluent name (e.g. OCS)
+  /// Empty string to indicate given as empty
+  final String? diluentName;
+
+  final String? containerName;
+
+  /// Free-text drug name and
+  /// Free-text drug units of measure
+  final List<DrugModel> drugs;
+
+  /// ITHEC IVINF IVENOS
+  final String productAdministrationRoute;
+
+  @override
+  List<Object> get props => [
+        productName,
+        diluentName ?? '',
+        containerName ?? '',
+        drugs,
+        productAdministrationRoute,
+      ];
+}
+
 /// Simplified view model of the product data required to display and
 /// submit an order for this specific product
 ///
@@ -68,10 +109,10 @@ class ProductModel extends Equatable {
       ];
 
   String getDrugsListCommaSeparatedText() {
-    return drugs.join(',');
+    return drugs.join(', ');
   }
 }
 
 String productViewModelDrugs(List<DrugModel> drugs) {
-  return drugs.join(',');
+  return drugs.join(', ');
 }

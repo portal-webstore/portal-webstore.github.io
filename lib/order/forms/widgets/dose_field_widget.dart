@@ -10,23 +10,39 @@ class DoseField extends StatelessWidget {
   const DoseField({
     Key? key,
     required this.drug,
+    required this.onFieldSubmitted,
+    required this.onSaved,
+    required this.focusNode,
+    required this.textEditingController,
   }) : super(key: key);
 
   final DrugModel drug;
+
+  final FocusNode focusNode;
+  final TextEditingController textEditingController;
+  final void Function(String?) onFieldSubmitted;
+  final void Function(String?) onSaved;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       decoration: InputDecoration(
         border: const UnderlineInputBorder(),
-        labelText: '${drug.drugName} dose (${drug.drugUnits})',
+        labelText: _getDrugDoseLabel,
         helperText: '',
       ),
+      focusNode: focusNode,
+      controller: textEditingController,
       inputFormatters: [
         allowDecimalTwoPlacesInput,
       ],
       validator: doseInputValidator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      onFieldSubmitted: onFieldSubmitted,
+      onSaved: onSaved,
+      textInputAction: TextInputAction.next,
     );
   }
+
+  String get _getDrugDoseLabel => '${drug.drugName} dose (${drug.drugUnits})';
 }
