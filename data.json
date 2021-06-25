@@ -1,0 +1,105 @@
+{
+    "orders": [
+        {
+            "orderID": "1",
+            "orderReference": "123FreeText",
+            "createdAt": 1620255516,
+            "updatedAt": 1620255516,
+            "requiredByDeliveryDate": "2021-05-11",
+            "isDraft": true,
+            "patientTreatmentProductItems": [
+                {
+                    "quantity": 2,
+                    "status": "AWAITING_CONFIRMATION",
+                    "patient": {
+                        "patientIdentifier": "",
+                        "lastName": "Blogs",
+                        "firstName": "Joan",
+                        "birthDate": "1960-12-31",
+                        "patientOcsLink": null
+                    },
+                    "drugDoses": [
+                        {
+                            "drug": {
+                                "drugName": "Methotrexate",
+                                "drugUnitsOfMeasurement": "mg",
+                                "ocsDrugLink": null
+                            },
+                            "dose": 100.1
+                        }
+                    ],
+                    "product": {
+                        "productName": "Methotrexate in Syringe (- maybe)",
+                        "drugs": [
+                            {
+                                "drugName": "Methotrexate",
+                                "drugUnitsOfMeasurement": "mg",
+                                "ocsDrugLink": null
+                            }
+                        ],
+                        "diluentName": "",
+                        "containerName": "Syringe",
+                        "containerCustomName": null,
+                        "containerVolume": 20.0,
+                        "containerIsFixedFinalVolume": false,
+                        "administrationRoute": "IVINF",
+                        "attachmentName": "None",
+                        "ocsProductLink": null
+                    }
+                }
+            ],
+            "comments": ""
+        },
+        {
+            "orderID": "2",
+            "orderReference": "123FreeText",
+            "createdAt": 1620255516,
+            "updatedAt": 1620255516,
+            "requiredByDeliveryDate": "2021-05-11",
+            "isDraft": false,
+            "patientTreatmentProductItems": [
+                {
+                    "quantity": 2,
+                    "status": "AWAITING_CONFIRMATION",
+                    "patient": {
+                        "patientIdentifier": "",
+                        "lastName": "Blogs",
+                        "firstName": "Joan",
+                        "birthDate": "1960-12-31",
+                        "patientOcsLink": null
+                    },
+                    "drugDoses": [
+                        {
+                            "drug": {
+                                "drugName": "Methotrexate",
+                                "drugUnitsOfMeasurement": "mg",
+                                "ocsDrugLink": null
+                            },
+                            "dose": 100.1
+                        }
+                    ],
+                    "product": {
+                        "productName": "Methotrexate in Syringe (- maybe)",
+                        "drugs": [
+                            {
+                                "drugName": "Methotrexate",
+                                "drugUnitsOfMeasurement": "mg",
+                                "ocsDrugLink": null
+                            }
+                        ],
+                        "diluentName": "",
+                        "containerName": "Syringe",
+                        "containerCustomName": null,
+                        "containerVolume": 20.0,
+                        "containerIsFixedFinalVolume": false,
+                        "administrationRoute": "IVINF",
+                        "attachmentName": "None",
+                        "ocsProductLink": null
+                    },
+                    "createdAt": 1620255000
+                }
+            ],
+            "comments": ""
+        }
+    ]
+}
